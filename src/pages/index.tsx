@@ -1,13 +1,13 @@
-import * as React from "react"
+import * as React from "react";
 
 const IndexPage = () => {
   return (
     <main>
       <div>
         <p>alskd</p>
-              </div>
+      </div>
     </main>
-  )
-}
+  );
+};
 
-export default IndexPage
+export default IndexPage;

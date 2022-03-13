@@ -1,0 +1,21 @@
+mkdir $1
+cd $1
+touch $1.tsx
+touch $1.module.scss
+touch types.ts
+
+echo "export interface I$1Props {
+    state: boolean
+}" >> types.ts
+
+echo "import scss from './$1.module.scss';
+import { I$1Props } from './types';
+
+export const $1 = (props: I$1Props) => {
+    return (
+        <div className={scss.container}>
+        </div>
+    )
+}
+    " >> $1.tsx
+

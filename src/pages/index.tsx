@@ -1,13 +1,13 @@
-import * as React from "react";
+import * as React from 'react';
 
-const IndexPage = () => {
+function IndexPage() {
   return (
     <main>
       <div>
-        <p>alskd</p>
+        <p>oi isabela, tudo bom? só passando pra falar que te amo e tals...</p>
       </div>
     </main>
   );
-};
+}
 
 export default IndexPage;

@@ -4,7 +4,7 @@ function IndexPage() {
   return (
     <main>
       <div>
-        <p>Isabela, se vc esta lendo isso vc me deve uma mamada</p>
+        <p>Página inicial</p>
       </div>
     </main>
   );

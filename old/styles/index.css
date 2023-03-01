@@ -1,4 +1,4 @@
-/* @tailwind base;
+@tailwind base;
 @tailwind components;
 @tailwind utilities;
 
@@ -6,4 +6,4 @@
   img[loading='lazy'] {
     clip-path: inset(0.6px);
   }
-} */
+}

@@ -206,16 +206,38 @@ const Ocr = () => {
                 <table>
                   <thead>
                     <tr>
-                      <th>Campo</th>
-                      <th>Valor</th>
+                      <th
+                        style={{ textAlign: "start", border: "1px solid gray" }}
+                      >
+                        Campo
+                      </th>
+                      <th
+                        style={{ textAlign: "start", border: "1px solid gray" }}
+                      >
+                        Valor
+                      </th>
                     </tr>
                   </thead>
                   <tbody>
                     {ocrResult.map((entry, index) => {
                       return (
                         <tr key={index}>
-                          <td>{entry.field}</td>
-                          <td>{entry.value}</td>
+                          <td
+                            style={{
+                              textAlign: "start",
+                              border: "1px solid gray",
+                            }}
+                          >
+                            {entry.field}
+                          </td>
+                          <td
+                            style={{
+                              textAlign: "start",
+                              border: "1px solid gray",
+                            }}
+                          >
+                            {entry.value}
+                          </td>
                         </tr>
                       );
                     })}

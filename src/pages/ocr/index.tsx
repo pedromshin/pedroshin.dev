@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Group, Stack, Text, Image, Button } from "@mantine/core";
-import { Dropzone, IMAGE_MIME_TYPE } from "@mantine/dropzone";
+import { Dropzone, IMAGE_MIME_TYPE, PDF_MIME_TYPE } from "@mantine/dropzone";
 
 import { AnalyzeDocumentCommand } from "@aws-sdk/client-textract";
 import { TextractClient } from "@aws-sdk/client-textract";
@@ -66,9 +66,8 @@ const Ocr = () => {
   };
 
   const params = {
-    Image: imageData,
     Document: imageData,
-    FeatureTypes: ["TABLES", "FORMS", "SIGNATURES"],
+    FeatureTypes: ["FORMS"],
   };
 
   function get_kv_map(response: any): [KeyMap, ValueMap, BlockMap] {
@@ -171,7 +170,7 @@ const Ocr = () => {
         <Stack style={{ flex: "1" }}>
           <Dropzone
             onDrop={(files) => loadFile(files[0])}
-            accept={IMAGE_MIME_TYPE}
+            accept={[...IMAGE_MIME_TYPE, ...PDF_MIME_TYPE]}
             multiple={false}
           >
             <Text size="xl" inline>

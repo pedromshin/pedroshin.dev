@@ -152,10 +152,8 @@ const Ocr = () => {
       let result = [];
 
       for (const [key, value] of Object.entries(kv_relations)) {
-        console.log(`${key}: ${value}`);
         result.push({ field: key.slice(0, -1), value: value[0] });
       }
-      console.log(result);
 
       setOcrResult(result);
     } catch (error) {

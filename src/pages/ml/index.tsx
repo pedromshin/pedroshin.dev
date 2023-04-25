@@ -1,12 +1,45 @@
 import { useState } from "react";
 
 const ML = () => {
-  const [description, setDescription] = useState("");
+  const [passagerId, setPassagerId] = useState("");
+
   const addTodo = () => {
-    fetch("/model1", {
+    fetch("/titanic", {
       method: "POST",
       body: JSON.stringify({
-        description,
+        PassengerId: {
+          "0": passagerId,
+        },
+        Pclass: {
+          "0": 1.0,
+        },
+        Sex: {
+          "0": 1.0,
+        },
+        Age: {
+          "0": 20.5,
+        },
+        SibSp: {
+          "0": 0.0,
+        },
+        Parch: {
+          "0": 0.0,
+        },
+        Fare: {
+          "0": 7.8292,
+        },
+        Cabin: {
+          "14": 5,
+        },
+        Embarked: {
+          "0": 2.0,
+        },
+        Ticket: {
+          "0": 2,
+        },
+        Name: {
+          "0": 2.0,
+        },
       }),
       headers: {
         "content-type": "application/json",
@@ -23,12 +56,12 @@ const ML = () => {
         }}
       >
         <input
-          name="description"
-          placeholder="Add new todo..."
-          value={description}
-          onChange={(e) => setDescription(e.target.value)}
-        ></input>
-        <button type="submit">Add todo</button>
+          name="passangerId"
+          placeholder="passangerId"
+          value={passagerId}
+          onChange={(e) => setPassagerId(e.target.value)}
+        />
+        <button type="submit">Submit</button>
       </form>
     </div>
   );

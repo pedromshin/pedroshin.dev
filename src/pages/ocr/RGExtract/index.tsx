@@ -2,7 +2,7 @@ import { useState } from "react";
 import { Group, Stack, Text, Image, Button } from "@mantine/core";
 import { Dropzone, IMAGE_MIME_TYPE, PDF_MIME_TYPE } from "@mantine/dropzone";
 
-import { AnalyzeIDCommand } from "@aws-sdk/client-textract";
+import { AnalyzeDocumentCommand } from "@aws-sdk/client-textract";
 import { TextractClient } from "@aws-sdk/client-textract";
 
 const client = new TextractClient({
@@ -13,13 +13,13 @@ const client = new TextractClient({
   },
 });
 
-type ResultType = { field: string; value: string; confidence: number }[];
+type RGDataType = { field: string; value: string }[];
 
-const IDDocument = () => {
+const RGExtract = () => {
   const [imageData, setImageData] = useState<{ Bytes: Uint8Array }>();
   const [imageUrl, setImageUrl] = useState<string>();
   const [loading, setLoading] = useState<boolean>(false);
-  const [ocrResult, setOcrResult] = useState<ResultType>();
+  const [ocrResult, setOcrResult] = useState<RGDataType>();
 
   const readAsArrayBuffer = (file: File) => {
     return new Promise((resolve, reject) => {
@@ -39,28 +39,43 @@ const IDDocument = () => {
     });
   };
 
+  const params = {
+    Document: imageData,
+    FeatureTypes: ["QUERIES"],
+    QueriesConfig: {
+      Queries: [
+        { Text: "registro geral", Alias: "RG_NUMBER" },
+        { Text: "data de expedicao", Alias: "EXPEDITION_DATE" },
+        { Text: "filiacao", Alias: "PARENTS_NAMES" },
+        { Text: "naturalidade", Alias: "PLACE_OF_BIRTH" },
+        { Text: "cpf", Alias: "CPF_NUMBER" },
+        { Text: "data de nascimento", Alias: "BIRTHDATE" },
+        { Text: "nome", Alias: "NAME" },
+      ],
+    },
+  };
+
   const extract = async () => {
+    let result: RGDataType = [];
     try {
-      const analyzeId = new AnalyzeIDCommand({
-        DocumentPages: [{ Bytes: imageData?.Bytes }],
-      });
+      const analyzeDoc = new AnalyzeDocumentCommand(params);
       setLoading(true);
-      const response = await client.send(analyzeId);
+      const data = await client.send(analyzeDoc);
       setLoading(false);
-      let result: ResultType = [];
-      if (response) {
-        for (const docFields of response["IdentityDocuments"]!) {
-          for (const idField of docFields["IdentityDocumentFields"]!) {
-            if (idField.ValueDetection?.Text) {
-              result.push({
-                field: idField.Type?.Text ?? "",
-                value: idField.ValueDetection?.Text ?? "",
-                confidence: idField.ValueDetection?.Confidence ?? 0,
-              });
-            }
-          }
+      const queryResults = data.Blocks?.filter(
+        (block) =>
+          block.BlockType === "QUERY" || block.BlockType === "QUERY_RESULT"
+      );
+
+      queryResults?.map((block, index) => {
+        if (block.BlockType === "QUERY") {
+          console.log(block.Query?.Alias, queryResults[index + 1].Text!);
+          result.push({
+            field: block.BlockType === "QUERY" ? block.Query?.Alias! : "",
+            value: queryResults[index + 1].Text!,
+          });
         }
-      }
+      });
 
       setOcrResult(result);
     } catch (error) {
@@ -73,9 +88,13 @@ const IDDocument = () => {
     <>
       <Group align="initial" style={{ padding: "50px" }}>
         <Stack style={{ flex: "1" }}>
-          <Text size="xl" inline>
-            Extração de dados padronizados de documentos de identidade - detecta
-            campos do que entende como padrão de todos documentos
+          <Text size="40" inline>
+            <b>RG verso</b>
+          </Text>
+          <Text size="24" inline>
+            Extrair valores padronizados do <b>verso</b> do RG (frente é a
+            página com foto e polegar, que não carrega nenhum dado a ser
+            extraído)
           </Text>
           <Dropzone
             onDrop={(files) => loadFile(files[0])}
@@ -86,14 +105,16 @@ const IDDocument = () => {
               Drag image here or click to select file
             </Text>
           </Dropzone>
+
           {!!imageData && (
             <Image
               src={imageUrl}
-              style={{ width: "100%", maxWidth: "400px", maxHeight: "400px" }}
+              style={{ width: "100%", maxWidth: 400, height: "auto" }}
               alt="dropzone"
             />
           )}
         </Stack>
+
         <Stack style={{ flex: "1" }}>
           <Button
             style={{
@@ -103,6 +124,7 @@ const IDDocument = () => {
           >
             {loading ? "Carregando..." : "Extrair"}
           </Button>
+
           {!!ocrResult && (
             <Stack>
               <Text size="xl">RESULT</Text>
@@ -124,11 +146,6 @@ const IDDocument = () => {
                         style={{ textAlign: "start", border: "1px solid gray" }}
                       >
                         Valor
-                      </th>
-                      <th
-                        style={{ textAlign: "start", border: "1px solid gray" }}
-                      >
-                        Confiança (%)
                       </th>
                     </tr>
                   </thead>
@@ -152,14 +169,6 @@ const IDDocument = () => {
                           >
                             {entry.value}
                           </td>
-                          <td
-                            style={{
-                              textAlign: "start",
-                              border: "1px solid gray",
-                            }}
-                          >
-                            {entry.confidence}
-                          </td>
                         </tr>
                       );
                     })}
@@ -174,4 +183,4 @@ const IDDocument = () => {
   );
 };
 
-export default IDDocument;
+export default RGExtract;

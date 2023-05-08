@@ -5,33 +5,6 @@ import { Dropzone, IMAGE_MIME_TYPE, PDF_MIME_TYPE } from "@mantine/dropzone";
 import { AnalyzeDocumentCommand } from "@aws-sdk/client-textract";
 import { TextractClient } from "@aws-sdk/client-textract";
 
-//trigger
-interface Block {
-  Id: string;
-  BlockType: string;
-  EntityTypes: string[];
-  Relationships?: Relationship[];
-  SelectionStatus?: string;
-  Text?: string;
-}
-
-interface Relationship {
-  Type: string;
-  Ids: string[];
-}
-
-interface KeyMap {
-  [blockId: string]: Block;
-}
-
-interface ValueMap {
-  [blockId: string]: Block;
-}
-
-interface BlockMap {
-  [blockId: string]: Block;
-}
-
 const client = new TextractClient({
   region: "us-east-1",
   credentials: {
@@ -40,12 +13,13 @@ const client = new TextractClient({
   },
 });
 
-const FirstVersion = () => {
+type CNHDataType = { field: string; value: string }[];
+
+const CNHExtract = () => {
   const [imageData, setImageData] = useState<{ Bytes: Uint8Array }>();
   const [imageUrl, setImageUrl] = useState<string>();
   const [loading, setLoading] = useState<boolean>(false);
-  const [ocrResult, setOcrResult] =
-    useState<{ field: string; value: string }[]>();
+  const [ocrResult, setOcrResult] = useState<CNHDataType>();
 
   const readAsArrayBuffer = (file: File) => {
     return new Promise((resolve, reject) => {
@@ -67,93 +41,39 @@ const FirstVersion = () => {
 
   const params = {
     Document: imageData,
-    FeatureTypes: ["FORMS"],
+    FeatureTypes: ["QUERIES"],
+    QueriesConfig: {
+      Queries: [
+        { Text: "no registro", Alias: "CNH_NUMBER" },
+        { Text: "data de nascimento", Alias: "BIRTHDATE" },
+        { Text: "validade", Alias: "EXPIRY_DATE" },
+        { Text: "cpf", Alias: "CPF_NUMBER" },
+        { Text: "nome", Alias: "NAME" },
+      ],
+    },
   };
 
-  function get_kv_map(response: any): [KeyMap, ValueMap, BlockMap] {
-    const blocks = response.Blocks;
-
-    // get key and value maps
-    const key_map: KeyMap = {};
-    const value_map: ValueMap = {};
-    const block_map: BlockMap = {};
-    for (const block of blocks) {
-      const block_id = block.Id;
-      block_map[block_id] = block;
-      if (block.BlockType == "KEY_VALUE_SET") {
-        if (block.EntityTypes.includes("KEY")) {
-          key_map[block_id] = block;
-        } else {
-          value_map[block_id] = block;
-        }
-      }
-    }
-
-    return [key_map, value_map, block_map];
-  }
-
-  function get_kv_relationship(
-    key_map: KeyMap,
-    value_map: ValueMap,
-    block_map: BlockMap
-  ): Record<string, string[]> {
-    const kvs: Record<string, string[]> = {};
-    for (const [block_id, key_block] of Object.entries(key_map)) {
-      const value_block = find_value_block(key_block, value_map);
-      const key = get_text(key_block, block_map);
-      const val = get_text(value_block, block_map);
-      kvs[key] = [...(kvs[key] || []), val];
-    }
-    return kvs;
-  }
-
-  function find_value_block(key_block: Block, value_map: ValueMap): Block {
-    for (const relationship of key_block.Relationships || []) {
-      if (relationship.Type == "VALUE") {
-        for (const value_id of relationship.Ids) {
-          const value_block = value_map[value_id];
-          return value_block;
-        }
-      }
-    }
-    throw new Error("No value block found");
-  }
-
-  function get_text(result: Block, blocks_map: BlockMap): string {
-    let text = "";
-    if (result.Relationships) {
-      for (const relationship of result.Relationships) {
-        if (relationship.Type == "CHILD") {
-          for (const child_id of relationship.Ids) {
-            const word = blocks_map[child_id];
-            if (word.BlockType == "WORD") {
-              text += word.Text + " ";
-            }
-            if (word.BlockType == "SELECTION_ELEMENT") {
-              if (word.SelectionStatus == "SELECTED") {
-                text += "X ";
-              }
-            }
-          }
-        }
-      }
-    }
-    return text;
-  }
-
   const extract = async () => {
+    let result: CNHDataType = [];
     try {
       const analyzeDoc = new AnalyzeDocumentCommand(params);
       setLoading(true);
       const data = await client.send(analyzeDoc);
       setLoading(false);
-      const [key_map, value_map, block_map] = get_kv_map(data);
-      const kv_relations = get_kv_relationship(key_map, value_map, block_map);
-      let result = [];
+      const queryResults = data.Blocks?.filter(
+        (block) =>
+          block.BlockType === "QUERY" || block.BlockType === "QUERY_RESULT"
+      );
 
-      for (const [key, value] of Object.entries(kv_relations)) {
-        result.push({ field: key.slice(0, -1), value: value[0] });
-      }
+      queryResults?.map((block, index) => {
+        if (block.BlockType === "QUERY") {
+          console.log(block.Query?.Alias, queryResults[index + 1].Text!);
+          result.push({
+            field: block.BlockType === "QUERY" ? block.Query?.Alias! : "",
+            value: queryResults[index + 1].Text!,
+          });
+        }
+      });
 
       setOcrResult(result);
     } catch (error) {
@@ -166,9 +86,11 @@ const FirstVersion = () => {
     <>
       <Group align="initial" style={{ padding: "50px" }}>
         <Stack style={{ flex: "1" }}>
-          <Text size="xl" inline>
-            Primeira versão de testes - detecta tudo que consegue relacionar uma
-            chave-valor
+          <Text size="40" inline>
+            <b>CNH frente</b>
+          </Text>
+          <Text size="24" inline>
+            Extrair valores padronizados da <b>frente</b> da CNH
           </Text>
           <Dropzone
             onDrop={(files) => loadFile(files[0])}
@@ -181,7 +103,11 @@ const FirstVersion = () => {
           </Dropzone>
 
           {!!imageData && (
-            <Image src={imageUrl} style={{ width: "100%" }} alt="dropzone" />
+            <Image
+              src={imageUrl}
+              style={{ width: "100%", maxWidth: 400, height: "auto" }}
+              alt="dropzone"
+            />
           )}
         </Stack>
 
@@ -253,4 +179,4 @@ const FirstVersion = () => {
   );
 };
 
-export default FirstVersion;
+export default CNHExtract;

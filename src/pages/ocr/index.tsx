@@ -1,13 +1,13 @@
-import FirstVersion from "./FirstVersion";
-import IDDocument from "./IDDocument";
-import LongText from "./LongText";
+import RGExtract from "./RGExtract";
+import CNHExtract from "./CNHExtract";
 
 const Ocr = () => {
   return (
     <>
-      <FirstVersion />
-      <IDDocument />
-      <LongText />
+      <RGExtract />
+      <CNHExtract />
+      {/* <FirstVersion />
+      <IDDocument /> */}
     </>
   );
 };

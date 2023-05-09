@@ -40,18 +40,31 @@ const RGExtract = () => {
   };
 
   const params = {
-    Document: imageData,
+    Document: imageData!,
     FeatureTypes: ["QUERIES"],
     QueriesConfig: {
       Queries: [
         { Text: "registro geral", Alias: "RG_NUMBER" },
         { Text: "data de expedicao", Alias: "EXPEDITION_DATE" },
-        { Text: "filiacao", Alias: "PARENTS_NAMES" },
         { Text: "naturalidade", Alias: "PLACE_OF_BIRTH" },
-        { Text: "cpf", Alias: "CPF_NUMBER" },
         { Text: "data de nascimento", Alias: "BIRTHDATE" },
         { Text: "nome", Alias: "NAME" },
+        {
+          Text: "in the 'filiacao' field are two names. the first name is the fathers name, and the second the mothers name. what is the fathers name?",
+          Alias: "FATHER_NAME",
+        },
+        {
+          Text: "filiacao second line mothers name",
+          Alias: "MOTHER_NAME",
+        },
+        {
+          Text: "city and state in 'doc origem'",
+          Alias: "DOCUMENT_ORIGIN",
+        },
       ],
+    },
+    OutputConfig: {
+      ContentType: "RAW",
     },
   };
 

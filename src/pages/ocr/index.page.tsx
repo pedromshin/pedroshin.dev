@@ -1,5 +1,5 @@
-import RGExtract from "./RGExtract/index.page";
-import CNHExtract from "./CNHExtract/index";
+import RGExtract from "./RGExtract";
+import CNHExtract from "./CNHExtract";
 
 const Ocr = () => {
   return (

@@ -93,6 +93,8 @@ const RGExtract = () => {
           block.BlockType === "QUERY" || block.BlockType === "QUERY_RESULT"
       );
 
+      console.log("queryresults", queryResults);
+
       queryResults?.map((block, index) => {
         if (block.BlockType === "QUERY") {
           result.push({
@@ -112,6 +114,8 @@ const RGExtract = () => {
           }
         }
       });
+
+      console.log(result);
 
       setOcrResult(result);
     } catch (error) {

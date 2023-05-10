@@ -4,6 +4,7 @@ import { Dropzone, IMAGE_MIME_TYPE, PDF_MIME_TYPE } from "@mantine/dropzone";
 
 import { AnalyzeDocumentCommand } from "@aws-sdk/client-textract";
 import { TextractClient } from "@aws-sdk/client-textract";
+import { ufStates } from "./ufStates";
 
 const client = new TextractClient({
   region: "us-east-1",
@@ -82,11 +83,21 @@ const RGExtract = () => {
 
       queryResults?.map((block, index) => {
         if (block.BlockType === "QUERY") {
-          console.log(block.Query?.Alias, queryResults[index + 1].Text!);
           result.push({
             field: block.BlockType === "QUERY" ? block.Query?.Alias! : "",
             value: queryResults[index + 1].Text!,
           });
+
+          if (block.Query?.Alias! === "DOCUMENT_ORIGIN") {
+            const ufPattern = ufStates.join("|");
+            const pattern = new RegExp(`-(${ufPattern})\\b`);
+            const uf = queryResults[index + 1].Text!.match(pattern);
+
+            result.push({
+              field: "EMISSION_UF_STATE",
+              value: uf![1],
+            });
+          }
         }
       });
 

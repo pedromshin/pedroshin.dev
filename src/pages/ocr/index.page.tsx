@@ -1,10 +1,12 @@
-import RGExtract from "./RGExtract";
+import RGExtract from "./RGExtract/index";
+import RGHighContrastExtract from "./RGHighContrastExtract";
 import CNHExtract from "./CNHExtract";
 
 const Ocr = () => {
   return (
     <>
       <RGExtract />
+      <RGHighContrastExtract />
       <CNHExtract />
     </>
   );

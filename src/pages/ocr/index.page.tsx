@@ -6,8 +6,6 @@ const Ocr = () => {
     <>
       <RGExtract />
       <CNHExtract />
-      {/* <FirstVersion />
-      <IDDocument /> */}
     </>
   );
 };

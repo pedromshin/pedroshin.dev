@@ -93,29 +93,27 @@ const RGExtract = () => {
           block.BlockType === "QUERY" || block.BlockType === "QUERY_RESULT"
       );
 
-      console.log("queryresults", queryResults);
-
       queryResults?.map((block, index) => {
+        const queryResultValue = queryResults?.[index + 1]?.Text;
+
         if (block.BlockType === "QUERY") {
           result.push({
             field: block.BlockType === "QUERY" ? block.Query?.Alias! : "",
-            value: queryResults[index + 1].Text!,
+            value: queryResultValue ?? "",
           });
 
           if (block.Query?.Alias! === "DOCUMENT_ORIGIN") {
             const ufPattern = ufStates.join("|");
-            const pattern = new RegExp(`-(${ufPattern})\\b`);
-            const uf = queryResults[index + 1].Text!.match(pattern);
+            const pattern = new RegExp(`(${ufPattern})\\b`);
+            const uf = queryResultValue!.match(pattern);
 
             result.push({
               field: "EMISSION_UF_STATE",
-              value: uf![1],
+              value: uf?.[1] ?? "",
             });
           }
         }
       });
-
-      console.log(result);
 
       setOcrResult(result);
     } catch (error) {

@@ -5,6 +5,7 @@ import { Dropzone, IMAGE_MIME_TYPE, PDF_MIME_TYPE } from "@mantine/dropzone";
 import { AnalyzeDocumentCommand } from "@aws-sdk/client-textract";
 import { TextractClient } from "@aws-sdk/client-textract";
 import { ufStates } from "./ufStates";
+import { issuingAgency } from "./issuingAgency";
 
 const client = new TextractClient({
   region: "us-east-1",
@@ -76,6 +77,17 @@ const RGExtract = () => {
       setLoading(true);
       const data = await client.send(analyzeDoc);
       setLoading(false);
+
+      // check to match with orgao emissor
+      // data?.Blocks?.map((block) => {
+      //   issuingAgency.map((agency) => {
+      //     const match = block.Text?.match(agency.sigla);
+      //     if (block.Text?.includes(agency.sigla)) {
+      //       console.log(match);
+      //     }
+      //   });
+      // });
+
       const queryResults = data.Blocks?.filter(
         (block) =>
           block.BlockType === "QUERY" || block.BlockType === "QUERY_RESULT"

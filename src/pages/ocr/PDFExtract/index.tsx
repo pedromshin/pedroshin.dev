@@ -1,9 +1,14 @@
 import { useState } from "react";
-import { Group, Stack, Text, Button } from "@mantine/core";
+import { Group, Stack, Text, Button, Image } from "@mantine/core";
 import { Dropzone, PDF_MIME_TYPE } from "@mantine/dropzone";
 
 import { DetectDocumentTextCommand } from "@aws-sdk/client-textract";
 import { TextractClient } from "@aws-sdk/client-textract";
+
+import * as pdfjsLib from "pdfjs-dist";
+import * as pdfjsWorker from "pdfjs-dist/build/pdf.worker.entry";
+
+pdfjsLib.GlobalWorkerOptions.workerSrc = pdfjsWorker;
 
 const client = new TextractClient({
   region: "us-east-1",
@@ -16,30 +21,50 @@ const client = new TextractClient({
 type OCRDataType = string;
 
 export const PDFExtract = () => {
+  const [imageUrl, setImageUrl] = useState<string>();
   const [imageData, setImageData] = useState<{ Bytes: Uint8Array }>();
   const [loading, setLoading] = useState<boolean>(false);
   const [ocrResult, setOcrResult] = useState<string>();
   const [fileName, setFileName] = useState<string>("");
 
-  const readAsArrayBuffer = (file: File) => {
-    return new Promise((resolve, reject) => {
-      const reader = new FileReader();
-      reader.onload = () => resolve(reader.result);
-      reader.onerror = reject;
-      reader.readAsArrayBuffer(file);
-    });
+  const dataURItoBlob = (dataURI: string) => {
+    const byteString = atob(dataURI.split(",")[1]);
+    const mimeString = dataURI.split(",")[0].split(":")[1].split(";")[0];
+    const ab = new ArrayBuffer(byteString.length);
+    const ia = new Uint8Array(ab);
+    for (let i = 0; i < byteString.length; i++) {
+      ia[i] = byteString.charCodeAt(i);
+    }
+    return new Blob([ab], { type: mimeString });
   };
-
-  const loadFile = (file: File) => {
-    readAsArrayBuffer(file).then((result) => {
-      setImageData({
-        Bytes: new Uint8Array(result as ArrayBuffer),
+  const loadFile = async (file: File) => {
+    const data = await file.arrayBuffer();
+    const loadingTask = pdfjsLib.getDocument({ data });
+    const loadedPdf = await loadingTask.promise;
+    const firstPage = await loadedPdf.getPage(1);
+    const viewport = firstPage.getViewport({ scale: 1 });
+    const canvas = document.createElement("canvas");
+    const context = canvas.getContext("2d")!;
+    canvas.width = viewport.width;
+    canvas.height = viewport.height;
+    await firstPage.render({ canvasContext: context, viewport }).promise;
+    const jpg = canvas.toDataURL("image/jpeg");
+    const blob = dataURItoBlob(jpg);
+    const url = URL.createObjectURL(blob);
+    setImageUrl(url);
+    setFileName(file.name);
+    await fetch(url)
+      .then((res) => {
+        return res.arrayBuffer();
+      })
+      .then((buf) => {
+        setImageUrl(url);
+        setImageData({
+          Bytes: new Uint8Array(buf),
+        });
       });
-      setFileName(file.name);
-    });
   };
 
-  // TODO MUDAR PARA APONTAR PARA OBJETO EM S3
   const params = {
     Document: imageData,
   };
@@ -82,6 +107,13 @@ export const PDFExtract = () => {
               </Text>
             )}
           </Dropzone>
+          {!!imageData && (
+            <Image
+              src={imageUrl}
+              style={{ width: "100%", maxWidth: 400, height: "auto" }}
+              alt="dropzone"
+            />
+          )}
         </Stack>
         <Stack style={{ flex: "1" }}>
           <Button

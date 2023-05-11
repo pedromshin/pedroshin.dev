@@ -51,7 +51,6 @@ const RGHighContrastExtract = () => {
         fetch(url)
           .then((res) => res.arrayBuffer())
           .then((buf) => {
-            setImageUrl(url);
             setImageData({
               Bytes: new Uint8Array(buf),
             });

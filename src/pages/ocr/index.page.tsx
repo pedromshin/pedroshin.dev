@@ -15,7 +15,7 @@ const Ocr = () => {
       <GeneralFormDataExtraction />
       {/* <GeneralTableDataExtraction /> */}
       <ExpenseExtract />
-      {/* <PDFExtract /> */}
+      <PDFExtract />
     </>
   );
 };

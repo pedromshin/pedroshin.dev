@@ -3,6 +3,7 @@ import RGHighContrastExtract from "./RGHighContrastExtract";
 import CNHExtract from "./CNHExtract";
 import GeneralFormDataExtraction from "./GeneralFormDataExtraction";
 import GeneralTableDataExtraction from "./GeneralTableDataExtraction";
+import { ExpenseExtract } from "./ExpenseExtract";
 
 const Ocr = () => {
   return (
@@ -12,6 +13,7 @@ const Ocr = () => {
       <CNHExtract />
       <GeneralFormDataExtraction />
       {/* <GeneralTableDataExtraction /> */}
+      <ExpenseExtract />
     </>
   );
 };

@@ -2,7 +2,7 @@ import { useState } from "react";
 import { Group, Stack, Text, Button, Image } from "@mantine/core";
 import { Dropzone, PDF_MIME_TYPE } from "@mantine/dropzone";
 
-import { DetectDocumentTextCommand } from "@aws-sdk/client-textract";
+import { Block, DetectDocumentTextCommand } from "@aws-sdk/client-textract";
 import { TextractClient } from "@aws-sdk/client-textract";
 
 import * as pdfjsLib from "pdfjs-dist";
@@ -18,13 +18,11 @@ const client = new TextractClient({
   },
 });
 
-type OCRDataType = string;
-
 export const PDFExtract = () => {
   const [imageUrl, setImageUrl] = useState<string>();
   const [imageData, setImageData] = useState<{ Bytes: Uint8Array }>();
   const [loading, setLoading] = useState<boolean>(false);
-  const [ocrResult, setOcrResult] = useState<string>();
+  const [ocrResult, setOcrResult] = useState<Block[]>();
   const [fileName, setFileName] = useState<string>("");
 
   const dataURItoBlob = (dataURI: string) => {
@@ -70,15 +68,13 @@ export const PDFExtract = () => {
   };
 
   const extract = async () => {
-    let result: OCRDataType = "";
     try {
       const analyzeDoc = new DetectDocumentTextCommand(params);
       setLoading(true);
       const data = await client.send(analyzeDoc);
-      console.log(data);
       setLoading(false);
 
-      setOcrResult(result);
+      setOcrResult(data?.Blocks);
     } catch (error) {
       setLoading(false);
     } finally {
@@ -133,7 +129,17 @@ export const PDFExtract = () => {
                   padding: "10px",
                 }}
               >
-                {ocrResult!}
+                {ocrResult.map((block) => (
+                  <div key={block.Id}>
+                    {block.Text && <p>{block.Text}</p>}
+                    {block.Relationships &&
+                      block?.Relationships?.[0]?.Ids?.map((id) => (
+                        <p key={id}>
+                          {ocrResult?.find((block) => block?.Id === id)?.Text}
+                        </p>
+                      ))}
+                  </div>
+                ))}
               </Text>
             </Stack>
           )}

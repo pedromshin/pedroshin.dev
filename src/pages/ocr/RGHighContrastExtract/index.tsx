@@ -109,13 +109,18 @@ const RGHighContrastExtract = () => {
           block.BlockType === "QUERY" || block.BlockType === "QUERY_RESULT"
       );
 
-      queryResults?.map((block, index) => {
-        const queryResultValue = queryResults?.[index + 1]?.Text;
-
+      for (const block of queryResults ?? []) {
         if (block.BlockType === "QUERY") {
+          const answerIds = block.Relationships?.[0]?.Ids ?? [];
+          const queryResultBlock = queryResults?.find(
+            (resultBlock) =>
+              resultBlock.BlockType === "QUERY_RESULT" &&
+              answerIds.includes(resultBlock?.Id ?? "")
+          );
+          const queryResultValue = queryResultBlock?.Text ?? "";
           result.push({
-            field: block.BlockType === "QUERY" ? block.Query?.Alias! : "",
-            value: queryResultValue ?? "",
+            field: block.Query?.Alias ?? "",
+            value: queryResultValue,
           });
 
           if (block.Query?.Alias! === "DOCUMENT_ORIGIN") {
@@ -129,7 +134,7 @@ const RGHighContrastExtract = () => {
             });
           }
         }
-      });
+      }
 
       setOcrResult(result);
     } catch (error) {

@@ -67,14 +67,21 @@ const CNHExtract = () => {
           block.BlockType === "QUERY" || block.BlockType === "QUERY_RESULT"
       );
 
-      queryResults?.map((block, index) => {
+      for (const block of queryResults ?? []) {
         if (block.BlockType === "QUERY") {
+          const answerIds = block.Relationships?.[0]?.Ids ?? [];
+          const queryResultBlock = queryResults?.find(
+            (resultBlock) =>
+              resultBlock.BlockType === "QUERY_RESULT" &&
+              answerIds.includes(resultBlock?.Id ?? "")
+          );
+          const queryResultValue = queryResultBlock?.Text ?? "";
           result.push({
-            field: block.BlockType === "QUERY" ? block.Query?.Alias! : "",
-            value: queryResults[index + 1].Text!,
+            field: block.Query?.Alias ?? "",
+            value: queryResultValue,
           });
         }
-      });
+      }
 
       setOcrResult(result);
     } catch (error) {

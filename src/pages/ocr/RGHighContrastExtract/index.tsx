@@ -111,6 +111,8 @@ const RGHighContrastExtract = () => {
           block.BlockType === "QUERY" || block.BlockType === "QUERY_RESULT"
       );
 
+      console.log(queryResults);
+
       queryResults?.map((block, index) => {
         const queryResultValue = queryResults?.[index + 1]?.Text;
 
@@ -123,7 +125,7 @@ const RGHighContrastExtract = () => {
           if (block.Query?.Alias! === "DOCUMENT_ORIGIN") {
             const ufPattern = ufStates.join("|");
             const pattern = new RegExp(`(${ufPattern})\\b`);
-            const uf = queryResultValue!.match(pattern);
+            const uf = queryResultValue?.match(pattern);
 
             result.push({
               field: "EMISSION_UF_STATE",

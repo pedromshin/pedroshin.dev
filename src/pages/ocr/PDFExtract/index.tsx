@@ -24,6 +24,7 @@ export const PDFExtract = () => {
   const [loading, setLoading] = useState<boolean>(false);
   const [ocrResult, setOcrResult] = useState<string>("");
   const [fileName, setFileName] = useState<string>("");
+  const [dataResult, setDataResult] = useState<Block[] | undefined>();
 
   const dataURItoBlob = (dataURI: string) => {
     const byteString = atob(dataURI.split(",")[1]);
@@ -85,6 +86,7 @@ export const PDFExtract = () => {
       });
 
       setOcrResult(result.join(" "));
+      setDataResult(data?.Blocks);
     } catch (error) {
       setLoading(false);
     } finally {
@@ -132,7 +134,7 @@ export const PDFExtract = () => {
           </Button>
           {!!ocrResult && (
             <Stack>
-              <Text size="xl">RESULT</Text>
+              <Text size="xl">RESULT 1</Text>
               <Text
                 style={{
                   fontFamily: "monospace",
@@ -140,6 +142,29 @@ export const PDFExtract = () => {
                 }}
               >
                 {ocrResult}
+              </Text>
+            </Stack>
+          )}
+          {!!dataResult && (
+            <Stack>
+              <Text size="xl">RESULT 2</Text>
+              <Text
+                style={{
+                  fontFamily: "monospace",
+                  padding: "10px",
+                }}
+              >
+                {dataResult?.map((block) => (
+                  <div key={block.Id}>
+                    {block.Text && <p>{block.Text}</p>}
+                    {block.Relationships &&
+                      block?.Relationships?.[0]?.Ids?.map((id) => (
+                        <p key={id}>
+                          {dataResult?.find((block) => block?.Id === id)?.Text}
+                        </p>
+                      ))}
+                  </div>
+                ))}
               </Text>
             </Stack>
           )}

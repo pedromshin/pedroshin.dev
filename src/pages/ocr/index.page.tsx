@@ -4,6 +4,7 @@ import CNHExtract from "./CNHExtract";
 import GeneralFormDataExtraction from "./GeneralFormDataExtraction";
 import GeneralTableDataExtraction from "./GeneralTableDataExtraction";
 import { ExpenseExtract } from "./ExpenseExtract";
+import { PDFExtract } from "./PDFExtract";
 
 const Ocr = () => {
   return (
@@ -14,6 +15,7 @@ const Ocr = () => {
       <GeneralFormDataExtraction />
       {/* <GeneralTableDataExtraction /> */}
       <ExpenseExtract />
+      {/* <PDFExtract /> */}
     </>
   );
 };

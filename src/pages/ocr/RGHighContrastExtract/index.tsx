@@ -22,6 +22,7 @@ const RGHighContrastExtract = () => {
   const [imageUrl, setImageUrl] = useState<string>();
   const [loading, setLoading] = useState<boolean>(false);
   const [ocrResult, setOcrResult] = useState<RGDataType>();
+  const [fileName, setFileName] = useState<string>("");
 
   const loadFile = (file: File) => {
     const reader = new FileReader();
@@ -57,6 +58,7 @@ const RGHighContrastExtract = () => {
           });
       };
     };
+    setFileName(file.name);
   };
 
   const params = {
@@ -157,9 +159,15 @@ const RGHighContrastExtract = () => {
             accept={[...IMAGE_MIME_TYPE, ...PDF_MIME_TYPE]}
             multiple={false}
           >
-            <Text size="xl" inline>
-              Drag image here or click to select file
-            </Text>
+            {!!fileName ? (
+              <Text size="xl" inline>
+                {fileName}
+              </Text>
+            ) : (
+              <Text size="xl" inline>
+                Drag image here or click to select file
+              </Text>
+            )}
           </Dropzone>
 
           {!!imageData && (

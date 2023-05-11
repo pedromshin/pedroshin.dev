@@ -21,6 +21,7 @@ export const ExpenseExtract = () => {
   const [loading, setLoading] = useState<boolean>(false);
   const [ocrResult, setOcrResult] = useState<OCRResultType>();
   const [expenseData, setExpenseData] = useState<ExpenseField[]>();
+  const [fileName, setFileName] = useState<string>("");
 
   const readAsArrayBuffer = (file: File) => {
     return new Promise((resolve, reject) => {
@@ -38,6 +39,7 @@ export const ExpenseExtract = () => {
         Bytes: new Uint8Array(result as ArrayBuffer),
       });
     });
+    setFileName(file.name);
   };
 
   const params = {
@@ -98,9 +100,15 @@ export const ExpenseExtract = () => {
             accept={[...IMAGE_MIME_TYPE, ...PDF_MIME_TYPE]}
             multiple={false}
           >
-            <Text size="xl" inline>
-              Drag image here or click to select file
-            </Text>
+            {!!fileName ? (
+              <Text size="xl" inline>
+                {fileName}
+              </Text>
+            ) : (
+              <Text size="xl" inline>
+                Drag image here or click to select file
+              </Text>
+            )}
           </Dropzone>
 
           {!!imageData && (

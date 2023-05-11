@@ -111,8 +111,6 @@ const RGHighContrastExtract = () => {
           block.BlockType === "QUERY" || block.BlockType === "QUERY_RESULT"
       );
 
-      console.log(queryResults);
-
       queryResults?.map((block, index) => {
         const queryResultValue = queryResults?.[index + 1]?.Text;
 
@@ -152,6 +150,10 @@ const RGHighContrastExtract = () => {
           <Text size="24" inline>
             Análise do RG com tratamento de preto e branco de alto contraste
             prévio à análise de OCR.
+          </Text>
+          <Text size="24" inline>
+            Acabou sendo pior do que a análise em cor normal, mas talvez a gente
+            encontre um uso pra ela
           </Text>
           <Dropzone
             onDrop={(files) => loadFile(files[0])}

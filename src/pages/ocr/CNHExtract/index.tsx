@@ -67,7 +67,6 @@ const CNHExtract = () => {
 
       queryResults?.map((block, index) => {
         if (block.BlockType === "QUERY") {
-          console.log(block.Query?.Alias, queryResults[index + 1].Text!);
           result.push({
             field: block.BlockType === "QUERY" ? block.Query?.Alias! : "",
             value: queryResults[index + 1].Text!,

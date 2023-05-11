@@ -105,7 +105,7 @@ const RGExtract = () => {
           if (block.Query?.Alias! === "DOCUMENT_ORIGIN") {
             const ufPattern = ufStates.join("|");
             const pattern = new RegExp(`(${ufPattern})\\b`);
-            const uf = queryResultValue!.match(pattern);
+            const uf = queryResultValue?.match(pattern);
 
             result.push({
               field: "EMISSION_UF_STATE",

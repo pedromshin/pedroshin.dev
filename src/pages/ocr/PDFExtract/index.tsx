@@ -156,13 +156,9 @@ export const PDFExtract = () => {
               >
                 {dataResult?.map((block) => (
                   <div key={block.Id}>
-                    {block.Text && <p>{block.Text}</p>}
-                    {block.Relationships &&
-                      block?.Relationships?.[0]?.Ids?.map((id) => (
-                        <p key={id}>
-                          {dataResult?.find((block) => block?.Id === id)?.Text}
-                        </p>
-                      ))}
+                    {block.Text && block.BlockType === "LINE" && (
+                      <p>{block.Text}</p>
+                    )}
                   </div>
                 ))}
               </Text>

@@ -201,7 +201,7 @@ export const ExpenseExtract = () => {
                       <th
                         style={{ textAlign: "start", border: "1px solid gray" }}
                       >
-                        Type (Standandized key)
+                        Type (Chaves em formato padronizado)
                       </th>
                       <th
                         style={{ textAlign: "start", border: "1px solid gray" }}

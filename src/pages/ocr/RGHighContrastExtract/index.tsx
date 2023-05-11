@@ -83,9 +83,6 @@ const RGHighContrastExtract = () => {
         },
       ],
     },
-    OutputConfig: {
-      ContentType: "RAW",
-    },
   };
 
   const extract = async () => {

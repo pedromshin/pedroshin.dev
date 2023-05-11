@@ -65,9 +65,6 @@ const RGExtract = () => {
         },
       ],
     },
-    OutputConfig: {
-      ContentType: "RAW",
-    },
   };
 
   const extract = async () => {

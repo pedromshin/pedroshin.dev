@@ -2,7 +2,7 @@ import { useState } from "react";
 import { Group, Stack, Text, Image, Button } from "@mantine/core";
 import { Dropzone, IMAGE_MIME_TYPE, PDF_MIME_TYPE } from "@mantine/dropzone";
 
-import { AnalyzeExpenseCommand } from "@aws-sdk/client-textract";
+import { AnalyzeExpenseCommand, ExpenseField } from "@aws-sdk/client-textract";
 import { TextractClient } from "@aws-sdk/client-textract";
 
 const client = new TextractClient({
@@ -20,6 +20,7 @@ export const ExpenseExtract = () => {
   const [imageUrl, setImageUrl] = useState<string>();
   const [loading, setLoading] = useState<boolean>(false);
   const [ocrResult, setOcrResult] = useState<OCRResultType>();
+  const [expenseData, setExpenseData] = useState<ExpenseField[]>();
 
   const readAsArrayBuffer = (file: File) => {
     return new Promise((resolve, reject) => {
@@ -42,30 +43,6 @@ export const ExpenseExtract = () => {
   const params = {
     Document: imageData!,
     FeatureTypes: ["QUERIES"],
-    QueriesConfig: {
-      Queries: [
-        { Text: "registro geral", Alias: "RG_NUMBER" },
-        { Text: "data de expedicao", Alias: "EXPEDITION_DATE" },
-        { Text: "naturalidade", Alias: "PLACE_OF_BIRTH" },
-        { Text: "data de nascimento", Alias: "BIRTHDATE" },
-        { Text: "nome", Alias: "NAME" },
-        {
-          Text: "what is the content of the second line of filiacao?",
-          Alias: "FATHER_NAME",
-        },
-        {
-          Text: "what is the content of the first line of filiacao?",
-          Alias: "MOTHER_NAME",
-        },
-        {
-          Text: "city and state in 'doc origem'",
-          Alias: "DOCUMENT_ORIGIN",
-        },
-      ],
-    },
-    OutputConfig: {
-      ContentType: "RAW",
-    },
   };
 
   const extract = async () => {
@@ -74,6 +51,7 @@ export const ExpenseExtract = () => {
       const analyzeDoc = new AnalyzeExpenseCommand(params);
       setLoading(true);
       const data = await client.send(analyzeDoc);
+      setExpenseData(data?.ExpenseDocuments?.[0]?.SummaryFields);
       let expenses: any = [];
 
       if (data) {
@@ -81,7 +59,7 @@ export const ExpenseExtract = () => {
           doc?.LineItemGroups?.forEach((items) => {
             items?.LineItems?.forEach((fields) => {
               fields?.LineItemExpenseFields?.forEach((expenseFields) => {
-                expenses.push(expenseFields);
+                expenses?.push(expenseFields);
               });
             });
           });
@@ -89,19 +67,17 @@ export const ExpenseExtract = () => {
       }
       setLoading(false);
 
-      const items = expenses.filter((obj: any) => obj.Type.Text === "ITEM");
-      const prices = expenses.filter((obj: any) => obj.Type.Text === "PRICE");
+      const items = expenses.filter((obj: any) => obj?.Type?.Text === "ITEM");
+      const prices = expenses.filter((obj: any) => obj?.Type?.Text === "PRICE");
       const quantities = expenses.filter(
-        (obj: any) => obj.Type.Text === "QUANTITY"
+        (obj: any) => obj?.Type?.Text === "QUANTITY"
       );
 
       result = items.map((item: any, index: any) => ({
-        item: item.ValueDetection.Text,
-        price: parseFloat(prices[index].ValueDetection.Text),
-        quantity: parseInt(quantities[index].ValueDetection.Text),
+        item: item?.ValueDetection?.Text,
+        price: parseFloat(prices?.[index]?.ValueDetection?.Text),
+        quantity: parseInt(quantities?.[index]?.ValueDetection?.Text),
       }));
-
-      console.log(result);
 
       setOcrResult(result);
     } catch (error) {
@@ -184,7 +160,7 @@ export const ExpenseExtract = () => {
                             border: "1px solid gray",
                           }}
                         >
-                          {result.item}
+                          {result?.item}
                         </td>
                         <td
                           style={{
@@ -192,7 +168,7 @@ export const ExpenseExtract = () => {
                             border: "1px solid gray",
                           }}
                         >
-                          {result.price}
+                          {result?.price}
                         </td>
                         <td
                           style={{
@@ -200,7 +176,58 @@ export const ExpenseExtract = () => {
                             border: "1px solid gray",
                           }}
                         >
-                          {result.quantity}
+                          {result?.quantity}
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+                <table>
+                  <thead>
+                    <tr>
+                      <th
+                        style={{ textAlign: "start", border: "1px solid gray" }}
+                      >
+                        LabelDetection
+                      </th>
+                      <th
+                        style={{ textAlign: "start", border: "1px solid gray" }}
+                      >
+                        Type (Standandized key)
+                      </th>
+                      <th
+                        style={{ textAlign: "start", border: "1px solid gray" }}
+                      >
+                        ValueDetection
+                      </th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {expenseData?.map((item, index) => (
+                      <tr key={index}>
+                        <td
+                          style={{
+                            textAlign: "start",
+                            border: "1px solid gray",
+                          }}
+                        >
+                          {item?.LabelDetection?.Text}
+                        </td>
+                        <td
+                          style={{
+                            textAlign: "start",
+                            border: "1px solid gray",
+                          }}
+                        >
+                          {item?.Type?.Text}
+                        </td>
+                        <td
+                          style={{
+                            textAlign: "start",
+                            border: "1px solid gray",
+                          }}
+                        >
+                          {item?.ValueDetection?.Text}
                         </td>
                       </tr>
                     ))}

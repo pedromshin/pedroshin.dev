@@ -22,7 +22,7 @@ export const PDFExtract = () => {
   const [imageUrl, setImageUrl] = useState<string>();
   const [imageData, setImageData] = useState<{ Bytes: Uint8Array }>();
   const [loading, setLoading] = useState<boolean>(false);
-  const [ocrResult, setOcrResult] = useState<Block[]>();
+  const [ocrResult, setOcrResult] = useState<string>("");
   const [fileName, setFileName] = useState<string>("");
 
   const dataURItoBlob = (dataURI: string) => {
@@ -68,13 +68,23 @@ export const PDFExtract = () => {
   };
 
   const extract = async () => {
+    const result: string[] = [];
     try {
       const analyzeDoc = new DetectDocumentTextCommand(params);
       setLoading(true);
       const data = await client.send(analyzeDoc);
       setLoading(false);
 
-      setOcrResult(data?.Blocks);
+      data?.Blocks?.map((block) => {
+        block.Text && result.push(block.Text as string);
+        block.Relationships &&
+          block?.Relationships?.[0]?.Ids?.map((id) => {
+            const text = data?.Blocks?.find((block) => block?.Id === id)?.Text;
+            text && result.push(text);
+          });
+      });
+
+      setOcrResult(result.join(" "));
     } catch (error) {
       setLoading(false);
     } finally {
@@ -129,17 +139,7 @@ export const PDFExtract = () => {
                   padding: "10px",
                 }}
               >
-                {ocrResult.map((block) => (
-                  <div key={block.Id}>
-                    {block.Text && <p>{block.Text}</p>}
-                    {block.Relationships &&
-                      block?.Relationships?.[0]?.Ids?.map((id) => (
-                        <p key={id}>
-                          {ocrResult?.find((block) => block?.Id === id)?.Text}
-                        </p>
-                      ))}
-                  </div>
-                ))}
+                {ocrResult}
               </Text>
             </Stack>
           )}

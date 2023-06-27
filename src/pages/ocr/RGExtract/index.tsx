@@ -2,8 +2,10 @@ import { useState } from "react";
 import { Group, Stack, Text, Image, Button } from "@mantine/core";
 import { Dropzone, IMAGE_MIME_TYPE, PDF_MIME_TYPE } from "@mantine/dropzone";
 
-import { AnalyzeDocumentCommand } from "@aws-sdk/client-textract";
-import { TextractClient } from "@aws-sdk/client-textract";
+import {
+  AnalyzeDocumentCommand,
+  TextractClient,
+} from "@aws-sdk/client-textract";
 import { ufStates } from "./ufStates";
 import { issuingAgency } from "./issuingAgency";
 
@@ -114,6 +116,34 @@ const RGExtract = () => {
             result.push({
               field: "EMISSION_UF_STATE",
               value: uf?.[1] ?? "",
+            });
+          }
+
+          if (
+            block.Query?.Alias! === "FATHER_NAME" ||
+            block.Query?.Alias! === "MOTHER_NAME" ||
+            block.Query?.Alias! === "NAME"
+          ) {
+            const queryResultBlockLine = data.Blocks?.find((resultBlock) => {
+              const resultBlockTop =
+                resultBlock.Geometry?.BoundingBox?.Top?.toFixed(3);
+              const resultBlockLeft =
+                resultBlock.Geometry?.BoundingBox?.Left?.toFixed(3);
+              const queryResultBlockTop =
+                queryResultBlock?.Geometry?.BoundingBox?.Top?.toFixed(3);
+              const queryResultBlockLeft =
+                queryResultBlock?.Geometry?.BoundingBox?.Left?.toFixed(3);
+
+              return (
+                resultBlock.BlockType === "LINE" &&
+                Math.abs(+resultBlockTop! - +queryResultBlockTop!) < 0.02 &&
+                Math.abs(+resultBlockLeft! - +queryResultBlockLeft!) < 0.02
+              );
+            });
+
+            result.push({
+              field: `NORMALIZED_${block.Query?.Alias}` ?? "",
+              value: queryResultBlockLine?.Text ?? "",
             });
           }
         }

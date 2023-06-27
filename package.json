@@ -9,7 +9,7 @@
     "lint": "next lint"
   },
   "dependencies": {
-    "@aws-sdk/client-textract": "^3.315.0",
+    "@aws-sdk/client-textract": "^3.360.0",
     "@emotion/react": "^11.10.6",
     "@mantine/core": "^6.0.8",
     "@mantine/dropzone": "^6.0.8",

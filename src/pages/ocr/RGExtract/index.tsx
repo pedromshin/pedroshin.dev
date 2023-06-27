@@ -127,8 +127,8 @@ const RGExtract = () => {
 
             return (
               resultBlock.BlockType === "LINE" &&
-              Math.abs(+resultBlockTop! - +queryResultBlockTop!) < 0.02 &&
-              Math.abs(+resultBlockLeft! - +queryResultBlockLeft!) < 0.02
+              Math.abs(+resultBlockTop! - +queryResultBlockTop!) < 0.02
+              // Math.abs(+resultBlockLeft! - +queryResultBlockLeft!) < 0.02
             );
           });
 

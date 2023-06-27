@@ -56,11 +56,11 @@ const RGExtract = () => {
         { Text: "data de nascimento", Alias: "BIRTHDATE" },
         { Text: "nome", Alias: "NAME" },
         {
-          Text: "what is the content of the second line of filiacao?",
+          Text: "what is the content of the first line of filiacao?",
           Alias: "FATHER_NAME",
         },
         {
-          Text: "what is the content of the first line of filiacao?",
+          Text: "what is the content of the second line of filiacao?",
           Alias: "MOTHER_NAME",
         },
         {

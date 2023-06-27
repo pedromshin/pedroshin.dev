@@ -94,6 +94,8 @@ const RGExtract = () => {
           block.BlockType === "QUERY" || block.BlockType === "QUERY_RESULT"
       );
 
+      let normalized = [];
+
       for (const block of queryResults ?? []) {
         if (block.BlockType === "QUERY") {
           const answerIds = block.Relationships?.[0]?.Ids ?? [];
@@ -119,35 +121,31 @@ const RGExtract = () => {
             });
           }
 
-          if (
-            block.Query?.Alias! === "FATHER_NAME" ||
-            block.Query?.Alias! === "MOTHER_NAME" ||
-            block.Query?.Alias! === "NAME"
-          ) {
-            const queryResultBlockLine = data.Blocks?.find((resultBlock) => {
-              const resultBlockTop =
-                resultBlock.Geometry?.BoundingBox?.Top?.toFixed(3);
-              const resultBlockLeft =
-                resultBlock.Geometry?.BoundingBox?.Left?.toFixed(3);
-              const queryResultBlockTop =
-                queryResultBlock?.Geometry?.BoundingBox?.Top?.toFixed(3);
-              const queryResultBlockLeft =
-                queryResultBlock?.Geometry?.BoundingBox?.Left?.toFixed(3);
+          const queryResultBlockLine = data.Blocks?.find((resultBlock) => {
+            const resultBlockTop =
+              resultBlock.Geometry?.BoundingBox?.Top?.toFixed(3);
+            const resultBlockLeft =
+              resultBlock.Geometry?.BoundingBox?.Left?.toFixed(3);
+            const queryResultBlockTop =
+              queryResultBlock?.Geometry?.BoundingBox?.Top?.toFixed(3);
+            const queryResultBlockLeft =
+              queryResultBlock?.Geometry?.BoundingBox?.Left?.toFixed(3);
 
-              return (
-                resultBlock.BlockType === "LINE" &&
-                Math.abs(+resultBlockTop! - +queryResultBlockTop!) < 0.02 &&
-                Math.abs(+resultBlockLeft! - +queryResultBlockLeft!) < 0.02
-              );
-            });
+            return (
+              resultBlock.BlockType === "LINE" &&
+              Math.abs(+resultBlockTop! - +queryResultBlockTop!) < 0.02 &&
+              Math.abs(+resultBlockLeft! - +queryResultBlockLeft!) < 0.02
+            );
+          });
 
-            result.push({
-              field: `NORMALIZED_${block.Query?.Alias}` ?? "",
-              value: queryResultBlockLine?.Text ?? "",
-            });
-          }
+          normalized.push({
+            field: `NORMALIZED_${block.Query?.Alias}` ?? "",
+            value: queryResultBlockLine?.Text ?? "",
+          });
         }
       }
+
+      result = [...result, ...normalized];
 
       setOcrResult(result);
     } catch (error) {

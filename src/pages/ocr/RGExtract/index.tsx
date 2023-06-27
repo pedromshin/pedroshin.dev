@@ -94,8 +94,6 @@ const RGExtract = () => {
           block.BlockType === "QUERY" || block.BlockType === "QUERY_RESULT"
       );
 
-      let normalized = [];
-
       for (const block of queryResults ?? []) {
         if (block.BlockType === "QUERY") {
           const answerIds = block.Relationships?.[0]?.Ids ?? [];
@@ -104,11 +102,7 @@ const RGExtract = () => {
               resultBlock.BlockType === "QUERY_RESULT" &&
               answerIds.includes(resultBlock?.Id ?? "")
           );
-          const queryResultValue = queryResultBlock?.Text ?? "";
-          result.push({
-            field: block.Query?.Alias ?? "",
-            value: queryResultValue,
-          });
+          let queryResultValue = queryResultBlock?.Text ?? "";
 
           if (block.Query?.Alias! === "DOCUMENT_ORIGIN") {
             const ufPattern = ufStates.join("|");
@@ -138,14 +132,40 @@ const RGExtract = () => {
             );
           });
 
-          normalized.push({
-            field: `NORMALIZED_${block.Query?.Alias}` ?? "",
-            value: queryResultBlockLine?.Text ?? "",
+          const queryResultBlockLineText = queryResultBlockLine?.Text ?? "";
+
+          const accentsRegex = /[\u0300-\u036f\u00c0-\u00ff]/;
+
+          const normalizeQueryResultBlockLine =
+            queryResultBlockLineText.replace(accentsRegex, "");
+
+          if (
+            normalizeQueryResultBlockLine.includes(queryResultValue) ||
+            queryResultValue.includes(normalizeQueryResultBlockLine)
+          ) {
+            const normalizedWords = queryResultBlockLineText.split(" ");
+            const queryResultWords = queryResultValue.split(" ");
+            const indexes = [];
+
+            for (let i = 0; i < normalizedWords.length; i++) {
+              if (accentsRegex.test(normalizedWords[i])) {
+                indexes.push(i);
+              }
+            }
+
+            for (const index of indexes) {
+              queryResultWords[index] = normalizedWords[index];
+            }
+
+            queryResultValue = queryResultWords.join(" ");
+          }
+
+          result.push({
+            field: block.Query?.Alias ?? "",
+            value: queryResultValue,
           });
         }
       }
-
-      result = [...result, ...normalized];
 
       setOcrResult(result);
     } catch (error) {

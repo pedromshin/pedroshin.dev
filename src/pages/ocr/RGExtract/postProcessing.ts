@@ -10,103 +10,118 @@ const detectDocumentOrigin = (resultValue: string) => {
   return uf;
 };
 
-const detectNormalizedValues = (
-  data: Block[],
-  queryResultValue: string,
-  block: Block,
-  queryResultBlock: Block | undefined,
-  blockAlias: string
+const findLine = (data: Block[], block: Block) => {
+  const lineText = data.find((item) => {
+    const itemTop = item.Geometry?.BoundingBox?.Top?.toFixed(3);
+    const blockTop = block?.Geometry?.BoundingBox?.Top?.toFixed(3);
+
+    return item.BlockType === "LINE" && Math.abs(+itemTop! - +blockTop!) < 0.02;
+  });
+
+  return lineText?.Text ?? "";
+};
+
+const normalizeSpecialCharacters = (
+  specialCharsRegex: RegExp,
+  resultValue: string,
+  resultBlocks: Block[],
+  data: Block[]
 ) => {
-  let result = [];
-  let resultValue = queryResultValue;
+  for (const resultBlock of resultBlocks) {
+    const resultLineText = findLine(data, resultBlock);
 
-  const queryResultBlockLine = data.find((resultBlock) => {
-    const resultBlockTop = resultBlock.Geometry?.BoundingBox?.Top?.toFixed(3);
-    const queryResultBlockTop =
-      queryResultBlock?.Geometry?.BoundingBox?.Top?.toFixed(3);
-
-    return (
-      resultBlock.BlockType === "LINE" &&
-      Math.abs(+resultBlockTop! - +queryResultBlockTop!) < 0.02
+    const normalizedResultLineText = resultLineText.replace(
+      specialCharsRegex,
+      ""
     );
-  });
 
-  const queryResultBlockLineText = queryResultBlockLine?.Text ?? "";
+    if (
+      normalizedResultLineText.includes(resultValue) ||
+      resultValue?.includes(normalizedResultLineText)
+    ) {
+      const normalizedWords = resultLineText.split(" ");
+      const queryResultWords: string[] = resultValue?.split(" ");
+      const indexes = [];
 
-  const accentsRegex = /[\u0300-\u036f\u00c0-\u00ff]/;
-
-  const normalizeQueryResultBlockLine = queryResultBlockLineText.replace(
-    accentsRegex,
-    ""
-  );
-
-  if (
-    normalizeQueryResultBlockLine.includes(queryResultValue) ||
-    queryResultValue.includes(normalizeQueryResultBlockLine)
-  ) {
-    const normalizedWords = queryResultBlockLineText.split(" ");
-    const queryResultWords = queryResultValue.split(" ");
-    const indexes = [];
-
-    for (let i = 0; i < normalizedWords.length; i++) {
-      if (accentsRegex.test(normalizedWords[i])) {
-        indexes.push(i);
+      for (let i = 0; i < normalizedWords.length; i++) {
+        if (specialCharsRegex.test(normalizedWords[i])) {
+          indexes.push(i);
+        }
       }
-    }
 
-    for (const index of indexes) {
-      queryResultWords[index] = normalizedWords[index];
-    }
+      for (const index of indexes) {
+        queryResultWords[index] = normalizedWords[index];
+      }
 
-    queryResultValue = queryResultWords.join(" ");
+      resultValue = queryResultWords.join(" ");
+    }
   }
 
-  if (blockAlias === "RG_DOCUMENT_ORIGIN") {
-    const documentOrigin = detectDocumentOrigin(queryResultValue);
-    if (documentOrigin) resultValue = documentOrigin;
+  return resultValue;
+};
+
+const detectCommonErrors = (resultValue?: string) => {
+  if (resultValue) {
+    const commonErrors = ["NATURALIDACE", "NATURALIDADE"];
+    if (commonErrors.includes(resultValue)) {
+      resultValue = "";
+    }
   }
 
-  result.push({
-    field: block.Query?.Alias ?? "",
-    value: resultValue,
-  });
-
-  return result;
+  return resultValue;
 };
 
 export const postProcessing = (data: Block[]) => {
   let result: RGDataType = [];
+  const accentsRegex = /[\u0300-\u036f\u00c0-\u00ff]/;
 
   const queryBlocks = data.filter((block) => block.BlockType === "QUERY");
   const resultBlocks = data.filter(
     (block) => block.BlockType === "QUERY_RESULT"
   );
 
-  for (const block of queryBlocks) {
-    const blockAlias = block.Query?.Alias!;
+  for (const queryBlock of queryBlocks) {
+    const blockAlias = queryBlock.Query?.Alias!;
 
-    const answerIds = block.Relationships?.[0]?.Ids ?? [];
+    const answerIds = queryBlock.Relationships?.[0]?.Ids ?? [];
 
     const resultBlock = resultBlocks?.find((resultBlock) => {
       return answerIds.includes(resultBlock?.Id ?? "");
     });
 
     let resultValue = resultBlock?.Text;
+    const resultConfidence = resultBlock?.Confidence;
+
+    resultValue = detectCommonErrors(resultValue);
 
     if (!!resultValue) {
-      result.push(
-        ...detectNormalizedValues(
-          data,
-          resultValue!,
-          block,
-          resultBlock,
-          blockAlias
-        )
+      resultValue = normalizeSpecialCharacters(
+        accentsRegex,
+        resultValue,
+        resultBlocks,
+        data
       );
+
+      if (blockAlias === "RG_DOCUMENT_ORIGIN") {
+        const documentOrigin = detectDocumentOrigin(resultValue);
+        if (documentOrigin) resultValue = documentOrigin;
+      }
+
+      if (resultConfidence && resultConfidence < 90) {
+        result.push({
+          field: blockAlias,
+          error: "ERROR_LOW_CONFIDENCE",
+        });
+      } else {
+        result.push({
+          field: blockAlias,
+          value: resultValue,
+        });
+      }
     } else {
       result.push({
         field: blockAlias,
-        error: `ERROR_MISSING_VALUE_${blockAlias}`,
+        error: `ERROR_MISSING_VALUE`,
       });
     }
   }

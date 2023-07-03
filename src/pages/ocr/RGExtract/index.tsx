@@ -16,7 +16,14 @@ const client = new TextractClient({
   },
 });
 
-type RGDataType = { field: string; value: string; error: string | null }[];
+export type RGDataType = Array<
+  | {
+      field: string;
+      value?: string;
+      error?: never;
+    }
+  | { field: string; value?: never; error?: string }
+>;
 
 const RGExtract = () => {
   const [imageData, setImageData] = useState<{ Bytes: Uint8Array }>();
@@ -49,22 +56,22 @@ const RGExtract = () => {
     FeatureTypes: ["QUERIES"],
     QueriesConfig: {
       Queries: [
-        { Text: "registro geral", Alias: "RG_NUMBER" },
-        { Text: "data de expedicao", Alias: "EXPEDITION_DATE" },
-        { Text: "naturalidade", Alias: "PLACE_OF_BIRTH" },
-        { Text: "data de nascimento", Alias: "BIRTHDATE" },
-        { Text: "nome", Alias: "NAME" },
+        { Text: "registro geral", Alias: "RG_DOCUMENT_NUMBER" },
+        { Text: "data de expedicao", Alias: "RG_DOCUMENT_EXPEDITION_DATE" },
+        { Text: "naturalidade", Alias: "RG_OWNER_PLACE_OF_BIRTH" },
+        { Text: "data de nascimento", Alias: "RG_OWNER_BIRTHDATE" },
+        { Text: "nome", Alias: "RG_OWNER_NAME" },
         {
           Text: "what is the content of the first line of filiacao?",
-          Alias: "FATHER_NAME",
+          Alias: "RG_OWNER_FATHER_NAME",
         },
         {
           Text: "what is the content of the second line of filiacao?",
-          Alias: "MOTHER_NAME",
+          Alias: "RG_OWNER_MOTHER_NAME",
         },
         {
           Text: "city and state in 'doc origem'",
-          Alias: "DOCUMENT_ORIGIN",
+          Alias: "RG_DOCUMENT_ORIGIN",
         },
       ],
     },
@@ -163,6 +170,11 @@ const RGExtract = () => {
                       >
                         Valor
                       </th>
+                      <th
+                        style={{ textAlign: "start", border: "1px solid gray" }}
+                      >
+                        Erro
+                      </th>
                     </tr>
                   </thead>
                   <tbody>
@@ -184,6 +196,14 @@ const RGExtract = () => {
                             }}
                           >
                             {entry.value}
+                          </td>
+                          <td
+                            style={{
+                              textAlign: "start",
+                              border: "1px solid gray",
+                            }}
+                          >
+                            {entry.error}
                           </td>
                         </tr>
                       );

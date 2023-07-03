@@ -1,25 +1,24 @@
 import { Block } from "@aws-sdk/client-textract";
 import { ufStates } from "./ufStates";
+import { RGDataType } from ".";
 
-const detectDocumentOrigin = (queryResultValue: string) => {
+const detectDocumentOrigin = (resultValue: string) => {
   const ufPattern = ufStates.join("|");
   const pattern = new RegExp(`(${ufPattern})\\b`);
-  const uf = queryResultValue?.match(pattern);
+  const uf = resultValue?.match(pattern)?.[1];
 
-  return {
-    field: "EMISSION_UF_STATE",
-    value: uf?.[1] ?? "",
-    error: null,
-  };
+  return uf;
 };
 
-const detectParenstNames = (
+const detectNormalizedValues = (
   data: Block[],
   queryResultValue: string,
   block: Block,
-  queryResultBlock: Block | undefined
+  queryResultBlock: Block | undefined,
+  blockAlias: string
 ) => {
   let result = [];
+  let resultValue = queryResultValue;
 
   const queryResultBlockLine = data.find((resultBlock) => {
     const resultBlockTop = resultBlock.Geometry?.BoundingBox?.Top?.toFixed(3);
@@ -62,40 +61,53 @@ const detectParenstNames = (
     queryResultValue = queryResultWords.join(" ");
   }
 
+  if (blockAlias === "RG_DOCUMENT_ORIGIN") {
+    const documentOrigin = detectDocumentOrigin(queryResultValue);
+    if (documentOrigin) resultValue = documentOrigin;
+  }
+
   result.push({
     field: block.Query?.Alias ?? "",
-    value: queryResultValue,
-    error: null,
+    value: resultValue,
   });
 
   return result;
 };
 
 export const postProcessing = (data: Block[]) => {
-  let result = [];
+  let result: RGDataType = [];
 
-  const queryResults = data.filter(
-    (block) => block.BlockType === "QUERY" || block.BlockType === "QUERY_RESULT"
+  const queryBlocks = data.filter((block) => block.BlockType === "QUERY");
+  const resultBlocks = data.filter(
+    (block) => block.BlockType === "QUERY_RESULT"
   );
 
-  for (const block of queryResults) {
-    if (block.BlockType === "QUERY") {
-      const answerIds = block.Relationships?.[0]?.Ids ?? [];
+  for (const block of queryBlocks) {
+    const blockAlias = block.Query?.Alias!;
 
-      const queryResultBlock = queryResults?.find(
-        (resultBlock) =>
-          resultBlock.BlockType === "QUERY_RESULT" &&
-          answerIds.includes(resultBlock?.Id ?? "")
-      );
+    const answerIds = block.Relationships?.[0]?.Ids ?? [];
 
-      let queryResultValue = queryResultBlock?.Text ?? "";
+    const resultBlock = resultBlocks?.find((resultBlock) => {
+      return answerIds.includes(resultBlock?.Id ?? "");
+    });
 
-      if (block.Query?.Alias! === "DOCUMENT_ORIGIN")
-        result.push(detectDocumentOrigin(queryResultValue));
+    let resultValue = resultBlock?.Text;
 
+    if (!!resultValue) {
       result.push(
-        ...detectParenstNames(data, queryResultValue, block, queryResultBlock)
+        ...detectNormalizedValues(
+          data,
+          resultValue!,
+          block,
+          resultBlock,
+          blockAlias
+        )
       );
+    } else {
+      result.push({
+        field: blockAlias,
+        error: `ERROR_MISSING_VALUE_${blockAlias}`,
+      });
     }
   }
 

@@ -2,6 +2,8 @@ import { useState } from "react";
 import { Group, Stack, Text, Image, Button } from "@mantine/core";
 import { Dropzone, IMAGE_MIME_TYPE, PDF_MIME_TYPE } from "@mantine/dropzone";
 
+import * as pdfjsLib from "pdfjs-dist";
+
 import {
   AnalyzeDocumentCommand,
   TextractClient,
@@ -33,22 +35,63 @@ const RGExtract = () => {
   const [fileName, setFileName] = useState<string>("");
 
   const readAsArrayBuffer = (file: File) => {
-    return new Promise((resolve, reject) => {
+    return new Promise<ArrayBuffer>((resolve, reject) => {
       const reader = new FileReader();
-      reader.onload = () => resolve(reader.result);
+      reader.onload = () => resolve(reader.result as ArrayBuffer);
       reader.onerror = reject;
       reader.readAsArrayBuffer(file);
     });
   };
 
+  const convertDataUrlToBytes = (dataUrl: string): Uint8Array => {
+    const base64 = dataUrl.split(",")[1];
+    const binaryString = window.atob(base64);
+    const bytes = new Uint8Array(binaryString.length);
+    for (let i = 0; i < binaryString.length; i++) {
+      bytes[i] = binaryString.charCodeAt(i);
+    }
+    return bytes;
+  };
+
   const loadFile = (file: File) => {
     setImageUrl(URL.createObjectURL(file));
-    readAsArrayBuffer(file).then((result) => {
-      setImageData({
-        Bytes: new Uint8Array(result as ArrayBuffer),
-      });
-    });
     setFileName(file.name);
+
+    readAsArrayBuffer(file).then((arrayBuffer) => {
+      if (file.type === "application/pdf") {
+        // Use pdfjs-dist to extract the first page as an image
+        const uint8Array = new Uint8Array(arrayBuffer);
+
+        // Use pdfjs-dist to extract the first page as an image
+        const loadingTask = pdfjsLib.getDocument(uint8Array);
+
+        loadingTask.promise.then((pdf) => {
+          pdf.getPage(1).then((page) => {
+            const viewport = page.getViewport({ scale: 1 });
+            const canvas = document.createElement("canvas");
+            const context = canvas.getContext("2d");
+
+            canvas.height = viewport.height;
+            canvas.width = viewport.width;
+
+            page
+              .render({
+                canvasContext: context!,
+                viewport: viewport,
+              })
+              .promise.then(() => {
+                const imageDataUrl = canvas.toDataURL("image/png");
+                setImageUrl(imageDataUrl);
+                setImageData({ Bytes: convertDataUrlToBytes(imageDataUrl) });
+              });
+          });
+        });
+      } else {
+        setImageData({
+          Bytes: new Uint8Array(arrayBuffer as ArrayBuffer),
+        });
+      }
+    });
   };
 
   const params = {

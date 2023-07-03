@@ -6,8 +6,7 @@ import {
   AnalyzeDocumentCommand,
   TextractClient,
 } from "@aws-sdk/client-textract";
-import { ufStates } from "./ufStates";
-import { issuingAgency } from "./issuingAgency";
+import { postProcessing } from "./postProcessing";
 
 const client = new TextractClient({
   region: "us-east-1",
@@ -17,7 +16,7 @@ const client = new TextractClient({
   },
 });
 
-type RGDataType = { field: string; value: string }[];
+type RGDataType = { field: string; value: string; error: string | null }[];
 
 const RGExtract = () => {
   const [imageData, setImageData] = useState<{ Bytes: Uint8Array }>();
@@ -75,97 +74,18 @@ const RGExtract = () => {
     let result: RGDataType = [];
     try {
       const analyzeDoc = new AnalyzeDocumentCommand(params);
+
       setLoading(true);
+
       const data = await client.send(analyzeDoc);
-      setLoading(false);
 
-      // check to match with orgao emissor
-      // data?.Blocks?.map((block) => {
-      //   issuingAgency.map((agency) => {
-      //     const match = block.Text?.match(agency.sigla);
-      //     if (block.Text?.includes(agency.sigla)) {
-      //       console.log(match);
-      //     }
-      //   });
-      // });
+      const blocks = data.Blocks;
 
-      const queryResults = data.Blocks?.filter(
-        (block) =>
-          block.BlockType === "QUERY" || block.BlockType === "QUERY_RESULT"
-      );
-
-      for (const block of queryResults ?? []) {
-        if (block.BlockType === "QUERY") {
-          const answerIds = block.Relationships?.[0]?.Ids ?? [];
-          const queryResultBlock = queryResults?.find(
-            (resultBlock) =>
-              resultBlock.BlockType === "QUERY_RESULT" &&
-              answerIds.includes(resultBlock?.Id ?? "")
-          );
-          let queryResultValue = queryResultBlock?.Text ?? "";
-
-          if (block.Query?.Alias! === "DOCUMENT_ORIGIN") {
-            const ufPattern = ufStates.join("|");
-            const pattern = new RegExp(`(${ufPattern})\\b`);
-            const uf = queryResultValue?.match(pattern);
-
-            result.push({
-              field: "EMISSION_UF_STATE",
-              value: uf?.[1] ?? "",
-            });
-          }
-
-          const queryResultBlockLine = data.Blocks?.find((resultBlock) => {
-            const resultBlockTop =
-              resultBlock.Geometry?.BoundingBox?.Top?.toFixed(3);
-            const resultBlockLeft =
-              resultBlock.Geometry?.BoundingBox?.Left?.toFixed(3);
-            const queryResultBlockTop =
-              queryResultBlock?.Geometry?.BoundingBox?.Top?.toFixed(3);
-            const queryResultBlockLeft =
-              queryResultBlock?.Geometry?.BoundingBox?.Left?.toFixed(3);
-
-            return (
-              resultBlock.BlockType === "LINE" &&
-              Math.abs(+resultBlockTop! - +queryResultBlockTop!) < 0.02
-              // Math.abs(+resultBlockLeft! - +queryResultBlockLeft!) < 0.02
-            );
-          });
-
-          const queryResultBlockLineText = queryResultBlockLine?.Text ?? "";
-
-          const accentsRegex = /[\u0300-\u036f\u00c0-\u00ff]/;
-
-          const normalizeQueryResultBlockLine =
-            queryResultBlockLineText.replace(accentsRegex, "");
-
-          if (
-            normalizeQueryResultBlockLine.includes(queryResultValue) ||
-            queryResultValue.includes(normalizeQueryResultBlockLine)
-          ) {
-            const normalizedWords = queryResultBlockLineText.split(" ");
-            const queryResultWords = queryResultValue.split(" ");
-            const indexes = [];
-
-            for (let i = 0; i < normalizedWords.length; i++) {
-              if (accentsRegex.test(normalizedWords[i])) {
-                indexes.push(i);
-              }
-            }
-
-            for (const index of indexes) {
-              queryResultWords[index] = normalizedWords[index];
-            }
-
-            queryResultValue = queryResultWords.join(" ");
-          }
-
-          result.push({
-            field: block.Query?.Alias ?? "",
-            value: queryResultValue,
-          });
-        }
+      if (blocks) {
+        result.push(...postProcessing(blocks));
       }
+
+      setLoading(false);
 
       setOcrResult(result);
     } catch (error) {

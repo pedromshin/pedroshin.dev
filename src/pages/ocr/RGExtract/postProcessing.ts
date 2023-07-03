@@ -10,22 +10,15 @@ const detectDocumentOrigin = (resultValue: string) => {
   return uf;
 };
 
-const findLine = (data: Block[], resultBlocks: Block[]) => {
+const findLine = (data: Block[], block: Block) => {
   const lineText = data.find((item) => {
     const itemTop = item.Geometry?.BoundingBox?.Top?.toFixed(3);
+    const blockTop = block?.Geometry?.BoundingBox?.Top?.toFixed(3);
 
-    const block = resultBlocks.find((block) => {
-      const blockTop = block?.Geometry?.BoundingBox?.Top?.toFixed(3);
-
-      return (
-        item.BlockType === "LINE" && Math.abs(+itemTop! - +blockTop!) < 0.02
-      );
-    });
-
-    return block;
+    return item.BlockType === "LINE" && Math.abs(+itemTop! - +blockTop!) < 0.02;
   });
 
-  return lineText?.Text ?? "";
+  return lineText;
 };
 
 const normalizeSpecialCharacters = (
@@ -34,32 +27,34 @@ const normalizeSpecialCharacters = (
   resultBlocks: Block[],
   data: Block[]
 ) => {
-  const resultLineText = findLine(data, resultBlocks);
+  for (const resultBlock of resultBlocks) {
+    const resultLineText = findLine(data, resultBlock)?.Text;
+    const normalizedResultLineText = resultLineText?.replace(
+      specialCharsRegex,
+      ""
+    );
 
-  const normalizedResultLineText = resultLineText.replace(
-    specialCharsRegex,
-    ""
-  );
+    if (
+      (normalizedResultLineText?.includes(resultValue) ||
+        resultValue?.includes(normalizedResultLineText!)) &&
+      resultLineText
+    ) {
+      const normalizedWords = resultLineText.split(" ");
+      const queryResultWords: string[] = resultValue?.split(" ");
+      const indexes = [];
 
-  if (
-    normalizedResultLineText.includes(resultValue) ||
-    resultValue?.includes(normalizedResultLineText)
-  ) {
-    const normalizedWords = resultLineText.split(" ");
-    const queryResultWords: string[] = resultValue?.split(" ");
-    const indexes = [];
-
-    for (let i = 0; i < normalizedWords.length; i++) {
-      if (specialCharsRegex.test(normalizedWords[i])) {
-        indexes.push(i);
+      for (let i = 0; i < normalizedWords.length; i++) {
+        if (specialCharsRegex.test(normalizedWords[i])) {
+          indexes.push(i);
+        }
       }
-    }
 
-    for (const index of indexes) {
-      queryResultWords[index] = normalizedWords[index];
-    }
+      for (const index of indexes) {
+        queryResultWords[index] = normalizedWords[index];
+      }
 
-    resultValue = queryResultWords.join(" ");
+      resultValue = queryResultWords.join(" ");
+    }
   }
 
   return resultValue;
@@ -112,7 +107,7 @@ export const postProcessing = (data: Block[]) => {
         if (documentOrigin) resultValue = documentOrigin;
       }
 
-      if (resultConfidence && resultConfidence < 90) {
+      if (resultConfidence && resultConfidence < 30) {
         result.push({
           field: blockAlias,
           error: "ERROR_LOW_CONFIDENCE",

@@ -10,12 +10,19 @@ const detectDocumentOrigin = (resultValue: string) => {
   return uf;
 };
 
-const findLine = (data: Block[], block: Block) => {
+const findLine = (data: Block[], resultBlocks: Block[]) => {
   const lineText = data.find((item) => {
     const itemTop = item.Geometry?.BoundingBox?.Top?.toFixed(3);
-    const blockTop = block?.Geometry?.BoundingBox?.Top?.toFixed(3);
 
-    return item.BlockType === "LINE" && Math.abs(+itemTop! - +blockTop!) < 0.02;
+    const block = resultBlocks.find((block) => {
+      const blockTop = block?.Geometry?.BoundingBox?.Top?.toFixed(3);
+
+      return (
+        item.BlockType === "LINE" && Math.abs(+itemTop! - +blockTop!) < 0.02
+      );
+    });
+
+    return block;
   });
 
   return lineText?.Text ?? "";
@@ -27,34 +34,32 @@ const normalizeSpecialCharacters = (
   resultBlocks: Block[],
   data: Block[]
 ) => {
-  for (const resultBlock of resultBlocks) {
-    const resultLineText = findLine(data, resultBlock);
+  const resultLineText = findLine(data, resultBlocks);
 
-    const normalizedResultLineText = resultLineText.replace(
-      specialCharsRegex,
-      ""
-    );
+  const normalizedResultLineText = resultLineText.replace(
+    specialCharsRegex,
+    ""
+  );
 
-    if (
-      normalizedResultLineText.includes(resultValue) ||
-      resultValue?.includes(normalizedResultLineText)
-    ) {
-      const normalizedWords = resultLineText.split(" ");
-      const queryResultWords: string[] = resultValue?.split(" ");
-      const indexes = [];
+  if (
+    normalizedResultLineText.includes(resultValue) ||
+    resultValue?.includes(normalizedResultLineText)
+  ) {
+    const normalizedWords = resultLineText.split(" ");
+    const queryResultWords: string[] = resultValue?.split(" ");
+    const indexes = [];
 
-      for (let i = 0; i < normalizedWords.length; i++) {
-        if (specialCharsRegex.test(normalizedWords[i])) {
-          indexes.push(i);
-        }
+    for (let i = 0; i < normalizedWords.length; i++) {
+      if (specialCharsRegex.test(normalizedWords[i])) {
+        indexes.push(i);
       }
-
-      for (const index of indexes) {
-        queryResultWords[index] = normalizedWords[index];
-      }
-
-      resultValue = queryResultWords.join(" ");
     }
+
+    for (const index of indexes) {
+      queryResultWords[index] = normalizedWords[index];
+    }
+
+    resultValue = queryResultWords.join(" ");
   }
 
   return resultValue;

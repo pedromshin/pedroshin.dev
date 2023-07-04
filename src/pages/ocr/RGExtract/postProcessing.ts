@@ -1,6 +1,59 @@
 import { Block } from "@aws-sdk/client-textract";
 import { ufStates } from "./ufStates";
 import { RGDataType } from ".";
+import { RG_ALIAS_ENUM } from "../RGExtract/index";
+
+const validateParents = (result: RGDataType) => {
+  const fatherIndex = result.findIndex(
+    (item) => item.field === RG_ALIAS_ENUM?.RG_OWNER_FATHER_NAME
+  );
+  const motherIndex = result.findIndex(
+    (item) => item.field === RG_ALIAS_ENUM?.RG_OWNER_MOTHER_NAME
+  );
+
+  const fatherName = result[fatherIndex]?.value;
+  const motherName = result[motherIndex]?.value;
+
+  if (fatherName && !motherName) {
+    result[fatherIndex] = {
+      field: RG_ALIAS_ENUM?.RG_OWNER_FATHER_NAME,
+      error: "ERROR_MISSING_VALUE",
+    };
+    result[motherIndex] = {
+      field: RG_ALIAS_ENUM?.RG_OWNER_MOTHER_NAME,
+      value: fatherName,
+    };
+  }
+
+  return result;
+};
+
+const validateExpeditionDate = (result: RGDataType) => {
+  // TODO improve this validation
+  const expeditionDateIndex = result.findIndex(
+    (item) => item.field === RG_ALIAS_ENUM?.RG_DOCUMENT_EXPEDITION_DATE
+  );
+  const ownerBirthDateIndex = result.findIndex(
+    (item) => item.field === RG_ALIAS_ENUM?.RG_OWNER_BIRTHDATE
+  );
+  const expeditionDate = result[expeditionDateIndex]?.value;
+  const ownerBirthDate = result[ownerBirthDateIndex]?.value;
+
+  if (expeditionDate && ownerBirthDate) {
+    if (expeditionDate === ownerBirthDate) {
+      result[expeditionDateIndex] = {
+        field: RG_ALIAS_ENUM?.RG_DOCUMENT_EXPEDITION_DATE,
+        error: "ERROR_INVALID_VALUE",
+      };
+      result[ownerBirthDateIndex] = {
+        field: RG_ALIAS_ENUM?.RG_OWNER_BIRTHDATE,
+        error: "ERROR_INVALID_VALUE",
+      };
+    }
+  }
+
+  return result;
+};
 
 const detectDocumentOrigin = (resultValue: string) => {
   const ufPattern = ufStates.join("|");
@@ -102,7 +155,7 @@ export const postProcessing = (data: Block[]) => {
         data
       );
 
-      if (blockAlias === "RG_DOCUMENT_ORIGIN") {
+      if (blockAlias === RG_ALIAS_ENUM?.RG_DOCUMENT_ORIGIN) {
         const documentOrigin = detectDocumentOrigin(resultValue);
         if (documentOrigin) resultValue = documentOrigin;
       }
@@ -125,6 +178,9 @@ export const postProcessing = (data: Block[]) => {
       });
     }
   }
+
+  result = validateParents(result);
+  result = validateExpeditionDate(result);
 
   return result;
 };

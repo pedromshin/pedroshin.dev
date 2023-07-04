@@ -38,7 +38,14 @@ export const PDFExtract = () => {
   };
   const loadFile = async (file: File) => {
     const data = await file.arrayBuffer();
-    const loadingTask = pdfjsLib.getDocument({ data });
+
+    // TODO check if is working
+    // Use pdfjs-dist to extract the first page as an image
+    const uint8Array = new Uint8Array(data);
+
+    // Use pdfjs-dist to extract the first page as an image
+    const loadingTask = pdfjsLib.getDocument(uint8Array);
+
     const loadedPdf = await loadingTask.promise;
     const firstPage = await loadedPdf.getPage(1);
     const viewport = firstPage.getViewport({ scale: 1 });

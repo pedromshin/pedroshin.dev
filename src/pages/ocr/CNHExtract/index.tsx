@@ -4,6 +4,24 @@ import { Dropzone, IMAGE_MIME_TYPE, PDF_MIME_TYPE } from "@mantine/dropzone";
 
 import { AnalyzeDocumentCommand } from "@aws-sdk/client-textract";
 import { TextractClient } from "@aws-sdk/client-textract";
+import { postProcessing } from "./postProcessing";
+
+export type CNHDataType = Array<
+  | {
+      field: string;
+      value?: string;
+      error?: never;
+    }
+  | { field: string; value?: never; error?: string }
+>;
+
+export enum CNH_ALIAS_ENUM {
+  CNH_DOCUMENT_NUMBER = "RG_DOCUMENT_NUMBER",
+  CNH_OWNER_BIRTHDATE = "RG_DOCUMENT_EXPEDITION_DATE",
+  CNH_DOCUMENT_EXPIRY_DATE = "RG_OWNER_PLACE_OF_BIRTH",
+  CNH_OWNER_CPF = "RG_OWNER_BIRTHDATE",
+  CNH_OWNER_NAME = "RG_OWNER_NAME",
+}
 
 const client = new TextractClient({
   region: "us-east-1",
@@ -12,8 +30,6 @@ const client = new TextractClient({
     secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY as string,
   },
 });
-
-type CNHDataType = { field: string; value: string }[];
 
 const CNHExtract = () => {
   const [imageData, setImageData] = useState<{ Bytes: Uint8Array }>();
@@ -46,11 +62,14 @@ const CNHExtract = () => {
     FeatureTypes: ["QUERIES"],
     QueriesConfig: {
       Queries: [
-        { Text: "no registro", Alias: "CNH_NUMBER" },
-        { Text: "data de nascimento", Alias: "BIRTHDATE" },
-        { Text: "validade", Alias: "EXPIRY_DATE" },
-        { Text: "cpf", Alias: "CPF_NUMBER" },
-        { Text: "nome", Alias: "NAME" },
+        { Text: "no registro", Alias: CNH_ALIAS_ENUM.CNH_DOCUMENT_NUMBER },
+        {
+          Text: "data de nascimento",
+          Alias: CNH_ALIAS_ENUM.CNH_OWNER_BIRTHDATE,
+        },
+        { Text: "validade", Alias: CNH_ALIAS_ENUM.CNH_DOCUMENT_EXPIRY_DATE },
+        { Text: "cpf", Alias: CNH_ALIAS_ENUM.CNH_OWNER_CPF },
+        { Text: "nome", Alias: CNH_ALIAS_ENUM.CNH_OWNER_NAME },
       ],
     },
   };
@@ -62,26 +81,14 @@ const CNHExtract = () => {
       setLoading(true);
       const data = await client.send(analyzeDoc);
       setLoading(false);
-      const queryResults = data.Blocks?.filter(
-        (block) =>
-          block.BlockType === "QUERY" || block.BlockType === "QUERY_RESULT"
-      );
 
-      for (const block of queryResults ?? []) {
-        if (block.BlockType === "QUERY") {
-          const answerIds = block.Relationships?.[0]?.Ids ?? [];
-          const queryResultBlock = queryResults?.find(
-            (resultBlock) =>
-              resultBlock.BlockType === "QUERY_RESULT" &&
-              answerIds.includes(resultBlock?.Id ?? "")
-          );
-          const queryResultValue = queryResultBlock?.Text ?? "";
-          result.push({
-            field: block.Query?.Alias ?? "",
-            value: queryResultValue,
-          });
-        }
+      const blocks = data.Blocks;
+
+      if (blocks) {
+        result.push(...postProcessing(blocks));
       }
+
+      setLoading(false);
 
       setOcrResult(result);
     } catch (error) {
@@ -157,6 +164,11 @@ const CNHExtract = () => {
                       >
                         Valor
                       </th>
+                      <th
+                        style={{ textAlign: "start", border: "1px solid gray" }}
+                      >
+                        Erro
+                      </th>
                     </tr>
                   </thead>
                   <tbody>
@@ -178,6 +190,14 @@ const CNHExtract = () => {
                             }}
                           >
                             {entry.value}
+                          </td>
+                          <td
+                            style={{
+                              textAlign: "start",
+                              border: "1px solid gray",
+                            }}
+                          >
+                            {entry.error}
                           </td>
                         </tr>
                       );

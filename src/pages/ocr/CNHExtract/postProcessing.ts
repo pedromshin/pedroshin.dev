@@ -1,43 +1,7 @@
 import { Block } from "@aws-sdk/client-textract";
 import { CNHDataType, CNH_ALIAS_ENUM } from ".";
-
-const detectCommonErrors = (resultValue?: string) => {
-  if (resultValue) {
-    const commonErrors = ["NATURALIDACE", "NATURALIDADE"];
-    if (commonErrors.includes(resultValue)) {
-      resultValue = "";
-    }
-  }
-
-  return resultValue;
-};
-
-const validateExpiryDate = (result: CNHDataType) => {
-  // TODO improve this validation
-  const expiryDateIndex = result.findIndex(
-    (item) => item.field === CNH_ALIAS_ENUM.CNH_DOCUMENT_EXPIRY_DATE
-  );
-  const ownerBirthDateIndex = result.findIndex(
-    (item) => item.field === CNH_ALIAS_ENUM.CNH_OWNER_BIRTHDATE
-  );
-  const expiryDate = result[expiryDateIndex]?.value;
-  const ownerBirthDate = result[ownerBirthDateIndex]?.value;
-
-  if (expiryDate && ownerBirthDate) {
-    if (expiryDate === ownerBirthDate) {
-      result[expiryDateIndex] = {
-        field: CNH_ALIAS_ENUM.CNH_DOCUMENT_EXPIRY_DATE,
-        error: "ERROR_INVALID_VALUE",
-      };
-      result[ownerBirthDateIndex] = {
-        field: CNH_ALIAS_ENUM.CNH_OWNER_BIRTHDATE,
-        error: "ERROR_INVALID_VALUE",
-      };
-    }
-  }
-
-  return result;
-};
+import { detectCommonErrors } from "@/utils/ocr-detectCommonErrors";
+import { validateDates } from "@/utils/ocr-validateDates";
 
 export const postProcessing = (data: Block[]) => {
   let result: CNHDataType = [];
@@ -80,7 +44,11 @@ export const postProcessing = (data: Block[]) => {
     }
   }
 
-  result = validateExpiryDate(result);
+  result = validateDates(
+    result,
+    CNH_ALIAS_ENUM.CNH_OWNER_BIRTHDATE,
+    CNH_ALIAS_ENUM.CNH_DOCUMENT_EXPIRY_DATE
+  );
 
   return result;
 };

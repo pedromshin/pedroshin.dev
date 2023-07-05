@@ -1,7 +1,9 @@
 import { Block } from "@aws-sdk/client-textract";
-import { ufStates } from "./ufStates";
+import { ufStates } from "../../../utils/ufStates";
 import { RGDataType } from ".";
 import { RG_ALIAS_ENUM } from "../RGExtract/index";
+import { detectCommonErrors } from "@/utils/ocr-detectCommonErrors";
+import { validateDates } from "@/utils/ocr-validateDates";
 
 const validateParents = (result: RGDataType) => {
   const fatherIndex = result.findIndex(
@@ -23,33 +25,6 @@ const validateParents = (result: RGDataType) => {
       field: RG_ALIAS_ENUM?.RG_OWNER_MOTHER_NAME,
       value: fatherName,
     };
-  }
-
-  return result;
-};
-
-const validateExpeditionDate = (result: RGDataType) => {
-  // TODO improve this validation
-  const expeditionDateIndex = result.findIndex(
-    (item) => item.field === RG_ALIAS_ENUM?.RG_DOCUMENT_EXPEDITION_DATE
-  );
-  const ownerBirthDateIndex = result.findIndex(
-    (item) => item.field === RG_ALIAS_ENUM?.RG_OWNER_BIRTHDATE
-  );
-  const expeditionDate = result[expeditionDateIndex]?.value;
-  const ownerBirthDate = result[ownerBirthDateIndex]?.value;
-
-  if (expeditionDate && ownerBirthDate) {
-    if (expeditionDate === ownerBirthDate) {
-      result[expeditionDateIndex] = {
-        field: RG_ALIAS_ENUM?.RG_DOCUMENT_EXPEDITION_DATE,
-        error: "ERROR_INVALID_VALUE",
-      };
-      result[ownerBirthDateIndex] = {
-        field: RG_ALIAS_ENUM?.RG_OWNER_BIRTHDATE,
-        error: "ERROR_INVALID_VALUE",
-      };
-    }
   }
 
   return result;
@@ -113,17 +88,6 @@ const normalizeSpecialCharacters = (
   return resultValue;
 };
 
-const detectCommonErrors = (resultValue?: string) => {
-  if (resultValue) {
-    const commonErrors = ["NATURALIDACE", "NATURALIDADE"];
-    if (commonErrors.includes(resultValue)) {
-      resultValue = "";
-    }
-  }
-
-  return resultValue;
-};
-
 export const postProcessing = (data: Block[]) => {
   let result: RGDataType = [];
   const accentsRegex = /[\u0300-\u036f\u00c0-\u00ff]/;
@@ -180,7 +144,11 @@ export const postProcessing = (data: Block[]) => {
   }
 
   result = validateParents(result);
-  result = validateExpeditionDate(result);
+  result = validateDates(
+    result,
+    RG_ALIAS_ENUM?.RG_OWNER_BIRTHDATE,
+    RG_ALIAS_ENUM?.RG_DOCUMENT_EXPEDITION_DATE
+  );
 
   return result;
 };

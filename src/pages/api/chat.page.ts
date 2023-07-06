@@ -1,4 +1,3 @@
-import { NextApiRequest, NextApiResponse } from "next";
 import { Configuration, OpenAIApi } from "openai-edge";
 import { OpenAIStream, StreamingTextResponse } from "ai";
 
@@ -10,11 +9,10 @@ const config = new Configuration({
 
 const openAI = new OpenAIApi(config);
 
-export default async function handler(
-  req: NextApiRequest,
-  res: NextApiResponse
-) {
-  const { messages } = await req.body();
+export const runtime = "edge";
+
+export default async function POST(req: any) {
+  const { messages } = await req.json();
 
   const response = await openAI.createChatCompletion({
     model: "gpt-3.5-turbo",

@@ -1,25 +1,26 @@
-import { useState } from "react";
+// pages/chat.js
 import { useChat } from "ai/react";
+import React from "react";
 
-const Chatbot = () => {
-  const { messages, handleSubmit, input } = useChat({ api: "/api/chat" });
-
+export default function Chat() {
+  const { messages, input, handleInputChange, handleSubmit } = useChat();
   return (
     <div>
-      {messages.map((message) => {
-        return (
-          <span key={message.id}>
-            {message.role} says... {message.content}
-          </span>
-        );
-      })}
-
+      <div>
+        {messages.map((m) => (
+          <div key={m.id}>
+            <span>{m.role}:</span>
+            <span>{m.content}</span>
+          </div>
+        ))}
+      </div>
       <form onSubmit={handleSubmit}>
-        <input />
-        <button type="submit">Send</button>
+        <input
+          value={input}
+          placeholder="Say something..."
+          onChange={handleInputChange}
+        />
       </form>
     </div>
   );
-};
-
-export default Chatbot;
+}

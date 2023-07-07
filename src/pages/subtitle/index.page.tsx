@@ -39,12 +39,12 @@ const Subtitle = () => {
   const [language, setLanguage] = useState<string>("pt");
 
   function bufferToWave(audioBuffer: AudioBuffer) {
-    var numOfChan = audioBuffer.numberOfChannels;
-    var length = audioBuffer.length * numOfChan * 2 + 44;
-    var buffer = new ArrayBuffer(length);
-    var view = new DataView(buffer);
-    var channels = [],
-      i,
+    const numOfChan = audioBuffer.numberOfChannels;
+    const length = audioBuffer.length * numOfChan * 2 + 44;
+    const buffer = new ArrayBuffer(length);
+    const view = new DataView(buffer);
+    const channels = [];
+    let i,
       sample,
       offset = 0,
       pos = 0;
@@ -100,47 +100,35 @@ const Subtitle = () => {
   const numberOfChannels = 1;
   let myBuffer: AudioBuffer;
 
-  const loadFile = (file: File) => {
+  const loadFile = async (file: File) => {
     setFileName(file.name);
 
+    const audioContext = new window.AudioContext();
     const reader = new FileReader();
-    reader.readAsArrayBuffer(file);
+    const videoFileAsBuffer = await new Promise<ArrayBuffer>((resolve) => {
+      reader.onload = () => resolve(reader.result as ArrayBuffer);
+      reader.readAsArrayBuffer(file);
+    });
 
-    reader.onload = function () {
-      const audioContext = new window.AudioContext();
-      const videoFileAsBuffer = reader.result;
-      audioContext
-        .decodeAudioData(videoFileAsBuffer as ArrayBuffer)
-        .then(function (decodedAudioData) {
-          const duration = decodedAudioData.duration;
+    const decodedAudioData = await audioContext.decodeAudioData(
+      videoFileAsBuffer
+    );
+    const duration = decodedAudioData.duration;
 
-          const offlineAudioContext = new OfflineAudioContext(
-            numberOfChannels,
-            sampleRate * duration,
-            sampleRate
-          );
-          const soundSource = offlineAudioContext.createBufferSource();
+    myBuffer = decodedAudioData;
+    const offlineAudioContext = new OfflineAudioContext(
+      numberOfChannels,
+      sampleRate * duration,
+      sampleRate
+    );
+    const soundSource = offlineAudioContext.createBufferSource();
+    soundSource.buffer = myBuffer;
+    soundSource.connect(offlineAudioContext.destination);
+    soundSource.start();
 
-          myBuffer = decodedAudioData;
-          soundSource.buffer = myBuffer;
-          soundSource.connect(offlineAudioContext.destination);
-          soundSource.start();
-
-          offlineAudioContext
-            .startRendering()
-            .then(function (renderedBuffer) {
-              console.log(1, renderedBuffer); // outputs audiobuffer
-              const wavFileBlob = bufferToWave(renderedBuffer);
-              setAudioResult(new File([wavFileBlob], "audio.wav"));
-            })
-            .catch(function (err) {
-              console.log("Rendering failed: " + err);
-            });
-        });
-    };
-
-    // reader.readAsArrayBuffer(file);
-    console.log(2, file);
+    const renderedBuffer = await offlineAudioContext.startRendering();
+    const wavFileBlob = bufferToWave(renderedBuffer);
+    setAudioResult(new File([wavFileBlob], "audio.wav"));
   };
 
   const extract = async () => {
@@ -206,7 +194,7 @@ const Subtitle = () => {
             extraído)
           </Text> */}
           <Dropzone
-            onDrop={(files) => loadFile(files[0])}
+            onDrop={async (files) => await loadFile(files[0])}
             accept={["video/mp4"]}
             multiple={false}
           >

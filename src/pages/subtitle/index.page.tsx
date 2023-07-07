@@ -37,6 +37,7 @@ const Subtitle = () => {
   const [videoTranscript, setVideoTranscript] = useState<string>();
   const [error, setError] = useState<string>();
   const [language, setLanguage] = useState<string>("pt");
+  const [speachLoading, setSpeachLoading] = useState<boolean>(false);
 
   function bufferToWave(audioBuffer: AudioBuffer) {
     const numOfChan = audioBuffer.numberOfChannels;
@@ -103,7 +104,9 @@ const Subtitle = () => {
   const loadFile = async (file: File) => {
     setFileName(file.name);
 
-    const audioContext = new window.AudioContext();
+    const audioContext = new (window.AudioContext ||
+      window.webkitAudioContext)();
+
     const reader = new FileReader();
     const videoFileAsBuffer = await new Promise<ArrayBuffer>((resolve) => {
       reader.onload = () => resolve(reader.result as ArrayBuffer);
@@ -167,13 +170,21 @@ const Subtitle = () => {
       <Group align="initial" style={{ padding: "50px" }}>
         <Stack style={{ flex: "1" }}>
           <div style={{ marginBottom: "50px" }}>
-            <p>Recording: {recording ? "Gravando" : ""}</p>
-            <p>Speaking: {speaking ? "Falando" : ""}</p>
-            <p>Transcripting: {transcribing}</p>
+            <p>.{recording ? "Gravando" : ""}</p>
+            <p>.{speaking ? "Falando" : ""}</p>
             <p>Transcribed Text: {transcript.text}</p>
             <button onClick={() => startRecording()}>Start</button>
             <button onClick={() => pauseRecording()}>Pause</button>
-            <button onClick={() => stopRecording()}>Stop</button>
+            <button
+              onClick={async () => {
+                setSpeachLoading(true);
+                await stopRecording();
+                setSpeachLoading(false);
+              }}
+            >
+              Stop
+            </button>
+            <p>{speachLoading ? "Carregando transcrição" : ""}</p>
           </div>
           <Text size="40" inline>
             <b>Vídeo com audio</b>

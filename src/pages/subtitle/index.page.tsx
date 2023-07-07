@@ -1,5 +1,5 @@
 import useWhisper from "./useWhisper";
-import { Button, Group, Stack, Text } from "@mantine/core";
+import { Button, Group, Select, Stack, Text } from "@mantine/core";
 import { Dropzone } from "@mantine/dropzone";
 import { RawAxiosRequestHeaders } from "axios";
 import { useState } from "react";
@@ -36,6 +36,7 @@ const Subtitle = () => {
   const [audioResult, setAudioResult] = useState<any>();
   const [videoTranscript, setVideoTranscript] = useState<string>();
   const [error, setError] = useState<string>();
+  const [language, setLanguage] = useState<string>("pt");
 
   function bufferToWave(audioBuffer: AudioBuffer) {
     var numOfChan = audioBuffer.numberOfChannels;
@@ -148,7 +149,7 @@ const Subtitle = () => {
     body.append("file", audioResult);
     body.append("model", "whisper-1");
     if (config.mode === "transcriptions") {
-      body.append("language", "pt");
+      body.append("language", language);
     }
 
     const headers: RawAxiosRequestHeaders = {};
@@ -165,6 +166,7 @@ const Subtitle = () => {
       );
 
       setVideoTranscript(response.data.text);
+      setLoading(false);
       return response.data.text;
     } catch (error) {
       setError((error as any)?.response?.data?.error.message);
@@ -188,6 +190,16 @@ const Subtitle = () => {
           <Text size="40" inline>
             <b>Vídeo com audio</b>
           </Text>
+          <Select
+            label="Língua falada no vídeo"
+            placeholder="Pick one"
+            value={language}
+            onChange={(value) => setLanguage(value as any)}
+            data={[
+              { value: "pt", label: "Português" },
+              { value: "en", label: "Inglês" },
+            ]}
+          />
           {/* <Text size="24" inline>
             Extrair valores padronizados do <b>verso</b> do RG (frente é a
             página com foto e polegar, que não carrega nenhum dado a ser

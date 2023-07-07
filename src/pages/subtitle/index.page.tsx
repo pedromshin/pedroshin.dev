@@ -179,7 +179,7 @@ const Subtitle = () => {
             <b>Vídeo com audio</b>
           </Text>
           <Select
-            label="Língua falada no vídeo"
+            label="Língua falada no vídeo (é detectada automaticamente, mas também pode ser selecionada manualmente)"
             placeholder="Pick one"
             value={language}
             onChange={(value) => setLanguage(value as any)}

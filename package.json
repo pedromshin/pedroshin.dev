@@ -8,6 +8,16 @@
     "start": "next start",
     "lint": "next lint"
   },
+  "devDependencies": {
+    "@types/hark": "^1.2.2",
+    "@types/node": "18.15.11",
+    "@types/react": "18.0.37",
+    "@types/react-dom": "18.0.11",
+    "@types/recordrtc": "^5.6.11",
+    "eslint": "8.38.0",
+    "eslint-config-next": "13.3.0",
+    "typescript": "5.0.4"
+  },
   "dependencies": {
     "@aws-sdk/client-textract": "^3.360.0",
     "@emotion/react": "^11.10.6",
@@ -17,17 +27,10 @@
     "@mantine/dropzone": "^6.0.8",
     "@mantine/hooks": "^6.0.8",
     "@mantine/utils": "^6.0.8",
-    "@types/hark": "^1.2.2",
-    "@types/node": "18.15.11",
-    "@types/react": "18.0.37",
-    "@types/react-dom": "18.0.11",
-    "@types/recordrtc": "^5.6.11",
     "ai": "^2.1.15",
     "autoprefixer": "10.4.14",
     "axios": "^1.4.0",
     "dotenv": "^16.0.3",
-    "eslint": "8.38.0",
-    "eslint-config-next": "13.3.0",
     "hark": "^1.2.3",
     "lamejs": "github:zhuker/lamejs",
     "next": "13.3.0",
@@ -38,7 +41,6 @@
     "react": "18.2.0",
     "react-dom": "18.2.0",
     "recordrtc": "^5.6.2",
-    "tailwindcss": "3.3.1",
-    "typescript": "5.0.4"
+    "tailwindcss": "3.3.1"
   }
 }

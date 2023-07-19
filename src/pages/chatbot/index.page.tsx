@@ -4,26 +4,36 @@ import React from "react";
 
 export default function Chat() {
   const { messages, input, handleInputChange, handleSubmit } = useChat();
-
   const containerStyle = {
-    width: "400px",
+    width: "800px",
     margin: "0 auto",
     padding: "20px",
+    backgroundColor: "#f9f9f9", // Light gray background color
   };
 
   const messageStyle = {
     marginBottom: "10px",
-    padding: "5px",
+    padding: "10px",
     borderRadius: "5px",
   };
 
   const roleStyle = {
     fontWeight: "bold",
     marginRight: "5px",
+    color: "#007bff", // Blue color for role text
   };
 
   const formStyle = {
     marginTop: "20px",
+  };
+
+  const inputStyle = {
+    padding: "10px",
+    fontSize: "16px",
+    borderRadius: "5px",
+    border: "1px solid #ccc",
+    width: "100%",
+    outline: "none",
   };
 
   return (
@@ -41,14 +51,7 @@ export default function Chat() {
           value={input}
           placeholder="Say something..."
           onChange={handleInputChange}
-          style={{
-            padding: "10px",
-            fontSize: "16px",
-            borderRadius: "5px",
-            border: "1px solid #ccc",
-            width: "100%",
-            outline: "none",
-          }}
+          style={inputStyle}
         />
       </form>
     </div>

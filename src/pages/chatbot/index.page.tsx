@@ -7,10 +7,10 @@ export default function Chat() {
   return (
     <div>
       <div>
-        {messages.map((m) => (
-          <div key={m.id}>
-            <span>{m.role}:</span>
-            <span>{m.content}</span>
+        {messages?.map((m) => (
+          <div key={m?.id}>
+            <span>{m?.role}:</span>
+            <span>{m?.content}</span>
           </div>
         ))}
       </div>

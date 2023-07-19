@@ -3,7 +3,10 @@ import { useChat } from "ai/react";
 import React from "react";
 
 export default function Chat() {
-  const { messages, input, handleInputChange, handleSubmit } = useChat();
+  const { messages, input, handleInputChange, handleSubmit } = useChat({
+    api: "/api/chat",
+  });
+
   const containerStyle = {
     width: "800px",
     margin: "0 auto",

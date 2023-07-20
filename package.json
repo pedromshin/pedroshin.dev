@@ -11,6 +11,7 @@
   "devDependencies": {
     "@types/hark": "^1.2.2",
     "@types/lodash": "^4.14.195",
+    "@types/lodash-es": "^4.17.8",
     "@types/node": "18.15.11",
     "@types/react": "18.0.37",
     "@types/react-dom": "18.0.11",
@@ -34,7 +35,7 @@
     "dotenv": "^16.0.3",
     "hark": "^1.2.3",
     "lamejs": "github:zhuker/lamejs",
-    "lodash": "^4.17.21",
+    "lodash-es": "4.17.21",
     "next": "13.3.0",
     "openai": "^3.3.0",
     "openai-edge": "^1.1.1",

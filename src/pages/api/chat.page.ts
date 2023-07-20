@@ -1,14 +1,18 @@
 import { Configuration, OpenAIApi } from "openai-edge";
 import { OpenAIStream, StreamingTextResponse } from "ai";
-import _ from "lodash";
+import _ from "lodash-es";
 
+export const config = {
+  runtime: "edge",
+  unstable_allowDynamic: ["**/node_modules/lodash-es/*"],
+};
 const OPEN_AI_KEY = process.env.OPEN_AI_KEY;
 
-const config = new Configuration({
+const aiConfig = new Configuration({
   apiKey: OPEN_AI_KEY,
 });
 
-const openAI = new OpenAIApi(config);
+const openAI = new OpenAIApi(aiConfig);
 
 export default async function POST(req: any) {
   const res = await req.json();

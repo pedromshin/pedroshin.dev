@@ -10,8 +10,6 @@ const config = new Configuration({
 
 const openAI = new OpenAIApi(config);
 
-export const runtime = "edge";
-
 export default async function POST(req: any) {
   const res = await req.json();
   const messages = _.clone(res.messages);

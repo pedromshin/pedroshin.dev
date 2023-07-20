@@ -120,6 +120,7 @@ export const useWhisper: UseWhisperHook = (config) => {
         stream.current = undefined;
       }
     };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   /**
@@ -132,6 +133,7 @@ export const useWhisper: UseWhisperHook = (config) => {
         await onStartRecording();
       })();
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [autoStart]);
 
   /**

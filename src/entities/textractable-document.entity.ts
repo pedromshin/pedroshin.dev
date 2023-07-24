@@ -10,12 +10,25 @@ class Query {
   }
 }
 
+class Params {
+  constructor({ Bytes, Queries }: { Bytes: Uint8Array; Queries: Query[] }) {
+    this.Document = { Bytes };
+    this.FeatureTypes = ["QUERIES"];
+    this.QueriesConfig = { Queries: Queries };
+  }
+
+  public Document: { Bytes: Uint8Array };
+  public FeatureTypes: string[];
+  public QueriesConfig: { Queries: Query[] };
+}
+
 export class TextractableDocument {
   public fileType: string;
   public buffer: Buffer;
   public bytes: Promise<Uint8Array>;
   public queries: Query[];
   public mime: string;
+  public params: Params;
 
   private base64: string;
 
@@ -25,8 +38,8 @@ export class TextractableDocument {
     fileType,
   }: {
     base64: string;
-    queries: Query[];
     fileType: string;
+    queries: Query[];
   }) {
     this.fileType = fileType;
     this.queries = queries;
@@ -34,6 +47,7 @@ export class TextractableDocument {
     this.buffer = this.base64ToBuffer(this.base64);
     this.bytes = this.Uint8ArrayToBase64(this.buffer);
     this.mime = this.base64.split(",")[0];
+    this.params = new Params({ Bytes: this.buffer, Queries: this.queries });
   }
 
   private base64ToBuffer = (data: string): Buffer => {

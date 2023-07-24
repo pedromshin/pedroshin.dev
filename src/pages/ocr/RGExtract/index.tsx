@@ -42,6 +42,29 @@ export enum RG_ALIAS_ENUM {
   RG_DOCUMENT_ORIGIN = "RG_DOCUMENT_ORIGIN",
 }
 
+const queries = [
+  { Text: "registro geral", Alias: RG_ALIAS_ENUM.RG_DOCUMENT_NUMBER },
+  {
+    Text: "data de expedicao",
+    Alias: RG_ALIAS_ENUM.RG_DOCUMENT_EXPEDITION_DATE,
+  },
+  { Text: "naturalidade", Alias: RG_ALIAS_ENUM.RG_OWNER_PLACE_OF_BIRTH },
+  { Text: "data de nascimento", Alias: RG_ALIAS_ENUM.RG_OWNER_BIRTHDATE },
+  { Text: "nome", Alias: RG_ALIAS_ENUM.RG_OWNER_NAME },
+  {
+    Text: "what is the content of the first line of filiacao?",
+    Alias: RG_ALIAS_ENUM.RG_OWNER_FATHER_NAME,
+  },
+  {
+    Text: "what is the content of the second line of filiacao?",
+    Alias: RG_ALIAS_ENUM.RG_OWNER_MOTHER_NAME,
+  },
+  {
+    Text: "city and state in 'doc origem'",
+    Alias: RG_ALIAS_ENUM.RG_DOCUMENT_ORIGIN,
+  },
+];
+
 const RGExtract = () => {
   const [imageUrl, setImageUrl] = useState<string>();
   const [loading, setLoading] = useState<boolean>(false);
@@ -49,29 +72,6 @@ const RGExtract = () => {
   const [fileName, setFileName] = useState<string>("");
   const [textractableDocument, setTextractableDocument] =
     useState<TextractableDocument>();
-
-  const queries = [
-    { Text: "registro geral", Alias: RG_ALIAS_ENUM.RG_DOCUMENT_NUMBER },
-    {
-      Text: "data de expedicao",
-      Alias: RG_ALIAS_ENUM.RG_DOCUMENT_EXPEDITION_DATE,
-    },
-    { Text: "naturalidade", Alias: RG_ALIAS_ENUM.RG_OWNER_PLACE_OF_BIRTH },
-    { Text: "data de nascimento", Alias: RG_ALIAS_ENUM.RG_OWNER_BIRTHDATE },
-    { Text: "nome", Alias: RG_ALIAS_ENUM.RG_OWNER_NAME },
-    {
-      Text: "what is the content of the first line of filiacao?",
-      Alias: RG_ALIAS_ENUM.RG_OWNER_FATHER_NAME,
-    },
-    {
-      Text: "what is the content of the second line of filiacao?",
-      Alias: RG_ALIAS_ENUM.RG_OWNER_MOTHER_NAME,
-    },
-    {
-      Text: "city and state in 'doc origem'",
-      Alias: RG_ALIAS_ENUM.RG_DOCUMENT_ORIGIN,
-    },
-  ];
 
   const loadFile = async (file: File) => {
     setImageUrl(URL.createObjectURL(file));
@@ -96,19 +96,11 @@ const RGExtract = () => {
   };
 
   const extract = async () => {
-    const params = {
-      Document: {
-        Bytes: await textractableDocument?.bytes,
-      },
-      FeatureTypes: ["QUERIES"],
-      QueriesConfig: {
-        Queries: textractableDocument?.queries,
-      },
-    };
-
     let result: RGDataType = [];
     try {
-      const analyzeDoc = new AnalyzeDocumentCommand(params);
+      const analyzeDoc = new AnalyzeDocumentCommand(
+        textractableDocument!.params
+      );
 
       setLoading(true);
 
@@ -134,7 +126,7 @@ const RGExtract = () => {
       <Group align="initial" style={{ padding: "50px" }}>
         <Stack style={{ flex: "1" }}>
           <Text size="40" inline>
-            <b>RG verso</b>
+            <b>RG (imagem ou pdf)</b>
           </Text>
           <Text size="24" inline>
             Extrair valores padronizados do <b>verso</b> do RG (frente é a

@@ -1,7 +1,9 @@
 https://www.youtube.com/watch?v=RM-v7zoYQo0
 
+// 0
 create extension vector;
 
+// 1
 create table paul_graham (
 id bigserial primary key
 essay_title text,
@@ -12,6 +14,7 @@ content_tokens bigint,
 embedding vector (1536)
 );
 
+// 2
 create or replace function paul_graham_search (
 query_embedding vector(1536),
 similarity_threshold float,
@@ -52,4 +55,8 @@ $$
 ;
 
 
+// 3
+create index on paul_graham
+using ivfflat (embedding vector_cosine_ops)
+with (lists = 100)
 $$

@@ -7,6 +7,7 @@ import { TextractClient } from "@aws-sdk/client-textract";
 
 import * as pdfjsLib from "pdfjs-dist";
 import * as pdfjsWorker from "pdfjs-dist/build/pdf.worker.entry";
+import { dataURItoBlob } from "@/utils/dataURItoBlob";
 
 pdfjsLib.GlobalWorkerOptions.workerSrc = pdfjsWorker;
 
@@ -26,16 +27,6 @@ export const PDFExtract = () => {
   const [fileName, setFileName] = useState<string>("");
   const [dataResult, setDataResult] = useState<Block[] | undefined>();
 
-  const dataURItoBlob = (dataURI: string) => {
-    const byteString = atob(dataURI.split(",")[1]);
-    const mimeString = dataURI.split(",")[0].split(":")[1].split(";")[0];
-    const ab = new ArrayBuffer(byteString.length);
-    const ia = new Uint8Array(ab);
-    for (let i = 0; i < byteString.length; i++) {
-      ia[i] = byteString.charCodeAt(i);
-    }
-    return new Blob([ab], { type: mimeString });
-  };
   const loadFile = async (file: File) => {
     const data = await file.arrayBuffer();
 

@@ -9,6 +9,8 @@ import {
   TextractClient,
 } from "@aws-sdk/client-textract";
 import { postProcessing } from "./postProcessing";
+import { convertDataUrlToBytes } from "@/utils/convertDataUrlToBytes";
+import { readAsArrayBuffer } from "@/utils/readFileAsArrayBuffer";
 
 const client = new TextractClient({
   region: "us-east-1",
@@ -44,25 +46,6 @@ const RGExtract = () => {
   const [loading, setLoading] = useState<boolean>(false);
   const [ocrResult, setOcrResult] = useState<RGDataType>();
   const [fileName, setFileName] = useState<string>("");
-
-  const readAsArrayBuffer = (file: File) => {
-    return new Promise<ArrayBuffer>((resolve, reject) => {
-      const reader = new FileReader();
-      reader.onload = () => resolve(reader.result as ArrayBuffer);
-      reader.onerror = reject;
-      reader.readAsArrayBuffer(file);
-    });
-  };
-
-  const convertDataUrlToBytes = (dataUrl: string): Uint8Array => {
-    const base64 = dataUrl.split(",")[1];
-    const binaryString = window.atob(base64);
-    const bytes = new Uint8Array(binaryString.length);
-    for (let i = 0; i < binaryString.length; i++) {
-      bytes[i] = binaryString.charCodeAt(i);
-    }
-    return bytes;
-  };
 
   const loadFile = (file: File) => {
     setImageUrl(URL.createObjectURL(file));

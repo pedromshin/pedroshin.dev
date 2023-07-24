@@ -1,4 +1,4 @@
-import { OpenAIModel } from "@/../types";
+import { OpenAIModel } from "@/types";
 import { createClient } from "@supabase/supabase-js";
 import {
   createParser,

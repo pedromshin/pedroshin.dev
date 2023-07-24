@@ -1447,6 +1447,19 @@
   dependencies:
     tslib "^2.4.0"
 
+"@tabler/icons-react@^2.28.0":
+  version "2.28.0"
+  resolved "https://registry.yarnpkg.com/@tabler/icons-react/-/icons-react-2.28.0.tgz#ff0f8b639c88857039663a51574a5e7fbc172697"
+  integrity sha512-AuUd2hdK/4pa/DIIqCHZ32Dh9bIbbzo/2zEm2jr6cPARh81hJHScf/901ABYLNljWULCLSyz7YDOjnh+G1RGUw==
+  dependencies:
+    "@tabler/icons" "2.28.0"
+    prop-types "^15.7.2"
+
+"@tabler/icons@2.28.0":
+  version "2.28.0"
+  resolved "https://registry.yarnpkg.com/@tabler/icons/-/icons-2.28.0.tgz#0ab357c434e31b25d7aef868fa08143711f2e7e5"
+  integrity sha512-JgqeXzS2Cik0Bed+dn3AYh/N2OqLv7FzoOqIzAWnywJyVOBNxB47pzW4Zc0hidDVCk2dt1ekeC2jHaXSheT+BQ==
+
 "@types/hark@^1.2.2":
   version "1.2.2"
   resolved "https://registry.yarnpkg.com/@types/hark/-/hark-1.2.2.tgz#5564b485f70780715435047eea5addbf31e74240"
@@ -2102,6 +2115,11 @@ debug@^4.1.1, debug@^4.3.2, debug@^4.3.4:
   dependencies:
     ms "2.1.2"
 
+dedent@^0.7.0:
+  version "0.7.0"
+  resolved "https://registry.yarnpkg.com/dedent/-/dedent-0.7.0.tgz#2495ddbaf6eb874abb0e1be9df22d2e5a544326c"
+  integrity sha512-Q6fKUPqnAHAyhiUgFU7BUzLiv0kd8saH9al7tnu5Q/okj6dnupxyTgFIBjVzJATdfIAm9NAsvXNzjaKa+bxVyA==
+
 deep-is@^0.1.3:
   version "0.1.4"
   resolved "https://registry.yarnpkg.com/deep-is/-/deep-is-0.1.4.tgz#a6f2dce612fadd2ef1f519b73551f17e85199831"
@@ -2228,6 +2246,15 @@ emoji-regex@^9.2.2:
   version "9.2.2"
   resolved "https://registry.yarnpkg.com/emoji-regex/-/emoji-regex-9.2.2.tgz#840c8803b0d8047f4ff0cf963176b32d4ef3ed72"
   integrity sha512-L18DaJsXSUk2+42pv8mLs5jJT2hqFkFE4j21wOmgbUqsZ2hL72NsUU785g9RXgo3s0ZNgVl42TiHp3ZtOv/Vyg==
+
+endent@^2.1.0:
+  version "2.1.0"
+  resolved "https://registry.yarnpkg.com/endent/-/endent-2.1.0.tgz#5aaba698fb569e5e18e69e1ff7a28ff35373cd88"
+  integrity sha512-r8VyPX7XL8U01Xgnb1CjZ3XV+z90cXIJ9JPE/R9SEC9vpw2P6CfsRPJmp20DppC5N7ZAMCmjYkJIa744Iyg96w==
+  dependencies:
+    dedent "^0.7.0"
+    fast-json-parse "^1.0.3"
+    objectorarray "^1.0.5"
 
 enhanced-resolve@^5.12.0:
   version "5.15.0"
@@ -2646,6 +2673,11 @@ fast-glob@^3.2.12, fast-glob@^3.2.9, fast-glob@^3.3.0:
     glob-parent "^5.1.2"
     merge2 "^1.3.0"
     micromatch "^4.0.4"
+
+fast-json-parse@^1.0.3:
+  version "1.0.3"
+  resolved "https://registry.yarnpkg.com/fast-json-parse/-/fast-json-parse-1.0.3.tgz#43e5c61ee4efa9265633046b770fb682a7577c4d"
+  integrity sha512-FRWsaZRWEJ1ESVNbDWmsAlqDk96gPQezzLghafp5J4GUKjbCz3OkAHuZs5TuPEtkbVQERysLp9xv6c24fBm8Aw==
 
 fast-json-stable-stringify@^2.0.0:
   version "2.1.0"
@@ -3577,6 +3609,11 @@ object.values@^1.1.6:
     define-properties "^1.1.4"
     es-abstract "^1.20.4"
 
+objectorarray@^1.0.5:
+  version "1.0.5"
+  resolved "https://registry.yarnpkg.com/objectorarray/-/objectorarray-1.0.5.tgz#2c05248bbefabd8f43ad13b41085951aac5e68a5"
+  integrity sha512-eJJDYkhJFFbBBAxeh8xW+weHlkI28n2ZdQV/J/DNfWfSKlGEf2xcfAbZTv3riEXHAhL9SVOTs2pRmXiSTf78xg==
+
 once@^1.3.0:
   version "1.4.0"
   resolved "https://registry.yarnpkg.com/once/-/once-1.4.0.tgz#583b1aa775961d4b113ac17d9c50baef9dd76bd1"
@@ -3810,7 +3847,7 @@ prelude-ls@^1.2.1:
   resolved "https://registry.yarnpkg.com/prelude-ls/-/prelude-ls-1.2.1.tgz#debc6489d7a6e6b0e7611888cec880337d316396"
   integrity sha512-vkcDPrRZo1QZLbn5RLGPpg/WmIQ65qoWWhcGKf/b5eplkkarX0m9z8ppCat4mlOqUsWpyNuYgO3VRyrYHSzX5g==
 
-prop-types@^15.8.1:
+prop-types@^15.7.2, prop-types@^15.8.1:
   version "15.8.1"
   resolved "https://registry.yarnpkg.com/prop-types/-/prop-types-15.8.1.tgz#67d87bf1a694f48435cf332c24af10214a3140b5"
   integrity sha512-oj87CgZICdulUohogVAR7AjlC0327U4el4L6eAvOqCeudMDVU0NThNaV+b9Df4dXgSP1gXMTnPdhfe/2qDH5cg==

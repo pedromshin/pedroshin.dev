@@ -85,12 +85,12 @@ const RGExtract = () => {
 
     setTextractableDocument(textractableDocument);
 
-    if (await textractableDocument.bytes)
+    if (await textractableDocument.uint8array)
       setImageUrl(
         textractableDocument.mime +
           "," +
           textractableDocument.uint8ArrayToBase64(
-            await textractableDocument.bytes
+            await textractableDocument.uint8array
           )
       );
   };

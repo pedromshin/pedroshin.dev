@@ -1,5 +1,7 @@
 import * as pdfjsLib from "pdfjs-dist";
+import pdfjsWorker from "pdfjs-dist/build/pdf.worker.entry";
 
+pdfjsLib.GlobalWorkerOptions.workerSrc = pdfjsWorker;
 class Query {
   public Text: string;
   public Alias: string;
@@ -25,7 +27,7 @@ class Params {
 export class TextractableDocument {
   public fileType: string;
   public buffer: Buffer;
-  public bytes: Promise<Uint8Array>;
+  public uint8array: Promise<Uint8Array>;
   public queries: Query[];
   public mime: string;
   public params: Params;
@@ -45,7 +47,7 @@ export class TextractableDocument {
     this.queries = queries;
     this.base64 = base64;
     this.buffer = this.base64ToBuffer(this.base64);
-    this.bytes = this.Uint8ArrayToBase64(this.buffer);
+    this.uint8array = this.bufferToUint8Array(this.buffer);
     this.mime = this.base64.split(",")[0];
     this.params = new Params({ Bytes: this.buffer, Queries: this.queries });
   }
@@ -55,14 +57,12 @@ export class TextractableDocument {
     return Buffer.from(base64Data, "base64");
   };
 
-  private Uint8ArrayToBase64 = (
-    uint8Array: Uint8Array
-  ): Promise<Uint8Array> => {
+  private bufferToUint8Array = async (buffer: Buffer): Promise<Uint8Array> => {
     if (this.fileType === "application/pdf") {
-      const loadingTask = pdfjsLib.getDocument(uint8Array);
+      const loadingTask = pdfjsLib.getDocument(new Uint8Array(buffer));
 
-      const result = loadingTask.promise.then((pdf) => {
-        return pdf.getPage(1).then((page) => {
+      const result = await loadingTask.promise.then(async (pdf) => {
+        return pdf.getPage(1).then(async (page) => {
           const viewport = page.getViewport({ scale: 1 });
           const canvas = document.createElement("canvas");
           const context = canvas.getContext("2d");
@@ -70,7 +70,7 @@ export class TextractableDocument {
           canvas.height = viewport.height;
           canvas.width = viewport.width;
 
-          return page
+          return await page
             .render({
               canvasContext: context!,
               viewport: viewport,
@@ -86,20 +86,9 @@ export class TextractableDocument {
       // Check if it's already a Promise, return it as-is; otherwise, wrap it in a Promise
       return result instanceof Promise ? result : Promise.resolve(result);
     } else {
-      return Promise.resolve(
-        new Uint8Array(this.bufferToArrayBuffer(this.buffer))
-      );
+      return Promise.resolve(new Uint8Array(buffer));
     }
   };
-
-  private bufferToArrayBuffer(buffer: Buffer) {
-    const arrayBuffer = new ArrayBuffer(buffer.length);
-    const view = new Uint8Array(arrayBuffer);
-    for (let i = 0; i < buffer.length; ++i) {
-      view[i] = buffer[i];
-    }
-    return arrayBuffer;
-  }
 
   private dataURLtoBytes = (dataUrl: string): Uint8Array => {
     const base64 = dataUrl.split(",")[1];

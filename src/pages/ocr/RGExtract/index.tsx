@@ -11,6 +11,8 @@ import {
 import { postProcessing } from "./postProcessing";
 import { convertDataUrlToBytes } from "@/utils/convertDataUrlToBytes";
 import { readAsArrayBuffer } from "@/utils/readFileAsArrayBuffer";
+import { TextractableDocument } from "@/entities";
+import { fileToBase64 } from "@/utils/fileToBase64";
 
 const client = new TextractClient({
   region: "us-east-1",
@@ -41,83 +43,69 @@ export enum RG_ALIAS_ENUM {
 }
 
 const RGExtract = () => {
-  const [imageData, setImageData] = useState<{ Bytes: Uint8Array }>();
   const [imageUrl, setImageUrl] = useState<string>();
   const [loading, setLoading] = useState<boolean>(false);
   const [ocrResult, setOcrResult] = useState<RGDataType>();
   const [fileName, setFileName] = useState<string>("");
+  const [textractableDocument, setTextractableDocument] =
+    useState<TextractableDocument>();
 
-  const loadFile = (file: File) => {
+  const queries = [
+    { Text: "registro geral", Alias: RG_ALIAS_ENUM.RG_DOCUMENT_NUMBER },
+    {
+      Text: "data de expedicao",
+      Alias: RG_ALIAS_ENUM.RG_DOCUMENT_EXPEDITION_DATE,
+    },
+    { Text: "naturalidade", Alias: RG_ALIAS_ENUM.RG_OWNER_PLACE_OF_BIRTH },
+    { Text: "data de nascimento", Alias: RG_ALIAS_ENUM.RG_OWNER_BIRTHDATE },
+    { Text: "nome", Alias: RG_ALIAS_ENUM.RG_OWNER_NAME },
+    {
+      Text: "what is the content of the first line of filiacao?",
+      Alias: RG_ALIAS_ENUM.RG_OWNER_FATHER_NAME,
+    },
+    {
+      Text: "what is the content of the second line of filiacao?",
+      Alias: RG_ALIAS_ENUM.RG_OWNER_MOTHER_NAME,
+    },
+    {
+      Text: "city and state in 'doc origem'",
+      Alias: RG_ALIAS_ENUM.RG_DOCUMENT_ORIGIN,
+    },
+  ];
+
+  const loadFile = async (file: File) => {
     setImageUrl(URL.createObjectURL(file));
     setFileName(file.name);
 
-    readAsArrayBuffer(file).then((arrayBuffer) => {
-      if (file.type === "application/pdf") {
-        // Use pdfjs-dist to extract the first page as an image
-        const uint8Array = new Uint8Array(arrayBuffer);
-
-        // Use pdfjs-dist to extract the first page as an image
-        const loadingTask = pdfjsLib.getDocument(uint8Array);
-
-        loadingTask.promise.then((pdf) => {
-          pdf.getPage(1).then((page) => {
-            const viewport = page.getViewport({ scale: 1 });
-            const canvas = document.createElement("canvas");
-            const context = canvas.getContext("2d");
-
-            canvas.height = viewport.height;
-            canvas.width = viewport.width;
-
-            page
-              .render({
-                canvasContext: context!,
-                viewport: viewport,
-              })
-              .promise.then(() => {
-                const imageDataUrl = canvas.toDataURL("image/png");
-                setImageUrl(imageDataUrl);
-                setImageData({ Bytes: convertDataUrlToBytes(imageDataUrl) });
-              });
-          });
-        });
-      } else {
-        setImageData({
-          Bytes: new Uint8Array(arrayBuffer as ArrayBuffer),
-        });
-      }
+    const textractableDocument = new TextractableDocument({
+      fileType: file.type,
+      base64: await fileToBase64(file),
+      queries: queries,
     });
-  };
 
-  const params = {
-    Document: imageData!,
-    FeatureTypes: ["QUERIES"],
-    QueriesConfig: {
-      Queries: [
-        { Text: "registro geral", Alias: RG_ALIAS_ENUM.RG_DOCUMENT_NUMBER },
-        {
-          Text: "data de expedicao",
-          Alias: RG_ALIAS_ENUM.RG_DOCUMENT_EXPEDITION_DATE,
-        },
-        { Text: "naturalidade", Alias: RG_ALIAS_ENUM.RG_OWNER_PLACE_OF_BIRTH },
-        { Text: "data de nascimento", Alias: RG_ALIAS_ENUM.RG_OWNER_BIRTHDATE },
-        { Text: "nome", Alias: RG_ALIAS_ENUM.RG_OWNER_NAME },
-        {
-          Text: "what is the content of the first line of filiacao?",
-          Alias: RG_ALIAS_ENUM.RG_OWNER_FATHER_NAME,
-        },
-        {
-          Text: "what is the content of the second line of filiacao?",
-          Alias: RG_ALIAS_ENUM.RG_OWNER_MOTHER_NAME,
-        },
-        {
-          Text: "city and state in 'doc origem'",
-          Alias: RG_ALIAS_ENUM.RG_DOCUMENT_ORIGIN,
-        },
-      ],
-    },
+    setTextractableDocument(textractableDocument);
+
+    if (await textractableDocument.bytes)
+      setImageUrl(
+        textractableDocument.mime +
+          "," +
+          textractableDocument.uint8ArrayToBase64(
+            await textractableDocument.bytes
+          )
+      );
   };
 
   const extract = async () => {
+    const params = {
+      Document: {
+        Bytes: await textractableDocument?.bytes,
+      },
+      FeatureTypes: ["QUERIES"],
+      QueriesConfig: {
+        Queries: textractableDocument?.queries,
+      },
+    };
+
     let result: RGDataType = [];
     try {
       const analyzeDoc = new AnalyzeDocumentCommand(params);
@@ -169,7 +157,7 @@ const RGExtract = () => {
             )}
           </Dropzone>
 
-          {!!imageData && (
+          {!!imageUrl && (
             <Image
               src={imageUrl}
               style={{ width: "100%", maxWidth: 400, height: "auto" }}

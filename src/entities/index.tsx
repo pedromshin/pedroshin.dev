@@ -1,1 +1,1 @@
-export * from "./textratable-document.entity";
+export * from "./textractable-document.entity";

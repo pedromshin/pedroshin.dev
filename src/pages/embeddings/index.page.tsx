@@ -1,6 +1,5 @@
 import { Answer } from "./components/Answer/Answer";
 import { Footer } from "./components/Footer";
-import { Navbar } from "./components/Navbar";
 import { PGChunk } from "@/types";
 import {
   IconArrowRight,
@@ -21,7 +20,7 @@ export default function Home() {
   const [showSettings, setShowSettings] = useState<boolean>(false);
   const [mode, setMode] = useState<"search" | "chat">("chat");
   const [matchCount, setMatchCount] = useState<number>(5);
-  const [apiKey, setApiKey] = useState<string>("");
+  const [apiKey, setApiKey] = useState<string>(process.env.OPEN_AI_KEY!);
 
   const handleSearch = async () => {
     if (!apiKey) {
@@ -202,7 +201,6 @@ export default function Home() {
   return (
     <>
       <div className="flex flex-col h-screen">
-        <Navbar />
         <div className="flex-1 overflow-auto border-red-300">
           <div className="mx-auto flex h-full w-full max-w-[750px] flex-col items-center px-3 pt-4 sm:pt-8">
             <button
@@ -341,7 +339,7 @@ export default function Home() {
                 <div className="mt-6 mb-16">
                   <div className="font-bold text-2xl">Passages</div>
 
-                  {chunks.map((chunk, index) => (
+                  {chunks?.map((chunk, index) => (
                     <div key={index}>
                       <div className="mt-4 border border-zinc-600 rounded-lg p-4">
                         <div className="flex justify-between">
@@ -368,10 +366,10 @@ export default function Home() {
                   ))}
                 </div>
               </div>
-            ) : chunks.length > 0 ? (
+            ) : chunks?.length > 0 ? (
               <div className="mt-6 pb-16">
                 <div className="font-bold text-2xl">Passages</div>
-                {chunks.map((chunk, index) => (
+                {chunks?.map((chunk, index) => (
                   <div key={index}>
                     <div className="mt-4 border border-zinc-600 rounded-lg p-4">
                       <div className="flex justify-between">

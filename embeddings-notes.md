@@ -25,8 +25,8 @@ id bigint,
 essay_title text,
 essay_url text,
 essay_date text,
+essay_thanks text,
 content text,
-content_length bigint,
 content_tokens bigint,
 similarity float
 )
@@ -40,6 +40,7 @@ paul_graham.id,
 paul_graham.essay_title,
 paul_graham.essay_url,
 paul_graham.essay_date,
+paul_graham.essay_thanks,
 paul_graham.content,
 paul_graham.content_tokens,
 1 - (paul_graham.embedding <=> query_embedding) as

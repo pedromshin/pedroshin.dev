@@ -9,14 +9,6 @@ const nextConfig = {
     SUPABASE_SERVICE_ROLE_KEY: process.env.SUPABASE_SERVICE_ROLE_KEY,
   },
   pageExtensions: ["page.tsx", "page.ts", "page.jsx", "page.js"],
-  async rewrites() {
-    return [
-      {
-        source: "/titanic",
-        destination: "http://127.0.0.1:5000/titanic",
-      },
-    ];
-  },
 };
 
 module.exports = nextConfig;

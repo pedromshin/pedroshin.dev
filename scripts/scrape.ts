@@ -181,20 +181,20 @@ const chunkEssay = async (essay: PGEssay) => {
 };
 
 (async () => {
-  console.log(1);
   const links = await getLinks();
-  console.log(2);
 
   let essays = [];
 
-  for (let i = 0; i < links.length; i++) {
+  // for (let i = 0; i < links.length; i++) {
+  for (let i = 0; i < 5; i++) {
     console.log(`${i}/${links.length}`);
 
     const essay = await getEssay(links[i]);
     const chunkedEssay = await chunkEssay(essay);
     essays.push(chunkedEssay);
   }
-  console.log(4);
+
+  fs.writeFileSync("scripts/essays.json", JSON.stringify(essays));
 
   const json: PGJSON = {
     current_date: "2023-03-01",

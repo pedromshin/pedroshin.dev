@@ -9,8 +9,16 @@ export default function Home() {
       link: "/ocr",
     },
     {
+      title: "Extração de dados padronizados de currículo",
+      link: "/curriculo",
+    },
+    {
       title: "Extract subtitle from video and transcribe audio",
       link: "/subtitle",
+    },
+    {
+      title: "Image generate",
+      link: "/image",
     },
     {
       title: "Chatbot",
@@ -23,10 +31,6 @@ export default function Home() {
     {
       title: "Chatbot with custom created data on notion page",
       link: "/embeddings-notion",
-    },
-    {
-      title: "Image generate",
-      link: "/image",
     },
   ];
 

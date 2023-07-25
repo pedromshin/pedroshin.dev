@@ -21,6 +21,10 @@ export default function Home() {
       link: "/embeddings-pg",
     },
     {
+      title: "Chatbot with custom created data on notion page",
+      link: "/embeddings-notion",
+    },
+    {
       title: "Image generate",
       link: "/image",
     },

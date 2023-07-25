@@ -7,6 +7,7 @@ const nextConfig = {
     OPEN_AI_KEY: process.env.OPEN_AI_KEY,
     NEXT_PUBLIC_SUPABASE_URL: process.env.NEXT_PUBLIC_SUPABASE_URL,
     SUPABASE_SERVICE_ROLE_KEY: process.env.SUPABASE_SERVICE_ROLE_KEY,
+    NOTION_API_KEY: process.env.NOTION_API_KEY,
   },
   pageExtensions: ["page.tsx", "page.ts", "page.jsx", "page.js"],
 };

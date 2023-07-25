@@ -17,8 +17,8 @@ export default function Home() {
       link: "/chatbot",
     },
     {
-      title: "Chatbot with embeddings",
-      link: "/embeddings",
+      title: "Chatbot with Paul Graham's Essay embeddings",
+      link: "/embeddings-pg",
     },
     {
       title: "Image generate",

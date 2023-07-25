@@ -38,7 +38,7 @@ export default function Embeddings() {
 
     setLoading(true);
 
-    const searchResponse = await fetch("/api/search", {
+    const searchResponse = await fetch("/api/pg/search", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -78,7 +78,7 @@ export default function Embeddings() {
 
     setLoading(true);
 
-    const searchResponse = await fetch("/api/search", {
+    const searchResponse = await fetch("/api/pg/search", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -101,7 +101,7 @@ export default function Embeddings() {
     ${results?.map((d: any) => d.content).join("\n\n")}
     `;
 
-    const answerResponse = await fetch("/api/answer", {
+    const answerResponse = await fetch("/api/pg/answer", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

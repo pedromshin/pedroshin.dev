@@ -2,8 +2,6 @@ import { useState } from "react";
 import { Group, Stack, Text, Image, Button } from "@mantine/core";
 import { Dropzone, IMAGE_MIME_TYPE, PDF_MIME_TYPE } from "@mantine/dropzone";
 
-import * as pdfjsLib from "pdfjs-dist";
-
 import {
   AnalyzeDocumentCommand,
   TextractClient,

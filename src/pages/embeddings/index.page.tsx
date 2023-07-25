@@ -9,7 +9,7 @@ import {
 import endent from "endent";
 import { KeyboardEvent, useEffect, useRef, useState } from "react";
 
-export default function Home() {
+export default function Embeddings() {
   const inputRef = useRef<HTMLInputElement>(null);
 
   const [query, setQuery] = useState<string>("");

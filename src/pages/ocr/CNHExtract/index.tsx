@@ -5,6 +5,8 @@ import { Dropzone, IMAGE_MIME_TYPE, PDF_MIME_TYPE } from "@mantine/dropzone";
 import { AnalyzeDocumentCommand } from "@aws-sdk/client-textract";
 import { TextractClient } from "@aws-sdk/client-textract";
 import { postProcessing } from "./postProcessing";
+import { TextractableDocument } from "@/entities";
+import { fileToBase64 } from "@/utils/fileToBase64";
 
 export type CNHDataType = Array<
   | {
@@ -31,53 +33,53 @@ const client = new TextractClient({
   },
 });
 
+const queries = [
+  { Text: "no registro", Alias: CNH_ALIAS_ENUM.CNH_DOCUMENT_NUMBER },
+  {
+    Text: "data de nascimento",
+    Alias: CNH_ALIAS_ENUM.CNH_OWNER_BIRTHDATE,
+  },
+  { Text: "validade", Alias: CNH_ALIAS_ENUM.CNH_DOCUMENT_EXPIRY_DATE },
+  { Text: "cpf", Alias: CNH_ALIAS_ENUM.CNH_OWNER_CPF },
+  { Text: "nome", Alias: CNH_ALIAS_ENUM.CNH_OWNER_NAME },
+];
+
 const CNHExtract = () => {
-  const [imageData, setImageData] = useState<{ Bytes: Uint8Array }>();
   const [imageUrl, setImageUrl] = useState<string>();
   const [loading, setLoading] = useState<boolean>(false);
   const [ocrResult, setOcrResult] = useState<CNHDataType>();
   const [fileName, setFileName] = useState<string>("");
+  const [textractableDocument, setTextractableDocument] =
+    useState<TextractableDocument>();
 
-  const readAsArrayBuffer = (file: File) => {
-    return new Promise((resolve, reject) => {
-      const reader = new FileReader();
-      reader.onload = () => resolve(reader.result);
-      reader.onerror = reject;
-      reader.readAsArrayBuffer(file);
-    });
-  };
-
-  const loadFile = (file: File) => {
+  const loadFile = async (file: File) => {
     setImageUrl(URL.createObjectURL(file));
-    readAsArrayBuffer(file).then((result) => {
-      setImageData({
-        Bytes: new Uint8Array(result as ArrayBuffer),
-      });
-    });
     setFileName(file.name);
-  };
 
-  const params = {
-    Document: imageData,
-    FeatureTypes: ["QUERIES"],
-    QueriesConfig: {
-      Queries: [
-        { Text: "no registro", Alias: CNH_ALIAS_ENUM.CNH_DOCUMENT_NUMBER },
-        {
-          Text: "data de nascimento",
-          Alias: CNH_ALIAS_ENUM.CNH_OWNER_BIRTHDATE,
-        },
-        { Text: "validade", Alias: CNH_ALIAS_ENUM.CNH_DOCUMENT_EXPIRY_DATE },
-        { Text: "cpf", Alias: CNH_ALIAS_ENUM.CNH_OWNER_CPF },
-        { Text: "nome", Alias: CNH_ALIAS_ENUM.CNH_OWNER_NAME },
-      ],
-    },
+    const textractableDocument = new TextractableDocument({
+      fileType: file.type,
+      base64: await fileToBase64(file),
+      queries: queries,
+    });
+
+    setTextractableDocument(textractableDocument);
+
+    if (await textractableDocument.uint8array)
+      setImageUrl(
+        textractableDocument.mime +
+          "," +
+          textractableDocument.uint8ArrayToBase64(
+            await textractableDocument.uint8array
+          )
+      );
   };
 
   const extract = async () => {
     let result: CNHDataType = [];
     try {
-      const analyzeDoc = new AnalyzeDocumentCommand(params);
+      const analyzeDoc = new AnalyzeDocumentCommand(
+        textractableDocument!.params
+      );
       setLoading(true);
       const data = await client.send(analyzeDoc);
       setLoading(false);
@@ -123,7 +125,7 @@ const CNHExtract = () => {
             )}
           </Dropzone>
 
-          {!!imageData && (
+          {!!imageUrl && (
             <Image
               src={imageUrl}
               style={{ width: "100%", maxWidth: 400, height: "auto" }}

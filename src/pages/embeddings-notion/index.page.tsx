@@ -8,6 +8,7 @@ import { useRef, useState } from "react";
 import { Chunk } from "../../../scripts/embeddings-notion/embed";
 import { Answer } from "./Answer/Answer";
 import { set } from "lodash";
+import { supabaseAdmin } from "./utils/embeddings";
 
 const apiKey = process.env.OPEN_AI_KEY;
 
@@ -17,7 +18,7 @@ const NotionEmbeddingPage = () => {
   const [chunks, setChunks] = useState<({ similarity: number } & Chunk)[]>();
   const [answer, setAnswer] = useState<string>("");
   const [loading, setLoading] = useState<boolean>(false);
-  const [updates, setUpdates] = useState<string[]>([""]);
+  const [updates, setUpdates] = useState<string[]>();
 
   const handleAnswer = async () => {
     if (!query) {
@@ -115,41 +116,61 @@ const NotionEmbeddingPage = () => {
             <button
               className="mt-4 border border-zinc-600 rounded-lg p-4 max-w-[300px]"
               onClick={async () => {
-                const scrapeResults = await fetch("/api/notion/scrape", {
-                  method: "GET",
-                }).then((res) => res.json());
+                setUpdates(undefined);
+                const deleteResult = await supabaseAdmin
+                  .from("notion_embeddings")
+                  .delete()
+                  .neq("content", 0);
 
-                const embed = await scrapeResults.forEach(
-                  async (section: any, i: number) => {
-                    section.chunks.forEach(async (chunk: any, j: number) => {
+                console.log("delete table", deleteResult);
+
+                try {
+                  const scrapeResults = await fetch("/api/notion/scrape", {
+                    method: "GET",
+                  }).then((res) => res.json());
+
+                  for (let i = 0; i < scrapeResults.length; i++) {
+                    const section = scrapeResults[i];
+                    for (let j = 0; j < section.chunks.length; j++) {
+                      const chunk = section.chunks[j];
                       const embedResults = await fetch("/api/notion/embed", {
                         headers: {
                           "Content-Type": "application/json",
                         },
                         method: "POST",
                         body: JSON.stringify({ text: chunk }),
-                      }).then((res) => {
-                        setUpdates((prev) => {
-                          prev.push(
-                            "sucessfully saved embedding of " +
-                              `section ${j + 1}/${section.chunks.length} of`,
-                            `chunk ${i + 1}/${scrapeResults.length}`
-                          );
-
-                          return prev;
-                        });
                       });
-                    });
+
+                      setUpdates((prev) => [
+                        ...(prev ?? [""]),
+                        `Successfully saved embedding of section ${j + 1}/${
+                          section.chunks.length
+                        } of chunk ${i + 1}/${scrapeResults.length}`,
+                      ]);
+                    }
                   }
-                );
+                } catch (error) {
+                  console.error("Error occurred:", error);
+                }
               }}
             >
               <div className="font-bold text-2sm mb-2">
                 Atualizar banco de dados estado atual da página do notion
               </div>
             </button>
+            {updates && (
+              <div className="mt-4 border border-zinc-600 rounded-lg p-4 max-w-[300px]">
+                <div className="font-bold text-2sm mb-2">Updates</div>
+                {updates.map((update, index) => (
+                  <div key={index}>{update}</div>
+                ))}
+              </div>
+            )}
           </div>
-          <div className="mt-6 mb-16">
+          {updates && (
+            <button onClick={() => setUpdates(undefined)}>Limpar</button>
+          )}
+          <div className="mt-6 mb-16 text-left w-full">
             <div className="font-bold text-2xl mb-2">Answer</div>
             <Answer text={answer} />
             <div className="font-bold text-2xl">Textos do notion</div>

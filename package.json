@@ -7,8 +7,8 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "scrape": "tsx scripts/scrape.ts",
-    "embed": "tsx scripts/embed.ts"
+    "scrape-pg": "tsx scripts/embeddings-pg/scrape.ts",
+    "embed-pg": "tsx scripts/embeddings-pg/embed.ts"
   },
   "devDependencies": {
     "@types/hark": "^1.2.2",

@@ -1,4 +1,4 @@
-import { PGEssay, PGJSON } from "../src/pages/embeddings-pg/types";
+import { PGEssay, PGJSON } from "../../src/pages/embeddings-pg/types";
 import { loadEnvConfig } from "@next/env";
 import { createClient } from "@supabase/supabase-js";
 import fs from "fs";

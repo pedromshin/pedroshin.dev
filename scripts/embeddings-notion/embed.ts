@@ -5,14 +5,14 @@ import { createClient } from "@supabase/supabase-js";
 
 loadEnvConfig("");
 
-type Chunk = {
+export type Chunk = {
   content: string;
   content_length: number;
   content_tokens: number;
   embedding: number[];
 };
 
-type ChunkedText = {
+export type ChunkedText = {
   content: string;
   length: number;
   tokens: number;

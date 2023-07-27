@@ -70,10 +70,12 @@ const generateEmbeddings = async (texts: ChunkedText[]) => {
   }
 };
 
-(async () => {
+export const embed = async () => {
   const texts = JSON.parse(
     fs.readFileSync("scripts/embeddings-notion/processed-notion.json", "utf8")
   );
 
   await generateEmbeddings(texts);
-})();
+};
+
+embed();

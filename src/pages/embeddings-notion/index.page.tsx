@@ -7,6 +7,7 @@ import {
 import { useRef, useState } from "react";
 import { Chunk } from "../../../scripts/embeddings-notion/embed";
 import { Answer } from "./Answer/Answer";
+import { set } from "lodash";
 
 const apiKey = process.env.OPEN_AI_KEY;
 
@@ -16,6 +17,7 @@ const NotionEmbeddingPage = () => {
   const [chunks, setChunks] = useState<({ similarity: number } & Chunk)[]>();
   const [answer, setAnswer] = useState<string>("");
   const [loading, setLoading] = useState<boolean>(false);
+  const [updates, setUpdates] = useState<string[]>([""]);
 
   const handleAnswer = async () => {
     if (!query) {
@@ -86,6 +88,8 @@ const NotionEmbeddingPage = () => {
     inputRef.current?.focus();
   };
 
+  console.log(updates);
+
   return (
     <div className="flex flex-col h-screen">
       <div className="flex-1 overflow-auto border-red-300">
@@ -105,6 +109,44 @@ const NotionEmbeddingPage = () => {
                 onClick={handleAnswer}
                 className="absolute right-2 top-2.5 h-7 w-7 rounded-full bg-blue-500 p-1 hover:cursor-pointer hover:bg-blue-600 sm:right-3 sm:top-3 sm:h-10 sm:w-10 text-white"
               />
+            </button>
+          </div>
+          <div className="flex gap-24 relative w-full mt-4">
+            <button
+              className="mt-4 border border-zinc-600 rounded-lg p-4 max-w-[300px]"
+              onClick={async () => {
+                const scrapeResults = await fetch("/api/notion/scrape", {
+                  method: "GET",
+                }).then((res) => res.json());
+
+                const embed = await scrapeResults.forEach(
+                  async (section: any, i: number) => {
+                    section.chunks.forEach(async (chunk: any, j: number) => {
+                      const embedResults = await fetch("/api/notion/embed", {
+                        headers: {
+                          "Content-Type": "application/json",
+                        },
+                        method: "POST",
+                        body: JSON.stringify({ text: chunk }),
+                      }).then((res) => {
+                        setUpdates((prev) => {
+                          prev.push(
+                            "sucessfully saved embedding of " +
+                              `section ${j + 1}/${section.chunks.length} of`,
+                            `chunk ${i + 1}/${scrapeResults.length}`
+                          );
+
+                          return prev;
+                        });
+                      });
+                    });
+                  }
+                );
+              }}
+            >
+              <div className="font-bold text-2sm mb-2">
+                Atualizar banco de dados estado atual da página do notion
+              </div>
             </button>
           </div>
           <div className="mt-6 mb-16">

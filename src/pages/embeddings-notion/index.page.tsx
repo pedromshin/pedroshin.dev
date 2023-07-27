@@ -113,53 +113,55 @@ const NotionEmbeddingPage = () => {
             </button>
           </div>
           <div className="flex gap-24 relative w-full mt-4">
-            <button
-              className="mt-4 border border-zinc-600 rounded-lg p-4 max-w-[300px]"
-              onClick={async () => {
-                setUpdates(undefined);
-                const deleteResult = await supabaseAdmin
-                  .from("notion_embeddings")
-                  .delete()
-                  .neq("content", 0);
+            <div className="max-h-200 overflow-y-auto">
+              <button
+                className="mt-4 border border-zinc-600 rounded-lg p-4 max-w-[300px]"
+                onClick={async () => {
+                  setUpdates(undefined);
+                  const deleteResult = await supabaseAdmin
+                    .from("notion_embeddings")
+                    .delete()
+                    .neq("content", 0);
 
-                console.log("delete table", deleteResult);
+                  console.log("delete table", deleteResult);
 
-                try {
-                  const scrapeResults = await fetch("/api/notion/scrape", {
-                    method: "GET",
-                  }).then((res) => res.json());
+                  try {
+                    const scrapeResults = await fetch("/api/notion/scrape", {
+                      method: "GET",
+                    }).then((res) => res.json());
 
-                  for (let i = 0; i < scrapeResults.length; i++) {
-                    const section = scrapeResults[i];
-                    for (let j = 0; j < section.chunks.length; j++) {
-                      const chunk = section.chunks[j];
-                      const embedResults = await fetch("/api/notion/embed", {
-                        headers: {
-                          "Content-Type": "application/json",
-                        },
-                        method: "POST",
-                        body: JSON.stringify({ text: chunk }),
-                      });
+                    for (let i = 0; i < scrapeResults.length; i++) {
+                      const section = scrapeResults[i];
+                      for (let j = 0; j < section.chunks.length; j++) {
+                        const chunk = section.chunks[j];
+                        const embedResults = await fetch("/api/notion/embed", {
+                          headers: {
+                            "Content-Type": "application/json",
+                          },
+                          method: "POST",
+                          body: JSON.stringify({ text: chunk }),
+                        });
 
-                      setUpdates((prev) => [
-                        ...(prev ?? [""]),
-                        `Successfully saved embedding of section ${j + 1}/${
-                          section.chunks.length
-                        } of chunk ${i + 1}/${scrapeResults.length}`,
-                      ]);
+                        setUpdates((prev) => [
+                          ...(prev ?? [""]),
+                          `Successfully saved embedding of section ${j + 1}/${
+                            section.chunks.length
+                          } of chunk ${i + 1}/${scrapeResults.length}`,
+                        ]);
+                      }
                     }
+                  } catch (error) {
+                    console.error("Error occurred:", error);
                   }
-                } catch (error) {
-                  console.error("Error occurred:", error);
-                }
-              }}
-            >
-              <div className="font-bold text-2sm mb-2">
-                Atualizar banco de dados estado atual da página do notion
-              </div>
-            </button>
+                }}
+              >
+                <div className="font-bold text-2sm mb-2">
+                  Atualizar banco de dados estado atual da página do notion
+                </div>
+              </button>
+            </div>
             {updates && (
-              <div className="mt-4 border border-zinc-600 rounded-lg p-4 max-w-[300px]">
+              <div className="mt-4 border border-zinc-600 rounded-lg p-4 max-w-[300px] max-h-[200px] overflow-y-auto">
                 <div className="font-bold text-2sm mb-2">Updates</div>
                 {updates.map((update, index) => (
                   <div key={index}>{update}</div>

@@ -9,7 +9,8 @@
     "lint": "next lint",
     "scrape-pg": "tsx scripts/embeddings-pg/scrape.ts",
     "embed-pg": "tsx scripts/embeddings-pg/embed.ts",
-    "scrape-notion": "tsx scripts/embeddings-notion/scrape.ts"
+    "scrape-notion": "tsx scripts/embeddings-notion/scrape.ts",
+    "embed-notion": "tsx scripts/embeddings-notion/embed.ts"
   },
   "devDependencies": {
     "@types/hark": "^1.2.2",

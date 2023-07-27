@@ -1,13 +1,157 @@
 [
-  "Cooking an egg is a simple yet versatile culinary skill that can be mastered by anyone. To prepare a delicious egg, start by heating a non-stick skillet over medium heat. Add a small amount of butter or oil to the pan. Once the fat is heated, crack the egg gently and let it slide into the pan. For a perfect sunny-side-up egg, cook it until the whites are set, but the yolk remains runny. If you prefer an over-easy egg, carefully flip it and cook for a few seconds on the other side. Salt and pepper to taste, and serve on toast or alongside other breakfast favorites. Enjoy your delectable creation!",
-  "como fazer ovo frito",
-  "passo 1 quebrar ovo",
-  "passo 2 fritar",
-  "passo 3 comer",
-  "todo list item 1",
-  "todo list item 2",
-  "todo list item 3",
-  "Heading1 dentro da pagina",
-  "Heading2 dentro da pagina",
-  "Heading3 dentro da pagina"
+  {
+    "content": "Cooking an egg is a simple yet versatile culinary skill that can be mastered by anyone. To prepare a delicious egg, start by heating a non-stick skillet over medium heat. Add a small amount of butter or oil to the pan. Once the fat is heated, crack the egg gently and let it slide into the pan. For a perfect sunny-side-up egg, cook it until the whites are set, but the yolk remains runny. If you prefer an over-easy egg, carefully flip it and cook for a few seconds on the other side. Salt and pepper to taste, and serve on toast or alongside other breakfast favorites. Enjoy your delectable creation!Cooking an egg is a simple yet versatile culinary skill that can be mastered by anyone. It is a process that transforms the raw, liquid egg into a delicious and nutritious food item that is enjoyed worldwide in various dishes. Behind this seemingly straightforward process lies a fascinating world of chemistry. This essay explores the science behind cooking an egg, discussing the different stages of the process and the chemical changes that occur within the egg during each step.Before delving into the cooking process, it is essential to understand the composition of an egg. An egg is composed of several key components: the eggshell, egg white (albumen), and egg yolk. The eggshell, primarily composed of calcium carbonate, provides protection to the egg's contents. The egg white is mainly made up of water, proteins, and minerals, while the egg yolk contains fats, proteins, and essential nutrients like vitamins and minerals.Cooking an egg starts with the application of heat to the raw egg. When the egg is exposed to heat, the proteins in the egg white begin to denature. Denaturation is a process in which the proteins' structure unravels due to the breaking of weak chemical bonds, such as hydrogen bonds and van der Waals forces, that hold the protein in its functional shape. As a result, the denatured proteins reconfigure themselves into a new structure, causing the egg white to solidify.As the temperature continues to rise, coagulation occurs within the egg white. Coagulation is the process where the proteins form a three-dimensional network, transforming the liquid egg white into a semi-solid gel. This coagulation is responsible for the transformation of the clear, viscous egg white into the opaque, firm texture we associate with cooked eggs.The cooking time and temperature play a crucial role in determining the outcome of the egg. Overcooking the egg can lead to the formation of a rubbery texture due to excessive protein denaturation and coagulation. On the other hand, undercooking may result in a runny egg with a liquid center, as the proteins have not coagulated sufficiently.",
+    "length": 2714,
+    "tokens": 566,
+    "chunks": [
+      {
+        "content": "Cooking an egg is a simple yet versatile culinary skill that can be mastered by anyone. To prepare a delicious egg, start by heating a non-stick skillet over medium heat. Add a small amount of butter or oil to the pan. Once the fat is heated, crack the egg gently and let it slide into the pan. For a perfect sunny-side-up egg, cook it until the whites are set, but the yolk remains runny. If you prefer an over-easy egg, carefully flip it and cook for a few seconds on the other side. Salt and pepper to taste, and serve on toast or alongside other breakfast favorites. Enjoy your delectable creation!Cooking an egg is a simple yet versatile culinary skill that can be mastered by anyone. It is a process that transforms the raw, liquid egg into a delicious and nutritious food item that is enjoyed worldwide in various dishes. Behind this seemingly straightforward process lies a fascinating world of chemistry.",
+        "content_length": 913,
+        "content_tokens": 194,
+        "embedding": []
+      },
+      {
+        "content": "This essay explores the science behind cooking an egg, discussing the different stages of the process and the chemical changes that occur within the egg during each step.Before delving into the cooking process, it is essential to understand the composition of an egg. An egg is composed of several key components: the eggshell, egg white (albumen), and egg yolk. The eggshell, primarily composed of calcium carbonate, provides protection to the egg's contents. The egg white is mainly made up of water, proteins, and minerals, while the egg yolk contains fats, proteins, and essential nutrients like vitamins and minerals.Cooking an egg starts with the application of heat to the raw egg. When the egg is exposed to heat, the proteins in the egg white begin to denature.",
+        "content_length": 770,
+        "content_tokens": 159,
+        "embedding": []
+      },
+      {
+        "content": "Denaturation is a process in which the proteins' structure unravels due to the breaking of weak chemical bonds, such as hydrogen bonds and van der Waals forces, that hold the protein in its functional shape. As a result, the denatured proteins reconfigure themselves into a new structure, causing the egg white to solidify.As the temperature continues to rise, coagulation occurs within the egg white. Coagulation is the process where the proteins form a three-dimensional network, transforming the liquid egg white into a semi-solid gel. This coagulation is responsible for the transformation of the clear, viscous egg white into the opaque, firm texture we associate with cooked eggs.The cooking time and temperature play a crucial role in determining the outcome of the egg. Overcooking the egg can lead to the formation of a rubbery texture due to excessive protein denaturation and coagulation. On the other hand, undercooking may result in a runny egg with a liquid center, as the proteins have not coagulated sufficiently.",
+        "content_length": 1028,
+        "content_tokens": 213,
+        "embedding": []
+      }
+    ]
+  },
+  {
+    "content": "como fazer ovo frito",
+    "length": 20,
+    "tokens": 8,
+    "chunks": [
+      {
+        "content": "como fazer ovo frito",
+        "content_length": 20,
+        "content_tokens": 8,
+        "embedding": []
+      }
+    ]
+  },
+  {
+    "content": "passo 1 quebrar ovo",
+    "length": 19,
+    "tokens": 8,
+    "chunks": [
+      {
+        "content": "passo 1 quebrar ovo",
+        "content_length": 19,
+        "content_tokens": 8,
+        "embedding": []
+      }
+    ]
+  },
+  {
+    "content": "passo 2 fritar",
+    "length": 14,
+    "tokens": 6,
+    "chunks": [
+      {
+        "content": "passo 2 fritar",
+        "content_length": 14,
+        "content_tokens": 6,
+        "embedding": []
+      }
+    ]
+  },
+  {
+    "content": "passo 3 comer",
+    "length": 13,
+    "tokens": 5,
+    "chunks": [
+      {
+        "content": "passo 3 comer",
+        "content_length": 13,
+        "content_tokens": 5,
+        "embedding": []
+      }
+    ]
+  },
+  {
+    "content": "todo list item 1",
+    "length": 16,
+    "tokens": 5,
+    "chunks": [
+      {
+        "content": "todo list item 1",
+        "content_length": 16,
+        "content_tokens": 5,
+        "embedding": []
+      }
+    ]
+  },
+  {
+    "content": "todo list item 2",
+    "length": 16,
+    "tokens": 5,
+    "chunks": [
+      {
+        "content": "todo list item 2",
+        "content_length": 16,
+        "content_tokens": 5,
+        "embedding": []
+      }
+    ]
+  },
+  {
+    "content": "todo list item 3",
+    "length": 16,
+    "tokens": 5,
+    "chunks": [
+      {
+        "content": "todo list item 3",
+        "content_length": 16,
+        "content_tokens": 5,
+        "embedding": []
+      }
+    ]
+  },
+  {
+    "content": "Heading1 dentro da pagina",
+    "length": 25,
+    "tokens": 8,
+    "chunks": [
+      {
+        "content": "Heading1 dentro da pagina",
+        "content_length": 25,
+        "content_tokens": 8,
+        "embedding": []
+      }
+    ]
+  },
+  {
+    "content": "Heading2 dentro da pagina",
+    "length": 25,
+    "tokens": 8,
+    "chunks": [
+      {
+        "content": "Heading2 dentro da pagina",
+        "content_length": 25,
+        "content_tokens": 8,
+        "embedding": []
+      }
+    ]
+  },
+  {
+    "content": "Heading3 dentro da pagina",
+    "length": 25,
+    "tokens": 8,
+    "chunks": [
+      {
+        "content": "Heading3 dentro da pagina",
+        "content_length": 25,
+        "content_tokens": 8,
+        "embedding": []
+      }
+    ]
+  }
 ]

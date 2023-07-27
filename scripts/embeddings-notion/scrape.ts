@@ -5,6 +5,28 @@ import fs from "fs";
 
 loadEnvConfig("");
 
+const findPlainTextValues = (data: any) => {
+  const plainTextValues: string[] = [];
+
+  function extractPlainText(obj: any) {
+    if (typeof obj === "object" && obj !== null) {
+      if (obj.hasOwnProperty("plain_text")) {
+        plainTextValues.push(obj.plain_text);
+      } else {
+        for (const key in obj) {
+          extractPlainText(obj[key]);
+        }
+      }
+    }
+  }
+
+  data.forEach((item: any) => {
+    extractPlainText(item);
+  });
+
+  return plainTextValues;
+};
+
 (async () => {
   const notion = new Client({ auth: process.env.NOTION_API_KEY });
 
@@ -19,6 +41,14 @@ loadEnvConfig("");
     fs.writeFileSync(
       "scripts/embeddings-notion/raw-notion.json",
       JSON.stringify(response)
+    );
+
+    const plainTextValues = findPlainTextValues(response.results);
+    console.log("plainTextValues", plainTextValues);
+
+    fs.writeFileSync(
+      "scripts/embeddings-notion/processed-notion.json",
+      JSON.stringify(plainTextValues)
     );
   } catch (error) {
     console.error(error);

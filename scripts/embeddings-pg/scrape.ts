@@ -1,4 +1,4 @@
-import { PGChunk, PGEssay, PGJSON } from "../src/pages/embeddings-pg/types";
+import { PGChunk, PGEssay, PGJSON } from "../../src/pages/embeddings-pg/types";
 import axios from "axios";
 import * as cheerio from "cheerio";
 import fs from "fs";
@@ -205,5 +205,5 @@ const chunkEssay = async (essay: PGEssay) => {
     essays,
   };
 
-  fs.writeFileSync("scripts/pg.json", JSON.stringify(json));
+  fs.writeFileSync("scripts/embeddings-pg/pg.json", JSON.stringify(json));
 })();

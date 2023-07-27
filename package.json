@@ -8,7 +8,8 @@
     "start": "next start",
     "lint": "next lint",
     "scrape-pg": "tsx scripts/embeddings-pg/scrape.ts",
-    "embed-pg": "tsx scripts/embeddings-pg/embed.ts"
+    "embed-pg": "tsx scripts/embeddings-pg/embed.ts",
+    "scrape-notion": "tsx scripts/embeddings-notion/scrape.ts"
   },
   "devDependencies": {
     "@types/hark": "^1.2.2",

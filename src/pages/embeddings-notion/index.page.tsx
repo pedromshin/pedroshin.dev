@@ -112,6 +112,14 @@ const NotionEmbeddingPage = () => {
               />
             </button>
           </div>
+          <a
+            href="https://solar-fox-a61.notion.site/Curso-de-culinaria-90ae074d502a41be99096e6585838941?pvs=4"
+            target="_blank"
+            className="flex gap-2 relative w-full mt-4"
+          >
+            Página do notion
+            <IconExternalLink />
+          </a>
           <div className="flex gap-24 relative w-full mt-4">
             <div className="max-h-200 overflow-y-auto">
               <button

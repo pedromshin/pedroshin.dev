@@ -1,6 +1,6 @@
 import { Answer } from "./components/Answer/Answer";
 import { Footer } from "./components/Footer";
-import { PGChunk } from "@/types";
+import { PGChunk } from "@/pages/embeddings-pg/types";
 import {
   IconArrowRight,
   IconExternalLink,

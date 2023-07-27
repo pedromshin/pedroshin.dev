@@ -1,4 +1,4 @@
-import { supabaseAdmin } from "@/utils/embeddings";
+import { supabaseAdmin } from "@/pages/embeddings-pg/utils/embeddings";
 
 export const config = {
   runtime: "edge",

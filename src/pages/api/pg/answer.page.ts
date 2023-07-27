@@ -1,4 +1,4 @@
-import { OpenAIStream } from "@/utils/embeddings";
+import { OpenAIStream } from "@/pages/embeddings-pg/utils/embeddings";
 
 export const config = {
   runtime: "edge",

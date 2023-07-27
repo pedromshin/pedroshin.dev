@@ -1,4 +1,4 @@
-import { OpenAIModel } from "@/types";
+import { OpenAIModel } from "@/pages/embeddings-pg/types";
 import { createClient } from "@supabase/supabase-js";
 import {
   createParser,

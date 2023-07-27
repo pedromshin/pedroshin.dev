@@ -1,4 +1,4 @@
-import { PGChunk, PGEssay, PGJSON } from "../src/types";
+import { PGChunk, PGEssay, PGJSON } from "../src/pages/embeddings-pg/types";
 import axios from "axios";
 import * as cheerio from "cheerio";
 import fs from "fs";

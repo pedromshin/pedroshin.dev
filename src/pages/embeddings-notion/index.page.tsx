@@ -7,7 +7,6 @@ import {
 import { useRef, useState } from "react";
 import { Chunk } from "../../../scripts/embeddings-notion/embed";
 import { Answer } from "./Answer/Answer";
-import { set } from "lodash";
 import { supabaseAdmin } from "./utils/embeddings";
 
 const apiKey = process.env.OPEN_AI_KEY;
@@ -15,6 +14,9 @@ const apiKey = process.env.OPEN_AI_KEY;
 const NotionEmbeddingPage = () => {
   const inputRef = useRef<HTMLInputElement>(null);
   const [query, setQuery] = useState<string>("");
+  const [systemPrompt, setSystemPrompt] = useState<string>(
+    "You are being used as a chatbot for company Flash Beneficios, the corporate perks company based in Sao Paulo, Brazil. If the user's question is innapropriate on a corporate environment, politely refuse to answer."
+  );
   const [chunks, setChunks] = useState<({ similarity: number } & Chunk)[]>();
   const [answer, setAnswer] = useState<string>("");
   const [loading, setLoading] = useState<boolean>(false);
@@ -59,7 +61,7 @@ const NotionEmbeddingPage = () => {
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({ prompt, apiKey }),
+      body: JSON.stringify({ prompt, apiKey, systemPrompt }),
     });
 
     if (!answerResponse.ok) {
@@ -89,8 +91,6 @@ const NotionEmbeddingPage = () => {
     inputRef.current?.focus();
   };
 
-  console.log(updates);
-
   return (
     <div className="flex flex-col h-screen">
       <div className="flex-1 overflow-auto border-red-300">
@@ -112,6 +112,13 @@ const NotionEmbeddingPage = () => {
               />
             </button>
           </div>
+          <input
+            className="h-12 w-full rounded-full border border-zinc-600 pr-12 pl-11 focus:border-zinc-800 focus:outline-none focus:ring-1 focus:ring-zinc-800 sm:h-16 sm:py-2 sm:pr-16 sm:pl-16 sm:text-lg mt-4"
+            type="text"
+            placeholder="System prompt (prompt enviado junto do texto digitado pelo usuário, para configurar o contexto de resposta.)"
+            value={systemPrompt}
+            onChange={(e) => setSystemPrompt(e.target.value)}
+          />
           <a
             href="https://solar-fox-a61.notion.site/Curso-de-culinaria-90ae074d502a41be99096e6585838941?pvs=4"
             target="_blank"

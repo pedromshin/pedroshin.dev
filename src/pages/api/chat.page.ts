@@ -19,9 +19,8 @@ export default async function POST(req: any) {
   const messages = _.clone(res.messages);
 
   messages.push({
-    role: "user",
-    content:
-      "You are being used as a chatbot for company Flash Beneficios, the corporate perks company based in Sao Paulo, Brazil. Do not give answers that would not be appropriate in a corporate environment, and only give answers in portuguese",
+    role: "system",
+    content: "",
   });
 
   const response = await openAI.createChatCompletion({

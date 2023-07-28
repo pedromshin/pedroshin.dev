@@ -6,12 +6,13 @@ export const config = {
 
 const handler = async (req: Request): Promise<Response> => {
   try {
-    const { prompt, apiKey } = (await req.json()) as {
+    const { prompt, apiKey, systemPrompt } = (await req.json()) as {
       prompt: string;
       apiKey: string;
+      systemPrompt: string;
     };
 
-    const stream = await OpenAIStream(prompt, apiKey);
+    const stream = await OpenAIStream(prompt, apiKey, systemPrompt);
 
     return new Response(stream);
   } catch (error) {

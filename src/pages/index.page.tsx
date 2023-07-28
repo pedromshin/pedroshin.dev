@@ -21,7 +21,7 @@ export default function Home() {
       link: "/image",
     },
     {
-      title: "Chatbot",
+      title: "Chatbot open",
       link: "/chatbot",
     },
     {

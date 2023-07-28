@@ -10,7 +10,11 @@ export const supabaseAdmin = createClient(
   process.env.SUPABASE_SERVICE_ROLE_KEY!
 );
 
-export const OpenAIStream = async (prompt: string, apiKey: string) => {
+export const OpenAIStream = async (
+  prompt: string,
+  apiKey: string,
+  systemPrompt: string
+) => {
   const encoder = new TextEncoder();
   const decoder = new TextDecoder();
 
@@ -25,7 +29,7 @@ export const OpenAIStream = async (prompt: string, apiKey: string) => {
       messages: [
         {
           role: "system",
-          content: "You are an assistant to a chef with a dark sense of humor.",
+          content: systemPrompt,
         },
         {
           role: "user",

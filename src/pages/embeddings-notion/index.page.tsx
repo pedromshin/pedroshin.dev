@@ -131,6 +131,7 @@ const NotionEmbeddingPage = () => {
             <div className="max-h-200 overflow-y-auto">
               <button
                 className="mt-4 border border-zinc-600 rounded-lg p-4 max-w-[300px]"
+                disabled={!!updates}
                 onClick={async () => {
                   setUpdates(undefined);
                   const deleteResult = await supabaseAdmin
@@ -170,8 +171,9 @@ const NotionEmbeddingPage = () => {
                   }
                 }}
               >
-                <div className="font-bold text-2sm mb-2">
-                  Atualizar banco de dados estado atual da página do notion
+                Atualizar banco de dados estado atual da página do notion.
+                <div className="text-xs text-gray-400">
+                  {!!updates && "Só é possível fazer uma atualização por vez."}
                 </div>
               </button>
             </div>

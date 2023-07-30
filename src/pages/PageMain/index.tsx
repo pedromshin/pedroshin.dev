@@ -1,4 +1,5 @@
 import { PageContainer } from "@/components/PageContainer";
+import { IconExternalLink } from "@tabler/icons-react";
 
 export const PageMain = () => {
   const items = [
@@ -38,16 +39,14 @@ export const PageMain = () => {
         <a
           key={item.title}
           href={item.link}
-          className="rounded-lg border border-transparent px-5 py-4 transition-colors hover:border-gray-300 hover:bg-gray-100 dark:hover:bg-neutral-800 p-4 mt-4"
+          className="flex flex-row items-center rounded-lg border border-transparent px-5 py-4 transition-colors hover:border-gray-300 hover:bg-gray-100 dark:hover:bg-neutral-800 p-4 mt-4"
           target="_blank"
           rel="noopener noreferrer"
         >
-          <h2 className="mb-3 text-2xl font-semibold text-white">
-            {item.title}
-            <span className="inline-block transition-transform group-hover:translate-x-1 text-white">
-              -&gt;
-            </span>
-          </h2>
+          <h2 className="text-2xl font-semibold text-white">{item.title}</h2>
+          <span className="ml-2 text-2xl font-semibold text-white">
+            <IconExternalLink />
+          </span>
         </a>
       ))}
     </PageContainer>

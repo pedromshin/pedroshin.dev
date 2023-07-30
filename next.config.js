@@ -12,7 +12,16 @@ const nextConfig = {
     GITHUB_SECRET: process.env.GITHUB_SECRET,
     NEXTAUTH_URL: process.env.NEXTAUTH_URL,
   },
-  pageExtensions: ["page.tsx", "page.ts", "page.jsx", "page.js"],
+  pageExtensions: [
+    "page.tsx",
+    "page.ts",
+    "page.jsx",
+    "page.js",
+    "route.tsx",
+    "route.ts",
+    "route.jsx",
+    "route.js",
+  ],
 };
 
 module.exports = nextConfig;

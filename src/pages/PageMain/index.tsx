@@ -38,13 +38,13 @@ export const PageMain = () => {
         <a
           key={item.title}
           href={item.link}
-          className="flex group rounded-lg border border-transparent px-5 py-4 transition-colors hover:border-gray-300 hover:bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800/30"
+          className="rounded-lg border border-transparent px-5 py-4 transition-colors hover:border-gray-300 hover:bg-gray-100 dark:hover:bg-neutral-800 p-4 mt-4"
           target="_blank"
           rel="noopener noreferrer"
         >
           <h2 className="mb-3 text-2xl font-semibold text-white">
             {item.title}
-            <span className="inline-block transition-transform group-hover:translate-x-1 motion-reduce:transform-none text-white">
+            <span className="inline-block transition-transform group-hover:translate-x-1 text-white">
               -&gt;
             </span>
           </h2>

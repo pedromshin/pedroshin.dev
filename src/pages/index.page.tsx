@@ -39,8 +39,8 @@ export default function Home() {
 
   if (session)
     return (
-      <main className="flex min-h-screen flex-col justify-between p-4">
-        <div className="mb-32 lg:mb-0  lg:text-left">
+      <main className="flex flex-col items-left justify-left min-h-screen bg-black">
+        <div className="flex-grow p-6 max-w-md w-full bg-black rounded-md shadow-md">
           {items.map((item) => (
             <a
               key={item.title}
@@ -49,16 +49,23 @@ export default function Home() {
               target="_blank"
               rel="noopener noreferrer"
             >
-              <h2 className={`${inter.className} mb-3 text-2xl font-semibold`}>
+              <h2
+                className={`${inter.className} mb-3 text-2xl font-semibold text-white`}
+              >
                 {item.title}
-                <span className="inline-block transition-transform group-hover:translate-x-1 motion-reduce:transform-none">
+                <span className="inline-block transition-transform group-hover:translate-x-1 motion-reduce:transform-none text-white">
                   -&gt;
                 </span>
               </h2>
             </a>
           ))}
         </div>
-        <button onClick={() => signOut()}>Sign out</button>
+        <button
+          className="flex items-center justify-center bg-black text-white border border-white px-4 py-3 rounded-md hover:bg-white hover:text-black focus:outline-none"
+          onClick={() => signOut()}
+        >
+          Sign out
+        </button>
       </main>
     );
 

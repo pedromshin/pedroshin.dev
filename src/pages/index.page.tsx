@@ -1,8 +1,11 @@
 import { Inter } from "next/font/google";
+import { useSession, signIn, signOut } from "next-auth/react";
 
 const inter = Inter({ subsets: ["latin"] });
 
 export default function Home() {
+  const { data: session } = useSession();
+
   const items = [
     {
       title: "OCR",
@@ -34,26 +37,34 @@ export default function Home() {
     },
   ];
 
+  if (session)
+    return (
+      <main className="flex min-h-screen flex-col justify-between p-4">
+        <div className="mb-32 lg:mb-0  lg:text-left">
+          {items.map((item) => (
+            <a
+              key={item.title}
+              href={item.link}
+              className="flex group rounded-lg border border-transparent px-5 py-4 transition-colors hover:border-gray-300 hover:bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800/30"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              <h2 className={`${inter.className} mb-3 text-2xl font-semibold`}>
+                {item.title}
+                <span className="inline-block transition-transform group-hover:translate-x-1 motion-reduce:transform-none">
+                  -&gt;
+                </span>
+              </h2>
+            </a>
+          ))}
+        </div>
+      </main>
+    );
+
   return (
-    <main className="flex min-h-screen flex-col justify-between p-4">
-      <div className="mb-32 lg:mb-0  lg:text-left">
-        {items.map((item) => (
-          <a
-            key={item.title}
-            href={item.link}
-            className="flex group rounded-lg border border-transparent px-5 py-4 transition-colors hover:border-gray-300 hover:bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800/30"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <h2 className={`${inter.className} mb-3 text-2xl font-semibold`}>
-              {item.title}
-              <span className="inline-block transition-transform group-hover:translate-x-1 motion-reduce:transform-none">
-                -&gt;
-              </span>
-            </h2>
-          </a>
-        ))}
-      </div>
-    </main>
+    <>
+      Not signed in <br />
+      <button onClick={() => signIn()}>Sign in</button>
+    </>
   );
 }

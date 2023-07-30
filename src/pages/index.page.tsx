@@ -1,10 +1,13 @@
 import { Inter } from "next/font/google";
 import { useSession, signIn, signOut } from "next-auth/react";
+import { redirect } from "next/navigation";
+import { getServerSession } from "next-auth";
+import { authOptions } from "./api/auth/[...nextauth].route";
 
 const inter = Inter({ subsets: ["latin"] });
 
-export default function Home() {
-  const { data: session } = useSession();
+export default async function Home() {
+  const session = await getServerSession(authOptions);
 
   const items = [
     {
@@ -37,7 +40,7 @@ export default function Home() {
     },
   ];
 
-  if (session)
+  if (session) {
     return (
       <main className="flex min-h-screen flex-col justify-between p-4">
         <div className="mb-32 lg:mb-0  lg:text-left">
@@ -61,11 +64,5 @@ export default function Home() {
         <button onClick={() => signOut()}>Sign out</button>
       </main>
     );
-
-  return (
-    <>
-      Not signed in <br />
-      <button onClick={() => signIn()}>Sign in with Github</button>
-    </>
-  );
+  } else redirect("api/auth/signin");
 }

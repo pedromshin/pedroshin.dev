@@ -32,8 +32,6 @@ const supabase = createClient(
 const generateEmbeddings = async (text: Chunk) => {
   const { content, content_length, content_tokens } = text;
 
-  console.log(text);
-
   const embeddingResponse = await openai.createEmbedding({
     model: "text-embedding-ada-002",
     input: content,

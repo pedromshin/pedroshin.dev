@@ -11,6 +11,11 @@ const nextConfig = {
     GITHUB_ID: process.env.GITHUB_ID,
     GITHUB_SECRET: process.env.GITHUB_SECRET,
     NEXTAUTH_URL: process.env.NEXTAUTH_URL,
+    PORT: process.env.PORT,
+    DEV: process.env.DEV,
+    PROD: process.env.PROD,
+    DEV_URL: process.env.DEV_URL,
+    PROD_URL: process.env.PROD_URL,
   },
   pageExtensions: [
     "page.tsx",

@@ -1,4 +1,5 @@
 // pages/chat.js
+import { PageContainer } from "@/components/PageContainer";
 import { useChat } from "ai/react";
 import React from "react";
 
@@ -39,23 +40,25 @@ export default function Chat() {
   };
 
   return (
-    <div style={containerStyle}>
-      <div>
-        {messages?.map((m) => (
-          <div key={m?.id} style={messageStyle}>
-            <span style={roleStyle}>{m?.role}:</span>
-            <span>{m?.content}</span>
-          </div>
-        ))}
+    <PageContainer>
+      <div style={containerStyle}>
+        <div>
+          {messages?.map((m) => (
+            <div key={m?.id} style={messageStyle}>
+              <span style={roleStyle}>{m?.role}:</span>
+              <span>{m?.content}</span>
+            </div>
+          ))}
+        </div>
+        <form onSubmit={handleSubmit} style={formStyle}>
+          <input
+            value={input}
+            placeholder="Say something..."
+            onChange={handleInputChange}
+            style={inputStyle}
+          />
+        </form>
       </div>
-      <form onSubmit={handleSubmit} style={formStyle}>
-        <input
-          value={input}
-          placeholder="Say something..."
-          onChange={handleInputChange}
-          style={inputStyle}
-        />
-      </form>
-    </div>
+    </PageContainer>
   );
 }

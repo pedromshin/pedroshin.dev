@@ -1,3 +1,4 @@
+import { PageContainer } from "@/components/PageContainer";
 import { Answer } from "./components/Answer/Answer";
 import { Footer } from "./components/Footer";
 import { PGChunk } from "@/pages/embeddings-pg/types";
@@ -201,7 +202,7 @@ export default function Embeddings() {
   }, []);
 
   return (
-    <>
+    <PageContainer>
       <div className="flex flex-col h-screen">
         <div className="flex-1 overflow-auto border-red-300">
           <div className="mx-auto flex h-full w-full max-w-[750px] flex-col items-center px-3 pt-4 sm:pt-8">
@@ -404,6 +405,6 @@ export default function Embeddings() {
         </div>
         <Footer />
       </div>
-    </>
+    </PageContainer>
   );
 }

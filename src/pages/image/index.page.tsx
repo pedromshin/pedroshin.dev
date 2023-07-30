@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Configuration, OpenAIApi } from "openai";
 import { Loader } from "@mantine/core";
+import { PageContainer } from "@/components/PageContainer";
 
 const containerStyle = {
   margin: "0 auto",
@@ -63,40 +64,42 @@ function App() {
   };
 
   return (
-    <div style={{ ...containerStyle, flexDirection: "column" }}>
-      <div>
-        <h2>Generate an Image using Open AI API</h2>
-        <form onSubmit={generateImage} style={formStyle}>
-          <input
-            value={prompt}
-            placeholder="Search Bears with Paint Brushes the Starry Night, painted by Vincent Van Gogh.."
-            onChange={(e) => setPrompt(e.target.value)}
-            style={inputStyle}
-          />
-        </form>
-        <button onClick={generateImage} style={buttonStyle}>
-          Generate
-        </button>
-      </div>
-      <>
-        {!loading ? (
-          result.length > 0 ? (
-            // eslint-disable-next-line @next/next/no-img-element
-            <img
-              className="result-image"
-              src={result}
-              alt="result"
-              width={width}
-              height={height}
+    <PageContainer>
+      <div style={{ ...containerStyle, flexDirection: "column" }}>
+        <div>
+          <h2>Generate an Image using Open AI API</h2>
+          <form onSubmit={generateImage} style={formStyle}>
+            <input
+              value={prompt}
+              placeholder="Search Bears with Paint Brushes the Starry Night, painted by Vincent Van Gogh.."
+              onChange={(e) => setPrompt(e.target.value)}
+              style={inputStyle}
             />
+          </form>
+          <button onClick={generateImage} style={buttonStyle}>
+            Generate
+          </button>
+        </div>
+        <>
+          {!loading ? (
+            result.length > 0 ? (
+              // eslint-disable-next-line @next/next/no-img-element
+              <img
+                className="result-image"
+                src={result}
+                alt="result"
+                width={width}
+                height={height}
+              />
+            ) : (
+              <></>
+            )
           ) : (
-            <></>
-          )
-        ) : (
-          <Loader />
-        )}
-      </>
-    </div>
+            <Loader />
+          )}
+        </>
+      </div>
+    </PageContainer>
   );
 }
 

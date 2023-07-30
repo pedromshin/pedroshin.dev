@@ -8,6 +8,7 @@ import { useRef, useState } from "react";
 import { Chunk } from "../../../scripts/embeddings-notion/embed";
 import { Answer } from "./Answer/Answer";
 import { supabaseAdmin } from "./utils/embeddings";
+import { PageContainer } from "@/components/PageContainer";
 
 const apiKey = process.env.OPEN_AI_KEY;
 
@@ -92,119 +93,125 @@ const NotionEmbeddingPage = () => {
   };
 
   return (
-    <div className="flex flex-col h-screen">
-      <div className="flex-1 overflow-auto border-red-300">
-        <div className="mx-auto flex h-full w-full max-w-[750px] flex-col items-center px-3 pt-4 sm:pt-8">
-          <div className="relative w-full mt-4">
-            <IconSearch className="absolute top-3 w-10 left-1 h-6 rounded-full opacity-50 sm:left-3 sm:top-4 sm:h-8" />
-            <input
-              ref={inputRef}
-              className="h-12 w-full rounded-full border border-zinc-600 pr-12 pl-11 focus:border-zinc-800 focus:outline-none focus:ring-1 focus:ring-zinc-800 sm:h-16 sm:py-2 sm:pr-16 sm:pl-16 sm:text-lg"
-              type="text"
-              placeholder="Notion embeddings test"
-              value={query}
-              onChange={(e) => setQuery(e.target.value)}
-            />
-            <button>
-              <IconArrowRight
-                onClick={handleAnswer}
-                className="absolute right-2 top-2.5 h-7 w-7 rounded-full bg-blue-500 p-1 hover:cursor-pointer hover:bg-blue-600 sm:right-3 sm:top-3 sm:h-10 sm:w-10 text-white"
+    <PageContainer>
+      <div className="flex flex-col h-screen">
+        <div className="flex-1 overflow-auto border-red-300">
+          <div className="mx-auto flex h-full w-full max-w-[750px] flex-col items-center px-3 pt-4 sm:pt-8">
+            <div className="relative w-full mt-4">
+              <IconSearch className="absolute top-3 w-10 left-1 h-6 rounded-full opacity-50 sm:left-3 sm:top-4 sm:h-8" />
+              <input
+                ref={inputRef}
+                className="h-12 w-full rounded-full border border-zinc-600 pr-12 pl-11 focus:border-zinc-800 focus:outline-none focus:ring-1 focus:ring-zinc-800 sm:h-16 sm:py-2 sm:pr-16 sm:pl-16 sm:text-lg"
+                type="text"
+                placeholder="Notion embeddings test"
+                value={query}
+                onChange={(e) => setQuery(e.target.value)}
               />
-            </button>
-          </div>
-          <input
-            className="h-12 w-full rounded-full border border-zinc-600 pr-12 pl-11 focus:border-zinc-800 focus:outline-none focus:ring-1 focus:ring-zinc-800 sm:h-16 sm:py-2 sm:pr-16 sm:pl-16 sm:text-lg mt-4"
-            type="text"
-            placeholder="System prompt (prompt enviado junto do texto digitado pelo usuário, para configurar o contexto de resposta.)"
-            value={systemPrompt}
-            onChange={(e) => setSystemPrompt(e.target.value)}
-          />
-          <a
-            href="https://solar-fox-a61.notion.site/Curso-de-culinaria-90ae074d502a41be99096e6585838941?pvs=4"
-            target="_blank"
-            className="flex gap-2 relative w-full mt-4"
-          >
-            Página do notion
-            <IconExternalLink />
-          </a>
-          <div className="flex gap-24 relative w-full mt-4">
-            <div className="max-h-200 overflow-y-auto">
-              <button
-                className="mt-4 border border-zinc-600 rounded-lg p-4 max-w-[300px]"
-                disabled={!!updates}
-                onClick={async () => {
-                  setUpdates(undefined);
-                  const deleteResult = await supabaseAdmin
-                    .from("notion_embeddings")
-                    .delete()
-                    .neq("content", 0);
-
-                  console.log("delete table", deleteResult);
-
-                  try {
-                    const scrapeResults = await fetch("/api/notion/scrape", {
-                      method: "GET",
-                    }).then((res) => res.json());
-
-                    for (let i = 0; i < scrapeResults.length; i++) {
-                      const section = scrapeResults[i];
-                      for (let j = 0; j < section.chunks.length; j++) {
-                        const chunk = section.chunks[j];
-                        const embedResults = await fetch("/api/notion/embed", {
-                          headers: {
-                            "Content-Type": "application/json",
-                          },
-                          method: "POST",
-                          body: JSON.stringify({ text: chunk }),
-                        });
-
-                        setUpdates((prev) => [
-                          ...(prev ?? [""]),
-                          `Successfully saved embedding of section ${j + 1}/${
-                            section.chunks.length
-                          } of chunk ${i + 1}/${scrapeResults.length}`,
-                        ]);
-                      }
-                    }
-                  } catch (error) {
-                    console.error("Error occurred:", error);
-                  }
-                }}
-              >
-                Atualizar banco de dados estado atual da página do notion.
-                <div className="text-xs text-gray-400">
-                  {!!updates && "Só é possível fazer uma atualização por vez."}
-                </div>
+              <button>
+                <IconArrowRight
+                  onClick={handleAnswer}
+                  className="absolute right-2 top-2.5 h-7 w-7 rounded-full bg-blue-500 p-1 hover:cursor-pointer hover:bg-blue-600 sm:right-3 sm:top-3 sm:h-10 sm:w-10 text-white"
+                />
               </button>
             </div>
-            {updates && (
-              <div className="mt-4 border border-zinc-600 rounded-lg p-4 max-w-[300px] max-h-[200px] overflow-y-auto">
-                <div className="font-bold text-2sm mb-2">Updates</div>
-                {updates.map((update, index) => (
-                  <div key={index}>{update}</div>
-                ))}
+            <input
+              className="h-12 w-full rounded-full border border-zinc-600 pr-12 pl-11 focus:border-zinc-800 focus:outline-none focus:ring-1 focus:ring-zinc-800 sm:h-16 sm:py-2 sm:pr-16 sm:pl-16 sm:text-lg mt-4"
+              type="text"
+              placeholder="System prompt (prompt enviado junto do texto digitado pelo usuário, para configurar o contexto de resposta.)"
+              value={systemPrompt}
+              onChange={(e) => setSystemPrompt(e.target.value)}
+            />
+            <a
+              href="https://solar-fox-a61.notion.site/Curso-de-culinaria-90ae074d502a41be99096e6585838941?pvs=4"
+              target="_blank"
+              className="flex gap-2 relative w-full mt-4"
+            >
+              Página do notion
+              <IconExternalLink />
+            </a>
+            <div className="flex gap-24 relative w-full mt-4">
+              <div className="max-h-200 overflow-y-auto">
+                <button
+                  className="mt-4 border border-zinc-600 rounded-lg p-4 max-w-[300px]"
+                  disabled={!!updates}
+                  onClick={async () => {
+                    setUpdates(undefined);
+                    const deleteResult = await supabaseAdmin
+                      .from("notion_embeddings")
+                      .delete()
+                      .neq("content", 0);
+
+                    console.log("delete table", deleteResult);
+
+                    try {
+                      const scrapeResults = await fetch("/api/notion/scrape", {
+                        method: "GET",
+                      }).then((res) => res.json());
+
+                      for (let i = 0; i < scrapeResults.length; i++) {
+                        const section = scrapeResults[i];
+                        for (let j = 0; j < section.chunks.length; j++) {
+                          const chunk = section.chunks[j];
+                          const embedResults = await fetch(
+                            "/api/notion/embed",
+                            {
+                              headers: {
+                                "Content-Type": "application/json",
+                              },
+                              method: "POST",
+                              body: JSON.stringify({ text: chunk }),
+                            }
+                          );
+
+                          setUpdates((prev) => [
+                            ...(prev ?? [""]),
+                            `Successfully saved embedding of section ${j + 1}/${
+                              section.chunks.length
+                            } of chunk ${i + 1}/${scrapeResults.length}`,
+                          ]);
+                        }
+                      }
+                    } catch (error) {
+                      console.error("Error occurred:", error);
+                    }
+                  }}
+                >
+                  Atualizar banco de dados estado atual da página do notion.
+                  <div className="text-xs text-gray-400">
+                    {!!updates &&
+                      "Só é possível fazer uma atualização por vez."}
+                  </div>
+                </button>
               </div>
-            )}
-          </div>
-          {updates && (
-            <button onClick={() => setUpdates(undefined)}>Limpar</button>
-          )}
-          <div className="mt-6 mb-16 text-left w-full">
-            <div className="font-bold text-2xl mb-2">Answer</div>
-            <Answer text={answer} />
-            <div className="font-bold text-2xl">Textos do notion</div>
-            {chunks?.map((chunk, index) => (
-              <div key={index}>
-                <div className="mt-4 border border-zinc-600 rounded-lg p-4">
-                  <div className="mt-2">{chunk.content}</div>
-                  <div className="mt-2">Similaridade: {chunk.similarity}</div>
+              {updates && (
+                <div className="mt-4 border border-zinc-600 rounded-lg p-4 max-w-[300px] max-h-[200px] overflow-y-auto">
+                  <div className="font-bold text-2sm mb-2">Updates</div>
+                  {updates.map((update, index) => (
+                    <div key={index}>{update}</div>
+                  ))}
                 </div>
-              </div>
-            ))}
+              )}
+            </div>
+            {updates && (
+              <button onClick={() => setUpdates(undefined)}>Limpar</button>
+            )}
+            <div className="mt-6 mb-16 text-left w-full">
+              <div className="font-bold text-2xl mb-2">Answer</div>
+              <Answer text={answer} />
+              <div className="font-bold text-2xl">Textos do notion</div>
+              {chunks?.map((chunk, index) => (
+                <div key={index}>
+                  <div className="mt-4 border border-zinc-600 rounded-lg p-4">
+                    <div className="mt-2">{chunk.content}</div>
+                    <div className="mt-2">Similaridade: {chunk.similarity}</div>
+                  </div>
+                </div>
+              ))}
+            </div>
           </div>
         </div>
       </div>
-    </div>
+    </PageContainer>
   );
 };
 

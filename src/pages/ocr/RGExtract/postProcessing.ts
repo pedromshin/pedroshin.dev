@@ -1,7 +1,7 @@
 import { Block } from "@aws-sdk/client-textract";
 import { ufStates } from "../../../utils/ufStates";
 import { RGDataType } from ".";
-import { RG_ALIAS_ENUM } from "../RGExtract/index";
+import { RG_ALIAS_ENUM } from "./index";
 import { detectCommonErrors } from "@/utils/ocr-detectCommonErrors";
 import { validateDates } from "@/utils/ocr-validateDates";
 

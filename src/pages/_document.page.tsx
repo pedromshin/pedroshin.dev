@@ -1,3 +1,4 @@
+import { PageContainer } from "@/components/PageContainer";
 import { Html, Head, Main, NextScript } from "next/document";
 
 export default function Document() {

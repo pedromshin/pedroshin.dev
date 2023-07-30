@@ -1,5 +1,7 @@
+import { PageContainer } from "@/components/PageContainer";
+
 const ResumePage = () => {
-  return <>leitor de curriculo</>;
+  return <PageContainer>leitor de curriculo</PageContainer>;
 };
 
 export default ResumePage;

@@ -20,7 +20,9 @@ export default function Embeddings() {
   const [showSettings, setShowSettings] = useState<boolean>(false);
   const [mode, setMode] = useState<"search" | "chat">("chat");
   const [matchCount, setMatchCount] = useState<number>(5);
-  const [apiKey, setApiKey] = useState<string>(process.env.OPEN_AI_KEY!);
+  const [apiKey, setApiKey] = useState<string>(
+    process.env.OPEN_AI_KEY as string
+  );
 
   const handleSearch = async () => {
     if (!apiKey) {

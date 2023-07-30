@@ -1,8 +1,8 @@
 import NextAuth from "next-auth";
 import GithubProvider from "next-auth/providers/github";
 
-const GITHUB_ID = process.env.GITHUB_ID!;
-const GITHUB_SECRET = process.env.GITHUB_SECRET!;
+const GITHUB_ID = process.env.GITHUB_ID as string;
+const GITHUB_SECRET = process.env.GITHUB_SECRET as string;
 
 export const authOptions = {
   providers: [

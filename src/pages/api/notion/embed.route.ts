@@ -25,8 +25,8 @@ const configuration = new Configuration({
 const openai = new OpenAIApi(configuration);
 
 const supabase = createClient(
-  process.env.NEXT_PUBLIC_SUPABASE_URL!,
-  process.env.SUPABASE_SERVICE_ROLE_KEY!
+  process.env.NEXT_PUBLIC_SUPABASE_URL as string,
+  process.env.SUPABASE_SERVICE_ROLE_KEY as string
 );
 
 const generateEmbeddings = async (text: Chunk) => {

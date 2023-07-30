@@ -2,11 +2,13 @@ import { signIn } from "next-auth/react";
 
 export const PageLogin = () => {
   return (
-    <div className="flex items-center justify-center min-h-screen bg-black">
-      <div className="p-6 max-w-md w-full bg-black rounded-md shadow-md border-white border flex flex-row items-left justify-center">
-        <h1 className="text-3xl font-bold text-white mb-4">Login</h1>
+    <div className="flex items-center justify-center h-screen p-4">
+      <div className="p-6 max-w-md w-full bg-white rounded-md shadow-md border-white border p-4">
+        <h1 className="flex text-white text-3xl font-bold text-white mb-4">
+          Login
+        </h1>
         <button
-          className="bg-black text-white border border-white px-4 py-3 rounded-md hover:bg-white hover:text-black focus:outline-none"
+          className="flex items-center border border-white bg-gray-800 text-white px-4 py-3 rounded-md hover:bg-gray-700 p-4 mt-4"
           onClick={() => signIn("github")}
         >
           <svg
@@ -15,6 +17,8 @@ export const PageLogin = () => {
             viewBox="0 0 20 20"
             fill="currentColor"
             aria-hidden="true"
+            height={20}
+            width={20}
           >
             <path
               fillRule="evenodd"

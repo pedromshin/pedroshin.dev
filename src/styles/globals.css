@@ -8,18 +8,8 @@
 @media (prefers-color-scheme: dark) {
 }
 
-html,
 body {
   height: 100%;
   margin: 0;
-}
-
-/* Add this style to position the sign-out button at the bottom of the page */
-.flex {
-  display: flex;
-  flex-direction: column;
-}
-
-.flex-grow {
-  flex: 1;
+  background: black;
 }

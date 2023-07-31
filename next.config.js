@@ -16,6 +16,7 @@ const nextConfig = {
     PROD: process.env.PROD,
     DEV_URL: process.env.DEV_URL,
     PROD_URL: process.env.PROD_URL,
+    ADMIN_EMAIL: process.env.ADMIN_EMAIL,
   },
   pageExtensions: [
     "page.tsx",

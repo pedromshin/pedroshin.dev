@@ -1,8 +1,11 @@
 // "use client";
 import envs from "@Src/envs";
+
 import { getServerSession } from "next-auth";
-import { authOptions } from "@Api/auth/[...nextauth]/route";
 import { redirect } from "next/navigation";
+
+import { authOptions } from "@Api/auth/[...nextauth]/route";
+import PageContainer from "@Components/templates/PageContainer";
 
 export default async function Page() {
   const session = await getServerSession(authOptions);
@@ -10,8 +13,8 @@ export default async function Page() {
   if (session?.user?.email !== envs.ADMIN_EMAIL) redirect("/home");
 
   return (
-    <main className="">
+    <PageContainer>
       <button>private page</button>
-    </main>
+    </PageContainer>
   );
 }

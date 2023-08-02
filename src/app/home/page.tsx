@@ -5,9 +5,7 @@ import PageContainer from "@Components/templates/PageContainer";
 export default function Page() {
   return (
     <PageContainer>
-      <main className="">
-        <button onClick={() => signOut()}>signout</button>
-      </main>
+      <button onClick={() => signOut()}>signout</button>
     </PageContainer>
   );
 }

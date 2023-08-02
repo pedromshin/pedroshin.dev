@@ -13,11 +13,12 @@ export default function Page() {
   const renderLink = (item: LinkType, index: number, isRoot: boolean) => {
     const hasSubitems = !!item.subitems;
 
-    const cardContainerStyle = "border rounded-3xl p-8 hover:bg-gray-normal";
+    const cardContainerStyle =
+      "border rounded-3xl py-6 px-8 hover:bg-gray-normal";
     const cardTitleStyle =
-      "flex flex-row items-center gap-4 font-bold text-4xl mb-2";
+      "flex flex-row items-center gap-2 md:gap-4 font-bold text-xl md:text-4xl mb-2";
     const subItemTitleStyle =
-      "w-fit flex flex-row items-center gap-2 text-base";
+      "w-fit flex flex-row items-center gap-2 text-sm md:text-base";
 
     return (
       <div key={index} className={isRoot ? cardContainerStyle : ""}>
@@ -40,8 +41,8 @@ export default function Page() {
           <ul
             className={
               index === 0
-                ? "flex flex-col list-disc ml-6 gap-4"
-                : "list-disc ml-6 gap-4"
+                ? "flex flex-col list-disc ml-4 md:ml-6 gap-2 md:gap-4"
+                : "list-disc ml-4 md:ml-6 gap-2 md:gap-4"
             }
           >
             {item.subitems.map((subitem: LinkType, j: number) => (
@@ -55,7 +56,7 @@ export default function Page() {
 
   return (
     <PageContainer>
-      <div className="flex flex-row flex-wrap justify-around p-24 gap-x-4 gap-y-8">
+      <div className="flex flex-row flex-wrap justify-around p-16 md:p-24 gap-x-4 gap-y-8">
         {links.map((item, i) => renderLink(item, i, true))}
       </div>
     </PageContainer>

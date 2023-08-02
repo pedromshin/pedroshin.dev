@@ -1,41 +1,9 @@
 "use client";
-import { signOut } from "next-auth/react";
 import PageContainer from "@Components/templates/PageContainer";
-import Button from "../components/atoms/Button";
+import { links } from "../links";
 
 export default function Page() {
-  const items = [
-    {
-      title: "OCR",
-      link: "/ocr",
-    },
-    {
-      title: "Extração de dados padronizados de currículo",
-      link: "/curriculo",
-    },
-    {
-      title: "Extract subtitle from video and transcribe audio",
-      link: "/subtitle",
-    },
-    {
-      title: "Image generate",
-      link: "/image",
-    },
-    {
-      title: "Chatbot open",
-      link: "/chatbot",
-    },
-    {
-      title: "Chatbot with Paul Graham's Essay embeddings",
-      link: "/embeddings-pg",
-    },
-    {
-      title: "Chatbot with custom created data on notion page",
-      link: "/embeddings-notion",
-    },
-  ];
-
-  const buttons = items.map((item, i) => (
+  const buttons = links.map((item, i) => (
     <a
       key={i}
       className="h-[150px] w-[300px] border rounded-3xl p-8 hover:bg-zinc-900"

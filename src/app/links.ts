@@ -1,7 +1,20 @@
-export const links = [
+type LinkType =
+  | {
+      title: string;
+      description?: string;
+      link: string;
+      subitems?: never; // Ensure there are no subitems when link is present
+    }
+  | {
+      title: string;
+      description?: string;
+      link?: never; // Ensure there is no link when subitems are present
+      subitems: LinkType[];
+    };
+
+export const links: LinkType[] = [
   {
     title: "OCR",
-    link: "/ocr",
     description: "",
     subitems: [
       {
@@ -12,13 +25,7 @@ export const links = [
     ],
   },
   {
-    title: "Resumé",
-    link: "/resume",
-    description: "Extract standard data from resumé",
-  },
-  {
     title: "Audio",
-    link: "/audio",
     description: "Extract subtitle from video and transcribe audio",
     subitems: [
       {
@@ -40,7 +47,6 @@ export const links = [
   },
   {
     title: "Chatbot",
-    link: "/chatbot",
     description: "Open chatbot",
     subitems: [
       {
@@ -52,6 +58,21 @@ export const links = [
         title: "Flash chatbot (word embeddings)",
         link: "/chatbot/flash",
         description: "Chatbot trained with content from a Notion page",
+      },
+    ],
+  },
+  {
+    title: "Em desenvolvimento/criação",
+    subitems: [
+      {
+        title: "Resumé",
+        link: "/",
+        description: "Extract standard data from resumé",
+      },
+      {
+        title: "Machine learning algorithms",
+        description: "Chatbot trained with content from a Notion page",
+        subitems: [],
       },
     ],
   },

@@ -11,7 +11,7 @@ export default () => {
       </h1>
       <nav className="flex flex-row align-center gap-x-4">
         {links.map((item, i) => (
-          <Link key={i} href={item.link}>
+          <Link key={i} href={item?.link ?? ""}>
             {item.title}
           </Link>
         ))}

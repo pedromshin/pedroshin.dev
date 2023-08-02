@@ -1,9 +1,9 @@
-"use client";
-import { useSession } from "next-auth/react";
+import { getServerSession } from "next-auth";
 import { redirect } from "next/navigation";
+import { authOptions } from "./api/auth/[...nextauth]/route";
 
-export default function Page() {
-  const { data: session } = useSession();
+export default async function Page() {
+  const session = await getServerSession(authOptions);
 
   session ? redirect("/home") : redirect("/login");
 }

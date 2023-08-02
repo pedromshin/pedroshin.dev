@@ -18,7 +18,7 @@ export const links: LinkType[] = [
     description: "",
     subitems: [
       {
-        title: "OCR",
+        title: "OCR pdf",
         link: "/ocr",
         description: "Extract text from image",
       },
@@ -72,7 +72,19 @@ export const links: LinkType[] = [
       {
         title: "Machine learning algorithms",
         description: "Chatbot trained with content from a Notion page",
-        subitems: [],
+        subitems: [
+          {
+            title: "Genetic algorithm",
+            link: "/ml/genetic",
+            description:
+              "Prediction of suvivability of Titanic passengers determined by genetic algorithm",
+          },
+          {
+            title: "Support 'scalar' machine with Newcomb-Benford's law",
+            link: "/ml/scalar-machine",
+            description: "Fraud detection with Newcomb-Benford's law",
+          },
+        ],
       },
     ],
   },

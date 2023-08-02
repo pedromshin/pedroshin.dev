@@ -28,12 +28,13 @@ export default function Page() {
     <main className="h-full w-full flex flex-col items-center justify-center">
       <div className="flex flex-col p-16 border rounded-3xl gap-y-6">
         <h1 className="text-4xl">Login</h1>
-        <div className="flex flex-row p-4 border rounded-3xl">
+        <button
+          className="flex flex-row p-4 border rounded-3xl"
+          onClick={() => signIn("github")}
+        >
           {githubSVG}
-          <button className="" onClick={() => signIn("github")}>
-            GitHub
-          </button>
-        </div>
+          GitHub
+        </button>
       </div>
     </main>
   );

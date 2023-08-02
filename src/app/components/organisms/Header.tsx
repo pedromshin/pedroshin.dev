@@ -2,15 +2,15 @@ import Link from "next/link";
 import Button from "../atoms/Button";
 import { signOut } from "next-auth/react";
 import { links } from "@Src/app/links";
-import RecursiveDropdown from "./RecursiveDropdown";
+import RecursiveDropdown from "../molecules/RecursiveDropdown";
 
 export default () => {
   return (
-    <header className="flex flex-row p-4 border-b-2 justify-between align-center">
-      <h1 className="text-2xl font-bold mr-[-150px]">
+    <header className="flex flex-col justify-center items-center gap-y-6 p-4 border-b-2  md:flex-row md:justify-between md:align-center">
+      <h1 className="text-2xl font-bold">
         <Link href={"/home"}>pedroshin.dev</Link>
       </h1>
-      <nav className="flex flex-row align-center gap-x-4">
+      <nav className="w-full md:w-fit flex flex-row align-center gap-x-4 overflow-scroll">
         <RecursiveDropdown links={links} />
       </nav>
       <button onClick={() => signOut()}>Signout</button>

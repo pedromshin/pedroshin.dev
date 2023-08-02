@@ -12,8 +12,10 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en" className="dark h-full">
-      <body className={`${inter.className} h-full`}>
+    <html lang="en" className="dark h-full overflow-hidden">
+      <body
+        className={`${inter.className} h-full overflow-y-scroll overflow-x-hidden`}
+      >
         <SessionProvider>
           <RouteGuard>{children} </RouteGuard>
         </SessionProvider>

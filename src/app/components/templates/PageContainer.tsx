@@ -1,5 +1,5 @@
 import { ReactNode } from "react";
-import Header from "../molecules/Header";
+import Header from "../organisms/Header";
 
 export default ({ children }: { children: ReactNode }) => {
   return (

@@ -18,7 +18,7 @@ export default function Page() {
         className="h-fit border rounded-3xl p-8 hover:bg-gray-normal"
       >
         <div className="mb-2">
-          <a href={item.link} target="_blank">
+          <a href={item.link} target="_blank" className="w-fit flex">
             <h1 className="flex flex-row items-center gap-4 font-bold text-4xl mb-2">
               {item.title}
               {!hasSubitems && <IconExternalLink />}
@@ -32,7 +32,7 @@ export default function Page() {
               <li key={j}>
                 <a
                   href={subitem.link}
-                  className="flex flex-row items-center gap-2 text-base"
+                  className="w-fit flex flex-row items-center gap-2 text-base"
                   target="_blank"
                 >
                   {subitem.title}

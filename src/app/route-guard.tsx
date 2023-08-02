@@ -14,7 +14,7 @@ export default function RouteGuard({
     return children;
   }
 
-  if (!session) redirect("/login");
+  if (session === null) redirect("/login");
 
   return children;
 }

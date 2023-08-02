@@ -2,16 +2,49 @@
 import PageContainer from "@Components/templates/PageContainer";
 import { links } from "../links";
 
+import {
+  IconArrowRight,
+  IconExternalLink,
+  IconSearch,
+} from "@tabler/icons-react";
+
 export default function Page() {
-  const buttons = links.map((item, i) => (
-    <a
-      key={i}
-      className="h-[150px] w-[300px] border rounded-3xl p-8 hover:bg-zinc-900"
-      href={item.link}
-    >
-      <h1 className="text-1xl font-bold">{item.title}</h1>
-    </a>
-  ));
+  const buttons = links.map((item, i) => {
+    const hasSubitems = !!item.subitems;
+
+    return (
+      <div
+        key={i}
+        className="h-fit border rounded-3xl p-8 hover:bg-gray-normal"
+      >
+        <div className="mb-2">
+          <a href={item.link} target="_blank">
+            <h1 className="flex flex-row items-center gap-4 font-bold text-4xl mb-2">
+              {item.title}
+              {!hasSubitems && <IconExternalLink />}
+            </h1>
+          </a>
+          <p className="opacity-50">{item.description}</p>
+        </div>
+        {hasSubitems && (
+          <ul className="flex flex-col list-disc ml-6 gap-4">
+            {item.subitems.map((subitem, j) => (
+              <li key={j}>
+                <a
+                  href={subitem.link}
+                  className="flex flex-row items-center gap-2 text-base"
+                  target="_blank"
+                >
+                  {subitem.title}
+                  <IconExternalLink size={20} />
+                </a>
+              </li>
+            ))}
+          </ul>
+        )}
+      </div>
+    );
+  });
 
   return (
     <PageContainer>

@@ -12,7 +12,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en" className="h-full">
+    <html lang="en" className="dark h-full">
       <body className={`${inter.className} h-full`}>
         <SessionProvider>
           <RouteGuard>{children} </RouteGuard>

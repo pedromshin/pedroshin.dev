@@ -46,17 +46,12 @@ export const links = [
       {
         title: "Open",
         link: "/chatbot/open",
-        description: "",
+        description: "Default chatbot with gpt-3.5-turbo",
       },
       {
-        title: "Paul Graham Essays",
-        link: "/chatbot/pg",
-        description: "",
-      },
-      {
-        title: "Flash chatbot",
+        title: "Flash chatbot (word embeddings)",
         link: "/chatbot/flash",
-        description: "",
+        description: "Chatbot trained with content from a Notion page",
       },
     ],
   },

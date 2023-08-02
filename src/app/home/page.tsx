@@ -38,6 +38,7 @@ export default function Page() {
                   {subitem.title}
                   <IconExternalLink size={20} />
                 </a>
+                <p className="opacity-50">{subitem.description}</p>
               </li>
             ))}
           </ul>

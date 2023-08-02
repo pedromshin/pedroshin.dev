@@ -1,6 +1,7 @@
 "use client";
 import { signIn, useSession } from "next-auth/react";
 import { redirect } from "next/navigation";
+import Button from "@Components/atoms/Button";
 
 export default function Page() {
   const { data: session } = useSession();
@@ -28,13 +29,10 @@ export default function Page() {
     <main className="h-full w-full flex flex-col items-center justify-center">
       <div className="flex flex-col p-16 border rounded-3xl gap-y-6">
         <h1 className="text-4xl">Login</h1>
-        <button
-          className="flex flex-row p-4 border rounded-3xl"
-          onClick={() => signIn("github")}
-        >
+        <Button callback={() => signIn("github")}>
           {githubSVG}
           GitHub
-        </button>
+        </Button>
       </div>
     </main>
   );

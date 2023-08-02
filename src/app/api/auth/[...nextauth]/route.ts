@@ -1,4 +1,4 @@
-import envs from "@/envs";
+import envs from "@Src/envs";
 import NextAuth from "next-auth";
 import GithubProvider from "next-auth/providers/github";
 

@@ -14,7 +14,7 @@ export default async function Page() {
 
   return (
     <PageContainer>
-      <button>private page</button>
+      <></>
     </PageContainer>
   );
 }

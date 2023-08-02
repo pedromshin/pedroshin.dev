@@ -3,7 +3,7 @@ import Header from "../molecules/Header";
 
 export default ({ children }: { children: ReactNode }) => {
   return (
-    <main>
+    <main className="h-full">
       <Header />
       {children}
     </main>

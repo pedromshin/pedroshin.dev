@@ -25,6 +25,7 @@ export default function Page() {
             <a href={item.link} target="_blank" className="w-fit flex">
               <h1 className={isRoot ? cardTitleStyle : subItemTitleStyle}>
                 {index === 0 ? item.title : <span>{item.title}</span>}
+                <IconExternalLink size={20} />
               </h1>
             </a>
           ) : (

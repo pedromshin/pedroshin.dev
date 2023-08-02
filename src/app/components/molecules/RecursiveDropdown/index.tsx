@@ -1,3 +1,4 @@
+"use-client";
 import { useState } from "react";
 import { IconExternalLink, IconChevronDown } from "@tabler/icons-react";
 import { LinkType } from "@Src/app/links";

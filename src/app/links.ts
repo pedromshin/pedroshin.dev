@@ -1,4 +1,4 @@
-type LinkType =
+export type LinkType =
   | {
       title: string;
       description?: string;

@@ -2,6 +2,7 @@ import Link from "next/link";
 import Button from "../atoms/Button";
 import { signOut } from "next-auth/react";
 import { links } from "@Src/app/links";
+import RecursiveDropdown from "./RecursiveDropdown";
 
 export default () => {
   return (
@@ -10,11 +11,7 @@ export default () => {
         <Link href={"/home"}>pedroshin.dev</Link>
       </h1>
       <nav className="flex flex-row align-center gap-x-4">
-        {links.map((item, i) => (
-          <Link key={i} href={item?.link ?? ""}>
-            {item.title}
-          </Link>
-        ))}
+        <RecursiveDropdown links={links} />
       </nav>
       <button onClick={() => signOut()}>Signout</button>
     </header>

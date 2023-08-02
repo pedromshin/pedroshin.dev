@@ -1,15 +1,16 @@
 "use client";
 import PageContainer from "@Components/templates/PageContainer";
-import { links } from "../links";
+import { LinkType, links } from "../links";
 
 import {
   IconArrowRight,
   IconExternalLink,
   IconSearch,
 } from "@tabler/icons-react";
+import Link from "next/link";
 
 export default function Page() {
-  const renderLink = (item: any, index: number, isRoot: boolean) => {
+  const renderLink = (item: LinkType, index: number, isRoot: boolean) => {
     const hasSubitems = !!item.subitems;
 
     const cardContainerStyle = "border rounded-3xl p-8 hover:bg-gray-normal";
@@ -22,12 +23,12 @@ export default function Page() {
       <div key={index} className={isRoot ? cardContainerStyle : ""}>
         <div className="mb-2">
           {item.link ? (
-            <a href={item.link} target="_blank" className="w-fit flex">
+            <Link href={item.link} target="_blank" className="w-fit flex">
               <h1 className={isRoot ? cardTitleStyle : subItemTitleStyle}>
                 {index === 0 ? item.title : <span>{item.title}</span>}
                 <IconExternalLink size={20} />
               </h1>
-            </a>
+            </Link>
           ) : (
             <h1 className={isRoot ? cardTitleStyle : subItemTitleStyle}>
               {item.title}
@@ -43,7 +44,7 @@ export default function Page() {
                 : "list-disc ml-6 gap-4"
             }
           >
-            {item.subitems.map((subitem: any, j: number) => (
+            {item.subitems.map((subitem: LinkType, j: number) => (
               <li key={j}>{renderLink(subitem, j, false)}</li>
             ))}
           </ul>

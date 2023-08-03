@@ -15,7 +15,12 @@ export default ({ links }: { links: LinkType[] }) => {
     }
   };
 
-  const renderLink = (item: LinkType, index: number, isRoot: boolean) => {
+  const renderLink = (
+    item: LinkType,
+    index: number,
+    isRoot: boolean,
+    currentPath: string
+  ) => {
     const hasSubitems = !!item.subitems;
     const isOpen = openItems.includes(index);
 
@@ -25,11 +30,13 @@ export default ({ links }: { links: LinkType[] }) => {
     const subItemTitleStyle =
       "w-fit flex flex-row items-center gap-2 text-base";
 
+    const newPath = `${currentPath}${item.slug}`;
+
     return (
       <div key={index} className={isRoot ? cardContainerStyle : ""}>
         <div className="mb-2">
-          {item.link ? (
-            <Link href={item.link} target="_blank">
+          {!hasSubitems ? (
+            <Link href={newPath} target="_blank">
               <h1
                 className={isRoot ? cardTitleStyle : subItemTitleStyle}
                 onClick={() => hasSubitems && toggleSubMenu(index)}
@@ -56,8 +63,8 @@ export default ({ links }: { links: LinkType[] }) => {
                 : "list-disc ml-6 gap-4"
             }
           >
-            {item.subitems.map((subitem: LinkType, j: number) => (
-              <li key={j}>{renderLink(subitem, j, false)}</li>
+            {item.subitems!.map((subitem: LinkType, j: number) => (
+              <li key={j}>{renderLink(subitem, j, false, newPath)}</li>
             ))}
           </ul>
         )}
@@ -66,6 +73,8 @@ export default ({ links }: { links: LinkType[] }) => {
   };
 
   return (
-    <>{links.map((item: LinkType, i: number) => renderLink(item, i, true))}</>
+    <>
+      {links.map((item: LinkType, i: number) => renderLink(item, i, true, ""))}
+    </>
   );
 };

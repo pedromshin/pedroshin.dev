@@ -10,7 +10,12 @@ import {
 import Link from "next/link";
 
 export default function Page() {
-  const renderLink = (item: LinkType, index: number, isRoot: boolean) => {
+  const renderLink = (
+    item: LinkType,
+    index: number,
+    isRoot: boolean,
+    currentPath: string
+  ) => {
     const hasSubitems = !!item.subitems;
 
     const cardContainerStyle =
@@ -20,11 +25,13 @@ export default function Page() {
     const subItemTitleStyle =
       "w-fit flex flex-row items-center gap-2 text-sm md:text-base";
 
+    const newPath = `${currentPath}${item.slug}`;
+
     return (
       <div key={index} className={isRoot ? cardContainerStyle : ""}>
         <div className="mb-2">
-          {item.link ? (
-            <Link href={item.link} target="_blank" className="w-fit flex">
+          {!hasSubitems ? (
+            <Link href={newPath} target="_blank" className="w-fit flex">
               <h1 className={isRoot ? cardTitleStyle : subItemTitleStyle}>
                 {index === 0 ? item.title : <span>{item.title}</span>}
                 <IconExternalLink size={20} />
@@ -45,8 +52,8 @@ export default function Page() {
                 : "list-disc ml-4 md:ml-6 gap-2 md:gap-4"
             }
           >
-            {item.subitems.map((subitem: LinkType, j: number) => (
-              <li key={j}>{renderLink(subitem, j, false)}</li>
+            {item.subitems!.map((subitem: LinkType, j: number) => (
+              <li key={j}>{renderLink(subitem, j, false, newPath)}</li>
             ))}
           </ul>
         )}
@@ -57,7 +64,7 @@ export default function Page() {
   return (
     <PageContainer>
       <div className="flex flex-row flex-wrap justify-around p-16 md:p-24 gap-x-4 gap-y-8">
-        {links.map((item, i) => renderLink(item, i, true))}
+        {links.map((item, i) => renderLink(item, i, true, ""))}
       </div>
     </PageContainer>
   );

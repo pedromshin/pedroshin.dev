@@ -5,6 +5,8 @@ export type LinkType = {
   subitems?: LinkType[];
 };
 
+export const rootSlug = "/projects";
+
 export const links: LinkType[] = [
   {
     title: "OCR",
@@ -59,7 +61,7 @@ export const links: LinkType[] = [
   },
   {
     title: "Em desenvolvimento/criação",
-    slug: "/dev",
+    slug: "/development",
     subitems: [
       {
         title: "Resumé",

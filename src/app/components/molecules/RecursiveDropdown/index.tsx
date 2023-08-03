@@ -1,7 +1,7 @@
 "use client";
 import { useState } from "react";
 import { IconExternalLink, IconChevronDown } from "@tabler/icons-react";
-import { LinkType } from "@Src/app/links";
+import { LinkType, rootSlug } from "@Src/app/links";
 import Link from "next/link";
 
 export default ({ links }: { links: LinkType[] }) => {
@@ -74,7 +74,9 @@ export default ({ links }: { links: LinkType[] }) => {
 
   return (
     <>
-      {links.map((item: LinkType, i: number) => renderLink(item, i, true, ""))}
+      {links.map((item: LinkType, i: number) =>
+        renderLink(item, i, true, rootSlug)
+      )}
     </>
   );
 };

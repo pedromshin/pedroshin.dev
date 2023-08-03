@@ -13,7 +13,12 @@ export default () => {
       <nav className="w-full md:w-fit flex flex-row align-center gap-x-4 overflow-scroll">
         <RecursiveDropdown links={links} />
       </nav>
-      <button onClick={() => signOut()}>Signout</button>
+      <div>
+        <a href="/private" target="_blank" className="mr-4">
+          Private
+        </a>
+        <button onClick={() => signOut()}>Signout</button>
+      </div>
     </header>
   );
 };

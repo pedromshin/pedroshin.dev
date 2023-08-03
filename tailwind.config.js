@@ -1,11 +1,12 @@
 /** @type {import('tailwindcss').Config} */
 module.exports = {
   content: [
-    "./src/pages/**/*.page.{js,ts,jsx,tsx}",
-    "./src/components/**/*.page.{js,ts,jsx,tsx}",
-    "./src/app/**/*.page.{js,ts,jsx,tsx}",
+    "./src/pages/**/*.{js,ts,jsx,tsx,mdx,html}",
+    "./src/components/**/*.{js,ts,jsx,tsx,mdx,html}",
+    "./src/app/**/*.{js,ts,jsx,tsx,mdx,html}",
   ],
   theme: {
+    darkMode: "class",
     extend: {
       backgroundImage: {
         "gradient-radial": "radial-gradient(var(--tw-gradient-stops))",

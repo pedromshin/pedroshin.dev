@@ -2,6 +2,8 @@ export default {
   // auth envs
   GITHUB_ID: process.env.GITHUB_ID as string,
   GITHUB_SECRET: process.env.GITHUB_SECRET as string,
+  GOOGLE_ID: process.env.GOOGLE_ID as string,
+  GOOGLE_SECRET: process.env.GOOGLE_SECRET as string,
   NEXTAUTH_URL: process.env.NEXTAUTH_URL as string,
   ADMIN_EMAIL: process.env.ADMIN_EMAIL,
   // other envs

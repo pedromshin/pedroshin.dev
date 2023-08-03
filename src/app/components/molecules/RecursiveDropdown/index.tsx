@@ -37,13 +37,12 @@ export default ({ links }: { links: LinkType[] }) => {
         <div className="mb-2">
           {!hasSubitems ? (
             <Link href={newPath} target="_blank">
-              <h1
-                className={isRoot ? cardTitleStyle : subItemTitleStyle}
-                onClick={() => hasSubitems && toggleSubMenu(index)}
-              >
-                {index === 0 ? item.title : <span>{item.title}</span>}
-                <IconExternalLink size={20} />
-              </h1>
+              <button onClick={() => hasSubitems && toggleSubMenu(index)}>
+                <h1 className={isRoot ? cardTitleStyle : subItemTitleStyle}>
+                  {index === 0 ? item.title : <span>{item.title}</span>}
+                  <IconExternalLink size={20} />
+                </h1>
+              </button>
             </Link>
           ) : (
             <button onClick={() => hasSubitems && toggleSubMenu(index)}>

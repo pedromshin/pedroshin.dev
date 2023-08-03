@@ -1,16 +1,17 @@
 "use client";
 import envs from "@Src/envs";
 
-import { getServerSession } from "next-auth";
 import { redirect } from "next/navigation";
 
-import { authOptions } from "@Api/auth/[...nextauth]/route";
 import PageContainer from "@Components/templates/PageContainer";
+import { useSession } from "next-auth/react";
 
-export default async function Page() {
-  const session = await getServerSession(authOptions);
+export default function Page() {
+  const { data: session, status } = useSession();
 
-  if (session?.user?.email !== envs.ADMIN_EMAIL) redirect("/home");
+  if (status === "loading") return <>loading</>;
+  if (status === "authenticated" && session?.user?.email !== envs.ADMIN_EMAIL)
+    redirect("/home");
 
   return (
     <PageContainer>

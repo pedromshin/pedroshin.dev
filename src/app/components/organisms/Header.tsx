@@ -1,4 +1,4 @@
-"use-client";
+"use client";
 import Link from "next/link";
 import { signOut } from "next-auth/react";
 import { links } from "@Src/app/links";

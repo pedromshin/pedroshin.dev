@@ -3,6 +3,7 @@ export default {
   GITHUB_ID: process.env.GITHUB_ID as string,
   GITHUB_SECRET: process.env.GITHUB_SECRET as string,
   NEXTAUTH_URL: process.env.NEXTAUTH_URL as string,
+  ADMIN_EMAIL: process.env.ADMIN_EMAIL,
   // other envs
   AWS_ACCESS_KEY_ID: process.env.AWS_ACCESS_KEY_ID,
   AWS_SECRET_ACCESS_KEY: process.env.AWS_SECRET_ACCESS_KEY,
@@ -15,5 +16,4 @@ export default {
   PROD: process.env.PROD,
   DEV_URL: process.env.DEV_URL,
   PROD_URL: process.env.PROD_URL,
-  ADMIN_EMAIL: process.env.ADMIN_EMAIL,
 };

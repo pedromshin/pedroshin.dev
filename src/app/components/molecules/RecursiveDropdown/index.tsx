@@ -46,13 +46,12 @@ export default ({ links }: { links: LinkType[] }) => {
               </h1>
             </Link>
           ) : (
-            <h1
-              className={isRoot ? cardTitleStyle : subItemTitleStyle}
-              onClick={() => hasSubitems && toggleSubMenu(index)}
-            >
-              {item.title}
-              <IconChevronDown size={20} />
-            </h1>
+            <button onClick={() => hasSubitems && toggleSubMenu(index)}>
+              <h1 className={isRoot ? cardTitleStyle : subItemTitleStyle}>
+                {item.title}
+                <IconChevronDown size={20} />
+              </h1>
+            </button>
           )}
         </div>
         {hasSubitems && isOpen && (

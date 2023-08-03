@@ -1,9 +1,19 @@
-import PageContainer from "@Src/app/components/templates/PageContainer";
+"use client";
+import PageChatbot from "@Src/app/components/templates/PageChatbot";
+import { useChat } from "ai/react";
 
 export default () => {
+  const { messages, input, handleInputChange, handleSubmit } = useChat({
+    api: "/api/chat",
+  });
+
   return (
-    <PageContainer>
+    <PageChatbot
+      input={input}
+      handleInputChange={handleInputChange}
+      handleSubmit={handleSubmit}
+    >
       <></>
-    </PageContainer>
+    </PageChatbot>
   );
 };

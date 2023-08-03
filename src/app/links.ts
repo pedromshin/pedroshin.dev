@@ -14,9 +14,19 @@ export const links: LinkType[] = [
     slug: "/ocr",
     subitems: [
       {
+        title: "RG",
+        slug: "/rg",
+        description: "Extract standardized data from identity card",
+      },
+      {
         title: "CNH",
         slug: "/cnh",
-        description: "Extract text from image",
+        description: "Extract standardized data from driver's license",
+      },
+      {
+        title: "Expense receipt",
+        slug: "/expense-receipt",
+        description: "Extract standardized data from expense receipt",
       },
     ],
   },

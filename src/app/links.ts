@@ -87,12 +87,19 @@ export const links: LinkType[] = [
             title: "Genetic algorithm",
             slug: "/genetic-algorithm",
             description:
-              "Prediction of suvivability of Titanic passengers determined by genetic algorithm",
+              "Prediction of suvivability of Titanic passengers determined by genetic algorithm + monitoring of randomness by Hurst exponent",
           },
           {
-            title: "Support 'scalar' machine with Newcomb-Benford's law",
+            title: "Statistical fraud detection with Newcomb-Benford's law",
+            slug: "/fraud-detection",
+            description:
+              "Detection of accounting anomalies applying a dataset to a Chi-Squared test to Newcomb-Benford's law expected values",
+          },
+          {
+            title: "Support 'scalar' machine",
             slug: "/scalar-machine",
-            description: "Fraud detection with Newcomb-Benford's law",
+            description:
+              "Algorithmic separation of a datasets into smaller subsets using Fisher's Linear Discriminant",
           },
         ],
       },

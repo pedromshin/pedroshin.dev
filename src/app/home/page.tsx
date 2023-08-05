@@ -31,7 +31,7 @@ export default function Page() {
       <div key={index} className={isRoot ? cardContainerStyle : ""}>
         <div className="mb-2">
           {!hasSubitems ? (
-            <Link href={newPath} target="_blank" className="w-fit flex">
+            <Link href={newPath} target="_blank" className="w-fit">
               <h1 className={isRoot ? cardTitleStyle : subItemTitleStyle}>
                 {index === 0 ? item.title : <span>{item.title}</span>}
                 <IconExternalLink size={20} />
@@ -42,7 +42,7 @@ export default function Page() {
               {item.title}
             </h1>
           )}
-          <p className="opacity-50">{item.description}</p>
+          <p className="opacity-50 flex max-w-sm">{item.description}</p>
         </div>
         {hasSubitems && (
           <ul

@@ -87,7 +87,7 @@ export const links: LinkType[] = [
             title: "Genetic algorithm",
             slug: "/genetic-algorithm",
             description:
-              "Prediction of suvivability of Titanic passengers determined by genetic algorithm + monitoring of randomness by Hurst exponent",
+              "Prediction of suvivability of Titanic passengers determined by quaternion representation of individuals in genetic algorithm + monitoring of randomness by Hurst exponent. (John Holland, Edwin Hurst)",
           },
           {
             title: "Statistical fraud detection with Newcomb-Benford's law",
@@ -100,6 +100,18 @@ export const links: LinkType[] = [
             slug: "/scalar-machine",
             description:
               "Algorithmic separation of a datasets into smaller subsets using Fisher's Linear Discriminant",
+          },
+          {
+            title: "Bigdata Dendrogram",
+            slug: "/dendrogram",
+            description:
+              "Hierarchical clustering of n-dimensional dataset by measuring euclidian cophenetic distance between attributes",
+          },
+          {
+            title: "MacQueen's K-meanS clustering",
+            slug: "/kmeans",
+            description:
+              "Unsupervised learning algorith to partition n-dataset in k clusters by minimizing mean intra-cluster distance between points",
           },
         ],
       },

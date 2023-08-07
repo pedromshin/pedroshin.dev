@@ -1,3 +1,4 @@
+"use client";
 import PageContainer from "@Src/app/components/templates/PageContainer";
 import Heading from "@Src/app/components/organisms/Heading";
 import Dropzone from "@Src/app/components/atoms/Dropzone";

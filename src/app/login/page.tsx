@@ -4,7 +4,7 @@ import { redirect } from "next/navigation";
 import Button from "@Components/atoms/Button";
 import { IconBrandGoogle, IconBrandGithub } from "@tabler/icons-react";
 
-export default function Page() {
+export default () => {
   const { data: session } = useSession();
 
   if (session) redirect("/home");
@@ -24,4 +24,4 @@ export default function Page() {
       </div>
     </main>
   );
-}
+};

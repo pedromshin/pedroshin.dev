@@ -10,6 +10,7 @@ export default () => {
   return (
     <PageChatbot
       input={input}
+      title="Flash Chatbot"
       handleInputChange={handleInputChange}
       handleSubmit={handleSubmit}
     >

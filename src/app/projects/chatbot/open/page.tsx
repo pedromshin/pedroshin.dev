@@ -10,6 +10,7 @@ export default () => {
   return (
     <PageChatbot
       input={input}
+      title="Open Chatbot"
       handleInputChange={handleInputChange}
       handleSubmit={handleSubmit}
     >

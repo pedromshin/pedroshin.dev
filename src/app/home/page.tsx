@@ -2,14 +2,10 @@
 import PageContainer from "@Components/templates/PageContainer";
 import { LinkType, links, rootSlug } from "../links";
 
-import {
-  IconArrowRight,
-  IconExternalLink,
-  IconSearch,
-} from "@tabler/icons-react";
+import { IconExternalLink } from "@tabler/icons-react";
 import Link from "next/link";
 
-export default function Page() {
+export default () => {
   const renderLink = (
     item: LinkType,
     index: number,
@@ -68,4 +64,4 @@ export default function Page() {
       </div>
     </PageContainer>
   );
-}
+};

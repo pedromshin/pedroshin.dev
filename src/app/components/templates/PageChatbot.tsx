@@ -19,8 +19,7 @@ export default ({
 }) => {
   return (
     <PageContainer>
-      <Heading title={title} />
-      {children}
+      <Heading title={title}>{children}</Heading>
       <ChatInput
         value={input}
         onSubmit={handleSubmit}

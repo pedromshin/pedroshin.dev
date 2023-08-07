@@ -4,6 +4,5 @@ import { authOptions } from "@Api/auth/[...nextauth]/route";
 
 export default async function Page() {
   const session = await getServerSession(authOptions);
-
-  session ? redirect("/home") : redirect("/login");
+  redirect("/home");
 }

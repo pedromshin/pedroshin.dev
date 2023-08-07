@@ -17,7 +17,7 @@ export default function RootLayout({
         className={`${inter.className} h-full overflow-y-scroll overflow-x-hidden`}
       >
         <SessionProvider>
-          <RouteGuard>{children} </RouteGuard>
+          <RouteGuard>{children}</RouteGuard>
         </SessionProvider>
       </body>
     </html>

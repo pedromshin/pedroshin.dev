@@ -10,11 +10,11 @@ export default function RouteGuard({
   const pathname = usePathname();
   const { data: session } = useSession();
 
-  if (pathname === "/login") {
-    return children;
-  }
+  // if (pathname === "/login") {
+  //   return children;
+  // }
 
-  if (session === null) redirect("/login");
+  // if (session === null) redirect("/login");
 
   return children;
 }

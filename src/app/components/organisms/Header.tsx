@@ -2,7 +2,7 @@
 import Link from "next/link";
 import { signOut } from "next-auth/react";
 import { links } from "@Src/app/links";
-import RecursiveDropdown from "../molecules/RecursiveDropdown";
+import RecursiveDropdown from "@Components/molecules/RecursiveDropdown";
 
 export default () => {
   return (

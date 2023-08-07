@@ -4,7 +4,9 @@ import Heading from "@Src/app/components/organisms/Heading";
 export default () => {
   return (
     <PageContainer>
-      <Heading title="OCR RG" />
+      <Heading title="OCR RG">
+        <></>
+      </Heading>
     </PageContainer>
   );
 };

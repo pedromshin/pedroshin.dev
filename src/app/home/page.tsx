@@ -1,6 +1,6 @@
 "use client";
 import PageContainer from "@Components/templates/PageContainer";
-import { LinkType, links, rootSlug } from "../links";
+import { LinkType, links, rootSlug } from "@Src/app/links";
 
 import { IconExternalLink } from "@tabler/icons-react";
 import Link from "next/link";

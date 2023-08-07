@@ -74,8 +74,8 @@ export const links: LinkType[] = [
     slug: "/development",
     subitems: [
       {
-        title: "Resumé",
-        slug: "/resume",
+        title: "Resumé data extraction",
+        slug: "/resume-extraction",
         description: "Extract standard data from resumé",
       },
       {

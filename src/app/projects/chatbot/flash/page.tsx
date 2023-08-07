@@ -1,5 +1,6 @@
 "use client";
 import PageChatbot from "@Src/app/components/templates/PageChatbot";
+import Heading from "@Src/app/components/organisms/Heading";
 import { useChat } from "ai/react";
 
 export default () => {

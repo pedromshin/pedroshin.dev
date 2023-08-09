@@ -9,6 +9,17 @@ import PageContainer from "@Src/app/components/templates/PageContainer";
 export default () => {
   const [loading, setLoading] = useState(false);
 
+  enum RG_ALIAS_ENUM {
+    RG_DOCUMENT_NUMBER = "RG_DOCUMENT_NUMBER",
+    RG_DOCUMENT_EXPEDITION_DATE = "RG_DOCUMENT_EXPEDITION_DATE",
+    RG_OWNER_PLACE_OF_BIRTH = "RG_OWNER_PLACE_OF_BIRTH",
+    RG_OWNER_BIRTHDATE = "RG_OWNER_BIRTHDATE",
+    RG_OWNER_NAME = "RG_OWNER_NAME",
+    RG_OWNER_FATHER_NAME = "RG_OWNER_FATHER_NAME",
+    RG_OWNER_MOTHER_NAME = "RG_OWNER_MOTHER_NAME",
+    RG_DOCUMENT_ORIGIN = "RG_DOCUMENT_ORIGIN",
+  }
+
   return (
     <PageContainer>
       <Heading
@@ -25,7 +36,15 @@ export default () => {
                 headers: {
                   "Content-Type": "application/json",
                 },
-                body: JSON.stringify({ document: base64 }),
+                body: JSON.stringify({
+                  document: base64,
+                  queries: [
+                    {
+                      Text: "registro geral",
+                      Alias: "asdasd",
+                    },
+                  ],
+                }),
               });
               setLoading(false);
             }}

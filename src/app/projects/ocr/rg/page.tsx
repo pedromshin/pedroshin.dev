@@ -1,15 +1,7 @@
 "use client";
-import { useState } from "react";
-
-import Dropzone from "@Src/app/components/atoms/Dropzone";
-import OCRResultTable from "@Src/app/components/molecules/OCRResultTable";
-import Heading from "@Src/app/components/organisms/Heading";
-import PageContainer from "@Src/app/components/templates/PageContainer";
+import PageOCR from "@Src/app/components/templates/PageOCR";
 
 export default () => {
-  const [loading, setLoading] = useState(false);
-  const [OCRResult, setOCRResult] = useState([]);
-
   enum RG_ALIAS_ENUM {
     RG_DOCUMENT_NUMBER = "RG_DOCUMENT_NUMBER",
     RG_DOCUMENT_EXPEDITION_DATE = "RG_DOCUMENT_EXPEDITION_DATE",
@@ -22,66 +14,41 @@ export default () => {
   }
 
   return (
-    <PageContainer>
-      <Heading
-        title="OCR RG"
-        description="Extrair valores padronizados do verso do RG (frente é a página com foto e polegar, que não carrega nenhum dado a ser extraído)"
-      >
-        <div className="flex flex-col w-full gap-8">
-          <Dropzone
-            accept="image/png, image/jpeg, application/pdf"
-            onSubmit={async (_, base64) => {
-              setLoading(true);
-              const result = await fetch("/api/projects/ocr/rg/extract", {
-                method: "POST",
-                headers: {
-                  "Content-Type": "application/json",
-                },
-                body: JSON.stringify({
-                  document: base64.split(",")[1],
-                  queries: [
-                    {
-                      Text: "registro geral",
-                      Alias: RG_ALIAS_ENUM.RG_DOCUMENT_NUMBER,
-                    },
-                    {
-                      Text: "data de expedicao",
-                      Alias: RG_ALIAS_ENUM.RG_DOCUMENT_EXPEDITION_DATE,
-                    },
-                    {
-                      Text: "naturalidade",
-                      Alias: RG_ALIAS_ENUM.RG_OWNER_PLACE_OF_BIRTH,
-                    },
-                    {
-                      Text: "data de nascimento",
-                      Alias: RG_ALIAS_ENUM.RG_OWNER_BIRTHDATE,
-                    },
-                    { Text: "nome", Alias: RG_ALIAS_ENUM.RG_OWNER_NAME },
-                    {
-                      Text: "what is the content of the first line of filiacao?",
-                      Alias: RG_ALIAS_ENUM.RG_OWNER_FATHER_NAME,
-                    },
-                    {
-                      Text: "what is the content of the second line of filiacao?",
-                      Alias: RG_ALIAS_ENUM.RG_OWNER_MOTHER_NAME,
-                    },
-                    {
-                      Text: "city and state in 'doc origem'",
-                      Alias: RG_ALIAS_ENUM.RG_DOCUMENT_ORIGIN,
-                    },
-                  ],
-                }),
-              });
-
-              setOCRResult(await result.json());
-              setLoading(false);
-            }}
-            submitText="Extrair"
-            loading={loading}
-          />
-          <OCRResultTable data={OCRResult} />
-        </div>
-      </Heading>
-    </PageContainer>
+    <PageOCR
+      title="OCR RG"
+      description="Extrair valores padronizados do verso do RG (frente é a página com foto e polegar, que não carrega nenhum dado a ser extraído)"
+      fetchURL="/api/projects/ocr/rg/extract"
+      queries={[
+        {
+          Text: "registro geral",
+          Alias: RG_ALIAS_ENUM.RG_DOCUMENT_NUMBER,
+        },
+        {
+          Text: "data de expedicao",
+          Alias: RG_ALIAS_ENUM.RG_DOCUMENT_EXPEDITION_DATE,
+        },
+        {
+          Text: "naturalidade",
+          Alias: RG_ALIAS_ENUM.RG_OWNER_PLACE_OF_BIRTH,
+        },
+        {
+          Text: "data de nascimento",
+          Alias: RG_ALIAS_ENUM.RG_OWNER_BIRTHDATE,
+        },
+        { Text: "nome", Alias: RG_ALIAS_ENUM.RG_OWNER_NAME },
+        {
+          Text: "what is the content of the first line of filiacao?",
+          Alias: RG_ALIAS_ENUM.RG_OWNER_FATHER_NAME,
+        },
+        {
+          Text: "what is the content of the second line of filiacao?",
+          Alias: RG_ALIAS_ENUM.RG_OWNER_MOTHER_NAME,
+        },
+        {
+          Text: "city and state in 'doc origem'",
+          Alias: RG_ALIAS_ENUM.RG_DOCUMENT_ORIGIN,
+        },
+      ]}
+    />
   );
 };

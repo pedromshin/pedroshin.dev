@@ -18,7 +18,17 @@ export default () => {
         <div className="flex flex-col w-full gap-8">
           <Dropzone
             accept="image/png, image/jpeg, application/pdf"
-            onSubmit={(_, base64) => base64}
+            onSubmit={async (_, base64) => {
+              setLoading(true);
+              await fetch("/api/projects/ocr/rg/extract", {
+                method: "POST",
+                headers: {
+                  "Content-Type": "application/json",
+                },
+                body: JSON.stringify({ document: base64 }),
+              });
+              setLoading(false);
+            }}
             submitText="Extrair"
             loading={loading}
           />

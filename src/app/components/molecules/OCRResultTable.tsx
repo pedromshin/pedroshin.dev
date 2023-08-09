@@ -20,7 +20,7 @@ export default ({
         </tr>
       </thead>
       <tbody>
-        {data.map((entry, index) => {
+        {data?.map((entry, index) => {
           return (
             <tr key={index}>
               <td className="text-start border border-solid">{entry.field}</td>

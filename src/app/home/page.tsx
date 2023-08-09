@@ -38,7 +38,7 @@ export default () => {
               {item.title}
             </h1>
           )}
-          <p className="opacity-50 flex max-w-sm">{item.description}</p>
+          <p className="opacity-60 flex max-w-sm">{item.description}</p>
         </div>
         {hasSubitems && (
           <ul

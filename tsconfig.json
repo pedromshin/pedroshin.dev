@@ -23,7 +23,8 @@
       "@Src/*": ["./src/*"],
       "@Components/*": ["./src/app/components/*"],
       "@Pages/*": ["./src/app/pages/*"],
-      "@Api/*": ["./src/app/api/*"]
+      "@Api/*": ["./src/app/api/*"],
+      "@Utils/*": ["./src/app/utils/*"]
     }
   },
   "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts"],

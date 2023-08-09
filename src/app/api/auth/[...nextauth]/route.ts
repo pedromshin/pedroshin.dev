@@ -6,7 +6,7 @@ import GoogleProvider from "next-auth/providers/google";
 const GITHUB_ID = envs.GITHUB_ID;
 const GITHUB_SECRET = envs.GITHUB_SECRET;
 
-export const authOptions = {
+const authOptions = {
   providers: [
     GithubProvider({
       clientId: GITHUB_ID,

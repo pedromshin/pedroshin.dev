@@ -25,9 +25,5 @@
     "react-dom": "18.2.0",
     "tailwindcss": "3.3.3",
     "typescript": "5.1.6"
-  },
-  "devDependencies": {
-    "aws-crt": "^1.17.1",
-    "encoding": "^0.1.13"
   }
 }

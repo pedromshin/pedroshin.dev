@@ -1,5 +1,4 @@
 "use client";
-import PageContainer from "@Components/templates/PageContainer";
 import { LinkType, links, rootSlug } from "@Src/app/links";
 
 import { IconExternalLink } from "@tabler/icons-react";
@@ -58,10 +57,8 @@ export default () => {
   };
 
   return (
-    <PageContainer>
-      <div className="flex flex-row flex-wrap justify-around p-16 md:p-24 gap-x-4 gap-y-8">
-        {links.map((item, i) => renderLink(item, i, true, rootSlug))}
-      </div>
-    </PageContainer>
+    <div className="flex flex-row flex-wrap justify-around p-16 md:p-24 gap-x-4 gap-y-8">
+      {links.map((item, i) => renderLink(item, i, true, rootSlug))}
+    </div>
   );
 };

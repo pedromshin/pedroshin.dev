@@ -3,7 +3,6 @@ import envs from "@Src/envs";
 
 import { redirect } from "next/navigation";
 
-import PageContainer from "@Components/templates/PageContainer";
 import { useSession } from "next-auth/react";
 
 export default function Page() {
@@ -13,9 +12,5 @@ export default function Page() {
   if (status === "authenticated" && session?.user?.email !== envs.ADMIN_EMAIL)
     redirect("/home");
 
-  return (
-    <PageContainer>
-      <></>
-    </PageContainer>
-  );
+  return <>Private page</>;
 }

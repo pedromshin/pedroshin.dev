@@ -4,7 +4,6 @@ import { useState } from "react";
 import Dropzone from "@Src/app/components/atoms/Dropzone";
 import OCRResultTable from "@Src/app/components/molecules/OCRResultTable";
 import Heading from "@Src/app/components/organisms/Heading";
-import PageContainer from "@Src/app/components/templates/PageContainer";
 
 export default ({
   fetchURL,
@@ -21,7 +20,7 @@ export default ({
   const [OCRResult, setOCRResult] = useState([]);
 
   return (
-    <PageContainer>
+    <>
       <Heading title={title} description={description}>
         <div className="flex flex-col w-full gap-8">
           <Dropzone
@@ -48,6 +47,6 @@ export default ({
           <OCRResultTable data={OCRResult} />
         </div>
       </Heading>
-    </PageContainer>
+    </>
   );
 };

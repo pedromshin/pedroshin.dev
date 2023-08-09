@@ -87,7 +87,7 @@ export const links: LinkType[] = [
             title: "Genetic algorithm",
             slug: "/genetic-algorithm",
             description:
-              "Prediction of suvivability of Titanic passengers determined by quaternion representation of individuals in genetic algorithm + monitoring of randomness by Hurst exponent. (John Holland, Edwin Hurst)",
+              "Prediction of suvivability of Titanic passengers determined by quaternion representation of individuals in genetic algorithm + monitoring of randomness by Hurst exponent.",
           },
           {
             title: "Statistical fraud detection with Newcomb-Benford's law",

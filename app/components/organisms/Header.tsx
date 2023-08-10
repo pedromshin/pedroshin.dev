@@ -8,7 +8,7 @@ export default () => {
   return (
     <header className="flex flex-col justify-center items-center gap-y-6 p-4 border-b-2  md:flex-row md:justify-between md:align-center">
       <h1 className="text-2xl font-bold">
-        <Link href={"/home"}>pedroshin.dev</Link>
+        <Link href={"/"}>pedroshin.dev</Link>
       </h1>
       <nav className="w-full md:w-fit flex flex-row align-center gap-x-4 overflow-scroll">
         <RecursiveDropdown links={links} />

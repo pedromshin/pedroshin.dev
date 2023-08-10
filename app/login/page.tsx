@@ -7,7 +7,7 @@ import { IconBrandGoogle, IconBrandGithub } from "@tabler/icons-react";
 export default () => {
   const { data: session } = useSession();
 
-  if (session) redirect("/home");
+  if (session) redirect("/");
 
   return (
     <main className="h-full w-full flex flex-col items-center justify-center">

@@ -2,8 +2,8 @@
 import "./globals.css";
 import { SessionProvider } from "next-auth/react";
 import { Inter } from "next/font/google";
-import RouteGuard from "./components/hocs/RouteGuard";
-import GlobalContainer from "./components/hocs/GlobalContainer";
+import RouteGuard from "@Components/hocs/RouteGuard";
+import GlobalContainer from "@Components/hocs/GlobalContainer";
 
 const inter = Inter({ subsets: ["latin"] });
 

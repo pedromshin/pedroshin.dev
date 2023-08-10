@@ -1,16 +1,14 @@
 import { NextResponse } from "next/server";
 
-import textractClient from "@Src/app/api/clients/textract-client";
-import TextractableDocument from "@Src/app/api/entities/textractable-document";
+import TextractableDocumentRepository from "@Src/app/api/classes/repositories/textract-document.repository";
 
 export async function POST(req: Request, res: Response) {
   const { document, queries } = await req.json();
 
-  const textractableDocument = new TextractableDocument({ document, queries });
+  const output = await new TextractableDocumentRepository(
+    document,
+    queries
+  ).analyze();
 
-  const result = await textractClient.send(
-    textractableDocument.analyzeDocument
-  );
-
-  return NextResponse.json({ result });
+  return NextResponse.json({ output });
 }

@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 
 import TextractableDocumentRepository from "@Src/app/api/classes/repositories/textract-document.repository";
+import TextractableDocumentEntity from "@Src/app/api/classes/entities/textract-document.entity";
 
 export async function POST(req: Request, res: Response) {
   const { document, queries } = await req.json();
@@ -10,5 +11,7 @@ export async function POST(req: Request, res: Response) {
     queries
   ).analyze();
 
-  return NextResponse.json({ output });
+  const result = new TextractableDocumentEntity(output).process();
+
+  return NextResponse.json(result);
 }

@@ -1,15 +1,6 @@
-export default ({
-  data,
-}: {
-  data: Array<
-    | {
-        field: string;
-        value?: string;
-        error?: never;
-      }
-    | { field: string; value?: never; error?: string }
-  >;
-}) => {
+import { TextractableDocumentResultType } from "@Src/app/types/TextractableDocumentResultType";
+
+export default ({ data }: { data: TextractableDocumentResultType }) => {
   return (
     <table className="w-full">
       <thead>

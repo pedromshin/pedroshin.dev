@@ -57,9 +57,11 @@ export default ({
         {!!base64 && !!file && (
           <div className="flex flex-col gap-4 lg:flex-row">
             <Image
+              width={400}
+              height={400}
               src={base64}
-              className="w-full max-w-2xl h-auto"
-              alt="dropzone"
+              className="w-auto max-w-md h-auto max-h-[1000px]"
+              alt="droppzone"
             />
             <div className="flex flex-col gap-4">
               <Button onClick={(e) => handleClear(e)}>Limpar</Button>

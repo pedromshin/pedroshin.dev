@@ -1,5 +1,5 @@
 "use client";
-import envs from "@Src/envs";
+import envs from "@Src/app/envs";
 
 import { redirect } from "next/navigation";
 

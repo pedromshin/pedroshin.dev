@@ -3,6 +3,7 @@ import { InputHTMLAttributes, useState, MouseEvent } from "react";
 import { IconCloudUpload } from "@tabler/icons-react";
 import Button from "./Button";
 import fileToBase64 from "@App/utils/fileToBase64";
+import Image from "next/image";
 
 const convertFileSize = (bytes: number) => {
   if (bytes === 0) return "0 B";
@@ -55,7 +56,7 @@ export default ({
         )}
         {!!base64 && !!file && (
           <div className="flex flex-col gap-4 lg:flex-row">
-            <img
+            <Image
               src={base64}
               className="w-full max-w-2xl h-auto"
               alt="dropzone"

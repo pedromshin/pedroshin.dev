@@ -100,11 +100,9 @@ export default class TextractableDocumentEntity {
           field: blockAlias,
           error: `ERROR_MISSING_VALUE`,
         });
-
-        return;
       }
 
-      const resultValue = this.detectErrors(resultBlock?.Text);
+      const resultValue = this.detectErrors(resultBlock?.Text ?? "");
       const normalizedResultValue =
         this.normalizeSpecialCharacters(resultValue);
 

@@ -36,10 +36,9 @@ export default ({
                   document: base64.split(",")[1],
                   queries: queries,
                 }),
-              });
+              }).finally(() => setLoading(false));
 
               setOCRResult(await result.json());
-              setLoading(false);
             }}
             submitText="Extrair"
             loading={loading}

@@ -2,51 +2,27 @@
 import PageOCR from "@Src/app/components/templates/PageOCR";
 
 export default () => {
-  enum RG_ALIAS_ENUM {
-    RG_DOCUMENT_NUMBER = "RG_DOCUMENT_NUMBER",
-    RG_DOCUMENT_EXPEDITION_DATE = "RG_DOCUMENT_EXPEDITION_DATE",
-    RG_OWNER_PLACE_OF_BIRTH = "RG_OWNER_PLACE_OF_BIRTH",
-    RG_OWNER_BIRTHDATE = "RG_OWNER_BIRTHDATE",
-    RG_OWNER_NAME = "RG_OWNER_NAME",
-    RG_OWNER_FATHER_NAME = "RG_OWNER_FATHER_NAME",
-    RG_OWNER_MOTHER_NAME = "RG_OWNER_MOTHER_NAME",
-    RG_DOCUMENT_ORIGIN = "RG_DOCUMENT_ORIGIN",
+  enum CNH_ALIAS_ENUM {
+    CNH_DOCUMENT_NUMBER = "CNH_DOCUMENT_NUMBER",
+    CNH_OWNER_BIRTHDATE = "CNH_OWNER_BIRTHDATE",
+    CNH_DOCUMENT_EXPIRY_DATE = "CNH_DOCUMENT_EXPIRY_DATE",
+    CNH_OWNER_CPF = "CNH_OWNER_CPF",
+    CNH_OWNER_NAME = "CNH_OWNER_NAME",
   }
 
   return (
     <PageOCR
       title="OCR CNH"
-      fetchURL="/api/projects/ocr/rg/extract"
+      fetchURL="/api/projects/ocr/analyse"
       queries={[
-        {
-          Text: "registro geral",
-          Alias: RG_ALIAS_ENUM.RG_DOCUMENT_NUMBER,
-        },
-        {
-          Text: "data de expedicao",
-          Alias: RG_ALIAS_ENUM.RG_DOCUMENT_EXPEDITION_DATE,
-        },
-        {
-          Text: "naturalidade",
-          Alias: RG_ALIAS_ENUM.RG_OWNER_PLACE_OF_BIRTH,
-        },
+        { Text: "no registro", Alias: CNH_ALIAS_ENUM.CNH_DOCUMENT_NUMBER },
         {
           Text: "data de nascimento",
-          Alias: RG_ALIAS_ENUM.RG_OWNER_BIRTHDATE,
+          Alias: CNH_ALIAS_ENUM.CNH_OWNER_BIRTHDATE,
         },
-        { Text: "nome", Alias: RG_ALIAS_ENUM.RG_OWNER_NAME },
-        {
-          Text: "what is the content of the first line of filiacao?",
-          Alias: RG_ALIAS_ENUM.RG_OWNER_FATHER_NAME,
-        },
-        {
-          Text: "what is the content of the second line of filiacao?",
-          Alias: RG_ALIAS_ENUM.RG_OWNER_MOTHER_NAME,
-        },
-        {
-          Text: "city and state in 'doc origem'",
-          Alias: RG_ALIAS_ENUM.RG_DOCUMENT_ORIGIN,
-        },
+        { Text: "validade", Alias: CNH_ALIAS_ENUM.CNH_DOCUMENT_EXPIRY_DATE },
+        { Text: "cpf", Alias: CNH_ALIAS_ENUM.CNH_OWNER_CPF },
+        { Text: "nome", Alias: CNH_ALIAS_ENUM.CNH_OWNER_NAME },
       ]}
     />
   );

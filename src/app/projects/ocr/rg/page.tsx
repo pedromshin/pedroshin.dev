@@ -17,7 +17,7 @@ export default () => {
     <PageOCR
       title="OCR RG"
       description="Extrair valores padronizados do verso do RG (frente é a página com foto e polegar, que não carrega nenhum dado a ser extraído)"
-      fetchURL="/api/projects/ocr/rg/extract"
+      fetchURL="/api/projects/ocr/rg/analyse"
       queries={[
         {
           Text: "registro geral",

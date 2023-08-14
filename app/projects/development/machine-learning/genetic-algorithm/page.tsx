@@ -12,7 +12,6 @@ export default () => {
   return (
     <>
       <Heading title="Genetic Algorithm">
-        <></>
         <iframe
           height={height}
           src="https://python.pedroshin.dev/retro/notebooks/?path=notebooks/genetic-algorithm/genetic-algorithm.ipynb"

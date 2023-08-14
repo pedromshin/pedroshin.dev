@@ -26,7 +26,7 @@ export default async () => {
     const subItemTitleStyle =
       "w-fit flex flex-row items-center gap-2 text-sm md:text-base";
 
-    const newPath = `${currentPath}${item.slug}`;
+    const newPath = item.external ? item.slug : `${currentPath}${item.slug}`;
 
     return (
       <div key={index} className={isRoot ? cardContainerStyle : ""}>

@@ -3,11 +3,18 @@ export type LinkType = {
   description?: string;
   slug: string;
   subitems?: LinkType[];
+  external?: boolean;
 };
 
 export const rootSlug = "/projects";
 
 export const links: LinkType[] = [
+  {
+    title: "Python Jupyter Notebooks",
+    slug: "https://python.pedroshin.dev",
+    external: true,
+    description: "WASM powered JupyterLab notebooks runninng in the browser",
+  },
   {
     title: "OCR",
     description: "",

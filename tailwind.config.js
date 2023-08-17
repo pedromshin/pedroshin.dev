@@ -11,7 +11,6 @@ module.exports = {
   theme: {
     screens: {
       xs: "475px",
-      ...defaultTheme.screens,
     },
     darkMode: "class",
     extend: {

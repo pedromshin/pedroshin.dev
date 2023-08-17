@@ -18,8 +18,8 @@ export default ({ onClose, open }: { onClose: () => void; open: boolean }) => {
           <RecursiveDropdown links={links} />
         </nav>
         <div>
-          <a href="/private" target="_blank" className="mr-4">
-            Private
+          <a href="/admin" target="_blank" className="mr-4">
+            admin
           </a>
           <button onClick={() => signOut()}>Signout</button>
         </div>

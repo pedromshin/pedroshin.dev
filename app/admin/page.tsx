@@ -15,5 +15,5 @@ export default function Page() {
   )
     redirect("/");
 
-  return <>Private page</>;
+  return <>Admin page</>;
 }

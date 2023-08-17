@@ -6,8 +6,10 @@ import { LinkType, links, rootSlug } from "@App/links";
 
 import { IconExternalLink } from "@tabler/icons-react";
 import Link from "next/link";
+import useMediaQuery from "./hooks/useMediaQuery";
 
-export default async () => {
+export default () => {
+  const xsWindow = useMediaQuery("(max-width: 640px)");
   // const session = await getServerSession(authOptions);
   // if (!session) redirect("/login");
 
@@ -28,17 +30,23 @@ export default async () => {
 
     const newPath = item.external ? item.slug : `${currentPath}${item.slug}`;
 
+    const renderExternalLinkIcon = (
+      <IconExternalLink size={20} style={{ minWidth: 20 }} />
+    );
+
     return (
       <div key={index} className={isRoot ? cardContainerStyle : ""}>
         <div className="mb-2">
-          {!hasSubitems ? (
+          {!hasSubitems && (
             <Link href={newPath} target="_blank" className="w-fit">
               <h1 className={isRoot ? cardTitleStyle : subItemTitleStyle}>
+                {xsWindow && renderExternalLinkIcon}
                 {index === 0 ? item.title : <span>{item.title}</span>}
-                <IconExternalLink size={20} />
+                {!xsWindow && renderExternalLinkIcon}
               </h1>
             </Link>
-          ) : (
+          )}
+          {hasSubitems && (
             <h1 className={isRoot ? cardTitleStyle : subItemTitleStyle}>
               {item.title}
             </h1>

@@ -1,4 +1,4 @@
-import { useState } from "react";
+"use client";
 import { signOut } from "next-auth/react";
 
 import { Drawer } from "@material-tailwind/react";
@@ -15,7 +15,7 @@ export default ({ onClose, open }: { onClose: () => void; open: boolean }) => {
       placement="right"
     >
       <div className="mb-6 h-full flex flex-col items-center justify-between">
-        <nav className="w-full max-w-[250px] md:w-fit flex-col align-center gap-x-4 overflow-scroll">
+        <nav className="w-full md:w-fit flex-col align-center gap-x-4 overflow-scroll">
           <RecursiveDropdown links={links} />
         </nav>
         <div>

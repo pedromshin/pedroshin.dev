@@ -18,6 +18,7 @@
   },
   "dependencies": {
     "@aws-sdk/client-textract": "3.360.0",
+    "@material-tailwind/react": "^2.1.0",
     "@tabler/icons-react": "2.30.0",
     "ai": "^2.1.31",
     "autoprefixer": "10.4.14",

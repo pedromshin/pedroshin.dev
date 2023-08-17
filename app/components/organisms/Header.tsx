@@ -1,8 +1,5 @@
 "use client";
 import Link from "next/link";
-import { signOut } from "next-auth/react";
-import { links } from "@App/links";
-import RecursiveDropdown from "@App/components/molecules/RecursiveDropdown";
 import { useState } from "react";
 import LinksDrawer from "./LinksDrawer";
 import { IconMenuDeep } from "@tabler/icons-react";
@@ -19,15 +16,6 @@ export default () => {
         <button onClick={() => setOpen(true)}>
           <IconMenuDeep />
         </button>
-        {/* <nav className="w-full md:w-fit flex-row align-center gap-x-4 overflow-scroll hidden lg:flex">
-          <RecursiveDropdown links={links} />
-        </nav> */}
-        {/* <div>
-          <a href="/private" target="_blank" className="mr-4">
-            Private
-          </a>
-          <button onClick={() => signOut()}>Signout</button>
-        </div> */}
       </header>
       <LinksDrawer open={open} onClose={() => setOpen(false)} />
     </>

@@ -5,13 +5,13 @@ import { LinkType, rootSlug } from "@App/links";
 import Link from "next/link";
 
 export default ({ links }: { links: LinkType[] }) => {
-  const [openItems, setOpenItems] = useState<number[]>([]);
+  const [openItems, setOpenItems] = useState<string[]>([]);
 
-  const toggleSubMenu = (index: number) => {
-    if (openItems.includes(index)) {
-      setOpenItems(openItems.filter((item) => item !== index));
+  const toggleSubMenu = (slug: string) => {
+    if (openItems.includes(slug)) {
+      setOpenItems(openItems.filter((item) => item !== slug));
     } else {
-      setOpenItems([...openItems, index]);
+      setOpenItems([...openItems, slug]);
     }
   };
 
@@ -22,34 +22,39 @@ export default ({ links }: { links: LinkType[] }) => {
     currentPath: string
   ) => {
     const hasSubitems = !!item.subitems;
-    const isOpen = openItems.includes(index);
+    const isOpen = openItems.includes(item.slug);
 
     const cardContainerStyle = "hover:bg-gray-normal";
-    const cardTitleStyle =
-      "flex flex-row items-center gap-2 mb-2 cursor-pointer";
+
+    const buttonStyle = "flex flex-row items-center gap-2 mb-2 cursor-pointer";
+
     const subItemTitleStyle =
-      "w-fit flex flex-row items-center gap-2 text-base";
+      "w-fit flex flex-row items-center gap-2 text-base text-start";
 
     const newPath = item.external ? item.slug : `${currentPath}${item.slug}`;
 
     return (
-      <div key={index} className={isRoot ? cardContainerStyle : ""}>
+      <div key={index} className={cardContainerStyle}>
         <div className="mb-2">
           {!hasSubitems ? (
             <Link href={newPath} target="_blank">
-              <button onClick={() => hasSubitems && toggleSubMenu(index)}>
-                <h1 className={isRoot ? cardTitleStyle : subItemTitleStyle}>
+              <button
+                onClick={() => hasSubitems && toggleSubMenu(item.slug)}
+                className={buttonStyle}
+              >
+                <h1 className={subItemTitleStyle}>
                   {index === 0 ? item.title : <span>{item.title}</span>}
-                  <IconExternalLink size={20} />
                 </h1>
+                <IconExternalLink size={20} />
               </button>
             </Link>
           ) : (
-            <button onClick={() => hasSubitems && toggleSubMenu(index)}>
-              <h1 className={isRoot ? cardTitleStyle : subItemTitleStyle}>
-                {item.title}
-                <IconChevronDown size={20} />
-              </h1>
+            <button
+              onClick={() => hasSubitems && toggleSubMenu(item.slug)}
+              className={buttonStyle}
+            >
+              <h1 className={subItemTitleStyle}>{item.title}</h1>
+              <IconChevronDown size={20} />
             </button>
           )}
         </div>

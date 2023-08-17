@@ -19,7 +19,7 @@ export default ({ onClose, open }: { onClose: () => void; open: boolean }) => {
         </nav>
         <div>
           <a href="/admin" target="_blank" className="mr-4">
-            admin
+            Admin
           </a>
           <button onClick={() => signOut()}>Signout</button>
         </div>

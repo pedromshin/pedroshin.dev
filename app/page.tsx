@@ -6,10 +6,8 @@ import { LinkType, links, rootSlug } from "@App/links";
 
 import { IconExternalLink } from "@tabler/icons-react";
 import Link from "next/link";
-import useMediaQuery from "./hooks/useMediaQuery";
 
 export default () => {
-  const xsWindow = useMediaQuery("(max-width: 640px)");
   // const session = await getServerSession(authOptions);
   // if (!session) redirect("/login");
 
@@ -24,15 +22,11 @@ export default () => {
     const cardContainerStyle =
       "border rounded-3xl py-6 px-8 hover:bg-gray-normal h-fit m-auto max-w-full overflow-scroll";
     const cardTitleStyle =
-      "flex flex-row items-center gap-2 md:gap-4 font-bold text-xl md:text-4xl mb-2 break-all";
+      "flex flex-row items-center gap-2 md:gap-4 font-bold text-xl md:text-4xl mb-2 break-words";
     const subItemTitleStyle =
       "w-fit flex flex-row items-center gap-2 text-sm md:text-base";
 
     const newPath = item.external ? item.slug : `${currentPath}${item.slug}`;
-
-    const renderExternalLinkIcon = (
-      <IconExternalLink size={20} style={{ minWidth: 20 }} />
-    );
 
     return (
       <div key={index} className={isRoot ? cardContainerStyle : ""}>
@@ -40,9 +34,23 @@ export default () => {
           {!hasSubitems && (
             <Link href={newPath} target="_blank" className="w-fit">
               <h1 className={isRoot ? cardTitleStyle : subItemTitleStyle}>
-                {xsWindow && renderExternalLinkIcon}
+                {!isRoot && (
+                  <IconExternalLink
+                    size={20}
+                    className="min-w-[20px] xs:hidden"
+                  />
+                )}
                 {index === 0 ? item.title : <span>{item.title}</span>}
-                {!xsWindow && renderExternalLinkIcon}
+                {isRoot && (
+                  <IconExternalLink
+                    size={20}
+                    className="min-w-[20px] xs:hidden"
+                  />
+                )}
+                <IconExternalLink
+                  size={20}
+                  className="min-w-[20px] hidden xs:block"
+                />
               </h1>
             </Link>
           )}

@@ -127,6 +127,12 @@ export const links: LinkType[] = [
             description:
               "Unsupervised learning algorith to partition n-dataset in k clusters by minimizing mean intra-cluster distance between points",
           },
+          {
+            title: "Mahalanobis Classifier",
+            slug: "/mahalanobis",
+            description:
+              "Big data classification algorithm using Mahalanobis distance to determine the probability of a point belonging to a class",
+          },
         ],
       },
     ],

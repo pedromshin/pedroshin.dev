@@ -16,6 +16,19 @@ export const links: LinkType[] = [
     description: "WASM powered JupyterLab notebooks runninng in the browser",
   },
   {
+    title: "Machine learning algorithms",
+    description: "Algorithms implemented in Python running in browser",
+    slug: "/machine-learning",
+    subitems: [
+      {
+        title: "Genetic algorithm",
+        slug: "/genetic-algorithm",
+        description:
+          "Prediction of suvivability of Titanic passengers determined by quaternion representation of individuals in genetic algorithm + monitoring of randomness by Hurst exponent.",
+      },
+    ],
+  },
+  {
     title: "OCR",
     description: "",
     slug: "/ocr",
@@ -87,15 +100,9 @@ export const links: LinkType[] = [
       },
       {
         title: "Machine learning algorithms",
-        description: "Chatbot trained with content from a Notion page",
+        description: "Algorithms implemented in Python running in browser",
         slug: "/machine-learning",
         subitems: [
-          {
-            title: "Genetic algorithm",
-            slug: "/genetic-algorithm",
-            description:
-              "Prediction of suvivability of Titanic passengers determined by quaternion representation of individuals in genetic algorithm + monitoring of randomness by Hurst exponent.",
-          },
           {
             title: "Statistical fraud detection with Newcomb-Benford's law",
             slug: "/fraud-detection",

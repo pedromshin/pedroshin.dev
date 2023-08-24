@@ -8,18 +8,22 @@ export default ({
   children,
   input,
   title,
+  description,
   handleInputChange,
   handleSubmit,
 }: {
   children: ReactNode;
   input: string;
   title: string;
+  description?: string;
   handleInputChange: ChangeEventHandler<HTMLInputElement>;
   handleSubmit: FormEventHandler<HTMLFormElement>;
 }) => {
   return (
     <>
-      <Heading title={title}>{children}</Heading>
+      <Heading title={title} description={description}>
+        {children}
+      </Heading>
       <ChatInput
         value={input}
         onSubmit={handleSubmit}

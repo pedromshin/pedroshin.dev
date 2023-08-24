@@ -12,7 +12,7 @@ export default ({
 }) => {
   return (
     <div className="flex flex-col items-center justify-start p-12 lg:items-start">
-      <div className="mb-24">
+      <div className="mb-20">
         <h1 className="text-4xl font-bold mb-4">{title}</h1>
         <p className="text-xl opacity-60">{description}</p>
       </div>

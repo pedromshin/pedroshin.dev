@@ -9,8 +9,9 @@ export default {
   // aws envs
   AWS_ACCESS_KEY_ID: process.env.AWS_ACCESS_KEY_ID as string,
   AWS_SECRET_ACCESS_KEY: process.env.AWS_SECRET_ACCESS_KEY as string,
+  // chatbot envs
+  OPEN_AI_KEY: process.env.OPEN_AI_KEY as string,
   // other envs
-  OPEN_AI_KEY: process.env.OPEN_AI_KEY,
   NEXT_PUBLIC_SUPABASE_URL: process.env.NEXT_PUBLIC_SUPABASE_URL,
   SUPABASE_SERVICE_ROLE_KEY: process.env.SUPABASE_SERVICE_ROLE_KEY,
   NOTION_API_KEY: process.env.NOTION_API_KEY,

@@ -60,8 +60,9 @@ export default ({
               width={400}
               height={400}
               src={base64}
-              className="w-auto max-w-md h-auto max-h-[1000px]"
+              className="w-auto max-w-md h-auto"
               alt="droppzone"
+              layout="responsive"
             />
             <div className="flex flex-col gap-4">
               <Button onClick={(e) => handleClear(e)}>Limpar</Button>

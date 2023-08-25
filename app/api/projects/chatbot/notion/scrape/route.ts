@@ -6,7 +6,7 @@ import { encodeText } from "./encodeTexts";
 
 const NOTION_PAGE_ID = "90ae074d-502a-41be-9909-6e6585838941";
 
-type EncodedTextType = {
+export type EncodedTextType = {
   content: string;
   length: number;
   tokens: number;

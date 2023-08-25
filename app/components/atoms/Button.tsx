@@ -8,7 +8,10 @@ export default ({
   HTMLButtonElement
 >) => {
   return (
-    <button className="flex flex-row p-4 border rounded-3xl h-fit" {...props}>
+    <button
+      className="flex flex-row p-4 border rounded-3xl h-fit gap-2"
+      {...props}
+    >
       {children}
     </button>
   );

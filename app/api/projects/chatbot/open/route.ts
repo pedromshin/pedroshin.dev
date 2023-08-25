@@ -1,6 +1,5 @@
 import { Configuration, OpenAIApi } from "openai-edge";
 import { OpenAIStream, StreamingTextResponse } from "ai";
-import _ from "lodash-es";
 import envs from "@App/envs";
 
 const aiConfig = new Configuration({

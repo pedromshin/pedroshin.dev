@@ -23,7 +23,6 @@
     "@tabler/icons-react": "2.30.0",
     "ai": "^2.1.31",
     "autoprefixer": "10.4.14",
-    "lodash-es": "^4.17.21",
     "next": "13.4.12",
     "next-auth": "^4.22.3",
     "openai-edge": "^1.2.2",

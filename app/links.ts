@@ -39,8 +39,8 @@ export const links: LinkType[] = [
         description: "Default chatbot with gpt-3.5-turbo",
       },
       {
-        title: "Flash chatbot (word embeddings)",
-        slug: "/flash",
+        title: "Trained chatbot (word embeddings)",
+        slug: "/notion",
         description: "Chatbot trained with content from a Notion page",
       },
     ],

@@ -1,5 +1,5 @@
 import { AnalyzeDocumentCommand } from "@aws-sdk/client-textract";
-import TextractClient from "@App/api/classes/providers/textract-client.provider";
+import TextractClient from "@App/clients/textract-client";
 
 export default class TextractableDocumentRepository {
   private readonly analyzeDocument: AnalyzeDocumentCommand;

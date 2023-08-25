@@ -13,6 +13,7 @@
     "@types/node": "20.4.5",
     "@types/react": "18.2.18",
     "@types/react-dom": "18.2.7",
+    "encoding": "^0.1.13",
     "eslint": "8.46.0",
     "eslint-config-next": "13.4.12",
     "typescript": "5.1.6"
@@ -20,9 +21,12 @@
   "dependencies": {
     "@aws-sdk/client-textract": "3.360.0",
     "@material-tailwind/react": "^2.1.0",
+    "@notionhq/client": "^2.2.12",
+    "@supabase/supabase-js": "^2.33.1",
     "@tabler/icons-react": "2.30.0",
     "ai": "^2.1.31",
     "autoprefixer": "10.4.14",
+    "gpt-3-encoder": "^1.1.4",
     "next": "13.4.12",
     "next-auth": "^4.22.3",
     "openai-edge": "^1.2.2",

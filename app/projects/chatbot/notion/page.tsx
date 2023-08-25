@@ -18,9 +18,16 @@ export default () => {
     } catch {}
 
     try {
-      const scrape = await fetch("/api/projects/chatbot/notion/scrape", {
-        method: "GET",
-      }).then((res) => res.json());
+      const scrape: string[] = await fetch(
+        "/api/projects/chatbot/notion/scrape",
+        {
+          method: "GET",
+        }
+      ).then((res) => res.json());
+
+      console.log(scrape);
+
+      scrape.map((section) => {});
     } catch {}
   };
 

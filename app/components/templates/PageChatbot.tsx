@@ -1,8 +1,8 @@
 "use client";
 import { ChangeEventHandler, FormEventHandler, ReactNode } from "react";
 
-import ChatInput from "@App/components/atoms/ChatInput";
-import Heading from "@App/components/organisms/Heading";
+import ChatInput from "@Components/atoms/ChatInput";
+import Heading from "@Components/organisms/Heading";
 
 export default ({
   children,
@@ -26,7 +26,10 @@ export default ({
       </Heading>
       <ChatInput
         value={input}
-        onSubmit={handleSubmit}
+        onSubmit={(e) => {
+          handleSubmit(e);
+          e.preventDefault();
+        }}
         onChange={handleInputChange}
       />
     </>

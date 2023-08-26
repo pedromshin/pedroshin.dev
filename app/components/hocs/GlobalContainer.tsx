@@ -1,6 +1,6 @@
 "use client";
 import { ReactNode } from "react";
-import Header from "@App/components/organisms/Header";
+import Header from "@Components/organisms/Header";
 
 export default ({ children }: { children: ReactNode }) => {
   return (

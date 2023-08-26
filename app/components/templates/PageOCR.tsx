@@ -1,9 +1,9 @@
 "use client";
 import { useState } from "react";
 
-import Dropzone from "@App/components/atoms/Dropzone";
-import OCRResultTable from "@App/components/molecules/OCRResultTable";
-import Heading from "@App/components/organisms/Heading";
+import Dropzone from "@Components/atoms/Dropzone";
+import OCRResultTable from "@Components/molecules/OCRResultTable";
+import Heading from "@Components/organisms/Heading";
 
 export default ({
   fetchURL,

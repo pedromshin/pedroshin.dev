@@ -1,6 +1,6 @@
 "use client";
 import { useState, useRef, useEffect } from "react";
-import Heading from "@App/components/organisms/Heading";
+import Heading from "@Components/organisms/Heading";
 
 export default () => {
   const [height, setHeight] = useState<string>();

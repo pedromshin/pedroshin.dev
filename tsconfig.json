@@ -24,7 +24,9 @@
       "@Components/*": ["./app/components/*"],
       "@Pages/*": ["./app/pages/*"],
       "@Api/*": ["./app/api/*"],
-      "@Utils/*": ["./app/utils/*"]
+      "@Utils/*": ["./app/utils/*"],
+      "@Clients/*": ["./app/clients/*"],
+      "@Envs": ["./app/envs"]
     }
   },
   "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts"],

@@ -1,4 +1,4 @@
-import envs from "@App/envs";
+import envs from "@Envs";
 import { TextractClient } from "@aws-sdk/client-textract";
 
 export default new TextractClient({

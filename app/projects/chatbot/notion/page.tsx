@@ -1,20 +1,30 @@
 "use client";
-import PageChatbot from "@App/components/templates/PageChatbot";
-import { useChat } from "ai/react";
-import Input from "@App/components/atoms/Input";
-import Button from "@App/components/atoms/Button";
-import ExternalLink from "@App/components/atoms/ExternalLink";
-import { IconRotate } from "@tabler/icons-react";
-import SupabaseClient from "@App/clients/supabase-client";
-import { EncodedTextType } from "@App/api/projects/chatbot/notion/scrape/route";
+import PageChatbot from "@Components/templates/PageChatbot";
+import Input from "@Components/atoms/Input";
+import Button from "@Components/atoms/Button";
+import ExternalLink from "@Components/atoms/ExternalLink";
+import { IconArrowDown, IconRotate } from "@tabler/icons-react";
+import SupabaseClient from "@Clients/supabase-client";
+import { ChunkType } from "@App/api/projects/chatbot/notion/scrape/route";
 import { useState } from "react";
+import envs from "@Envs";
+import {
+  Option,
+  Spinner,
+  Select,
+  Accordion,
+  AccordionHeader,
+  AccordionBody,
+} from "@material-tailwind/react";
 
 export default () => {
+  const [openConfig, setOpenConfig] = useState<boolean>(false);
   const [scraping, setScraping] = useState<boolean>(false);
-
-  const { messages, input, handleInputChange, handleSubmit } = useChat({
-    api: "/api/chat",
-  });
+  const [query, setQuery] = useState<string>("");
+  const [chunks, setChunks] =
+    useState<({ similarity: number } & ChunkType)[]>();
+  const [answer, setAnswer] = useState<string>("");
+  const [mode, setMode] = useState<"search" | "chat">("search");
 
   const handleGenerate = async () => {
     setScraping(true);
@@ -31,28 +41,93 @@ export default () => {
     setScraping(false);
   };
 
+  const handleChat = async () => {
+    setAnswer("");
+    setChunks([]);
+
+    if (mode === "search") {
+      const search = await fetch("/api/projects/chatbot/notion/search", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ query, apiKey: envs.OPEN_AI_KEY }),
+      }).then(async (res) => await res.json());
+
+      setChunks(search);
+
+      console.log(search);
+    }
+
+    if (mode === "chat") {
+    }
+  };
+
   return (
     <PageChatbot
-      input={input}
+      input={query}
       title="Customized Chatbot"
       description=""
-      handleInputChange={handleInputChange}
-      handleSubmit={handleSubmit}
+      handleInputChange={(e) => setQuery(e.target.value)}
+      handleSubmit={handleChat}
     >
-      <div className="flex flex-col gap-4 w-full">
-        <Input placeholder="Insert system prompt:" />
-        <ExternalLink
-          label="Edit content on Notion page!"
-          href="https://solar-fox-a61.notion.site/Flash-dataset-chatbot-90ae074d502a41be99096e6585838941"
-        />
-        <Button onClick={handleGenerate} disabled={scraping}>
-          {scraping
-            ? "Scraping..."
-            : "Generate word embeddings from Notion page and update vector database"}
-          <IconRotate />
-        </Button>
-      </div>
-      <></>
+      <Accordion open={openConfig}>
+        <AccordionHeader
+          onClick={() => setOpenConfig((prev) => !prev)}
+          className="text-white hover:text-white justify-between [&>span]:hidden"
+        >
+          <h1>{openConfig ? "Close" : "Open"} configurations</h1>
+          <IconArrowDown />
+        </AccordionHeader>
+        <AccordionBody>
+          <div className="flex flex-col gap-8 w-full mt-2">
+            <Input placeholder="Insert system prompt:" />
+            <ExternalLink
+              label="Edit content on Notion page!"
+              href="https://solar-fox-a61.notion.site/Flash-dataset-chatbot-90ae074d502a41be99096e6585838941"
+            />
+            <Button onClick={handleGenerate} disabled={scraping}>
+              {scraping ? (
+                <>
+                  <h1>Scraping...</h1>
+                  <Spinner />
+                </>
+              ) : (
+                <>
+                  <h1>
+                    Generate word embeddings from Notion page and update vector
+                    database
+                  </h1>
+                  <IconRotate />
+                </>
+              )}
+            </Button>
+            <Select
+              label="Select mode"
+              variant="standard"
+              color="gray"
+              value={mode}
+              onChange={(value) => setMode(value as "search" | "chat")}
+              size="lg"
+            >
+              <Option value="search" className="text-white hover:text-white">
+                Search database for most similar chunks
+              </Option>
+              <Option value="chat" className="text-white hover:text-white">
+                Chat with model fine-tuned by texts
+              </Option>
+            </Select>
+          </div>
+        </AccordionBody>
+      </Accordion>
+      {chunks?.map((chunk, index) => (
+        <div key={index}>
+          <div className="mt-4 border border-zinc-600 rounded-lg p-4">
+            <div className="mt-2">{chunk.content}</div>
+            <div className="mt-2">Similaridade: {chunk.similarity}</div>
+          </div>
+        </div>
+      ))}
     </PageChatbot>
   );
 };

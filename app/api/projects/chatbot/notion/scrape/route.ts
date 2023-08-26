@@ -1,9 +1,9 @@
-import NotionClient from "@App/clients/notion-client";
+import NotionClient from "@Clients/notion-client";
 import { NextResponse } from "next/server";
 
 import findTexts from "./findTexts";
 import { encodeText } from "./encodeTexts";
-import envs from "@App/envs";
+import envs from "@Envs";
 
 const NOTION_PAGE_ID = "90ae074d-502a-41be-9909-6e6585838941";
 

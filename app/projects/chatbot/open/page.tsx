@@ -1,5 +1,5 @@
 "use client";
-import PageChatbot from "@App/components/templates/PageChatbot";
+import PageChatbot from "@Components/templates/PageChatbot";
 import { useChat } from "ai/react";
 
 export default () => {

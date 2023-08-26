@@ -1,5 +1,5 @@
-import OpenAIClient from "@App/clients/openai-client";
-import SupabaseClient from "@App/clients/supabase-client";
+import OpenAIClient from "@Clients/openai-client";
+import SupabaseClient from "@Clients/supabase-client";
 import { NextResponse } from "next/server";
 import { ChunkType } from "../scrape/route";
 

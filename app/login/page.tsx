@@ -1,7 +1,7 @@
 "use client";
 import { signIn, useSession } from "next-auth/react";
 import { redirect } from "next/navigation";
-import Button from "@App/components/atoms/Button";
+import Button from "@Components/atoms/Button";
 import { IconBrandGoogle, IconBrandGithub } from "@tabler/icons-react";
 
 export default () => {

@@ -1,4 +1,4 @@
-import Heading from "@App/components/organisms/Heading";
+import Heading from "@Components/organisms/Heading";
 
 export default () => {
   return (

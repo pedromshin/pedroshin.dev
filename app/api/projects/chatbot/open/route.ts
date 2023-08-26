@@ -1,6 +1,6 @@
 import { Configuration, OpenAIApi } from "openai-edge";
 import { OpenAIStream, StreamingTextResponse } from "ai";
-import envs from "@App/envs";
+import envs from "@Envs";
 
 const aiConfig = new Configuration({
   apiKey: envs.OPEN_AI_KEY,

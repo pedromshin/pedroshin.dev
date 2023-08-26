@@ -1,4 +1,4 @@
-import envs from "@App/envs";
+import envs from "@Envs";
 import { Configuration, OpenAIApi } from "openai-edge";
 
 const configuration = new Configuration({

@@ -1,5 +1,5 @@
 "use client";
-import PageOCR from "@App/components/templates/PageOCR";
+import PageOCR from "@Components/templates/PageOCR";
 
 export default () => {
   enum CNH_ALIAS_ENUM {

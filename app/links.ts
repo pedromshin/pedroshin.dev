@@ -87,17 +87,24 @@ export const links: LinkType[] = [
         slug: "/cnh",
         description: "Extract standardized data from driver's license",
       },
-      {
-        title: "Expense receipt",
-        slug: "/expense-receipt",
-        description: "Extract standardized data from expense receipt",
-      },
     ],
   },
   {
     title: "Em desenvolvimento / criação",
     slug: "/development",
     subitems: [
+      {
+        title: "OCR",
+        description: "",
+        slug: "/ocr",
+        subitems: [
+          {
+            title: "Expense receipt",
+            slug: "/expense-receipt",
+            description: "Extract standardized data from expense receipt",
+          },
+        ],
+      },
       {
         title: "Audio",
         description: "Extract subtitle from video and transcribe audio",

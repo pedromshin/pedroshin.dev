@@ -8,7 +8,7 @@ export default ({
 }: {
   title: string;
   description?: string;
-  children: ReactNode;
+  children?: ReactNode;
 }) => {
   return (
     <div className="flex flex-col items-center justify-start p-12 lg:items-start">

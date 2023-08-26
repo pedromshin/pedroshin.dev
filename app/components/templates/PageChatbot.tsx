@@ -8,6 +8,7 @@ export default ({
   children,
   input,
   title,
+  configurations,
   description,
   handleInputChange,
   handleSubmit,
@@ -16,14 +17,19 @@ export default ({
   input: string;
   title: string;
   description?: string;
+  configurations?: ReactNode;
   handleInputChange: ChangeEventHandler<HTMLInputElement>;
   handleSubmit: FormEventHandler<HTMLFormElement>;
 }) => {
   return (
     <>
       <Heading title={title} description={description}>
-        {children}
+        {configurations}
       </Heading>
+      <div className="w-full p-5 border-b-2 border-gray-300 bg-transparent focus:outline-none focus:border-white" />
+      <div className="flex flex-col items-center justify-start p-12 lg:items-start">
+        {children}
+      </div>
       <ChatInput
         value={input}
         onSubmit={(e) => {

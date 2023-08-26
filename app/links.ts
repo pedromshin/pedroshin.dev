@@ -29,6 +29,11 @@ export const links: LinkType[] = [
     ],
   },
   {
+    title: "Image Generation",
+    slug: "/image",
+    description: "Generate images by a text prompt (R$0,20 per image)",
+  },
+  {
     title: "Chatbot",
     description: "Open chatbot",
     slug: "/chatbot",
@@ -121,11 +126,6 @@ export const links: LinkType[] = [
             description: "Transcribe audio from a voice recording",
           },
         ],
-      },
-      {
-        title: "Image",
-        slug: "/image",
-        description: "Generate images by a text prompt (R$0,20 per image)",
       },
       {
         title: "Resumé data extraction",

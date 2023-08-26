@@ -4,6 +4,7 @@ import { IconCloudUpload } from "@tabler/icons-react";
 import Button from "./Button";
 import fileToBase64 from "@App/utils/fileToBase64";
 import Image from "next/image";
+import { Spinner } from "@material-tailwind/react";
 
 const convertFileSize = (bytes: number) => {
   if (bytes === 0) return "0 B";
@@ -82,7 +83,7 @@ export default ({
                 )}
               </p>
               <Button onClick={() => onSubmit(file, base64)}>
-                {loading ? "loading..." : submitText}
+                {loading ? <Spinner /> : submitText}
               </Button>
             </div>
           </div>

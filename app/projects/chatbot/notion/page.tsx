@@ -73,7 +73,7 @@ export default () => {
     <PageChatbot
       input={query}
       title="Customized Chatbot"
-      description=""
+      description="Train chatbot with data from custom Notion page and either SEARCH for most similar chunks OR CHAT with model fine-tuned by texts."
       handleInputChange={(e) => setQuery(e.target.value)}
       handleSubmit={handleChat}
       configurations={

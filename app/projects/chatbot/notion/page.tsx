@@ -110,7 +110,6 @@ export default () => {
               </Button>
               <Select
                 label="Select mode"
-                variant="standard"
                 color="gray"
                 value={mode}
                 onChange={(value) => setMode(value as "search" | "chat")}

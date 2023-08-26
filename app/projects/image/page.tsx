@@ -66,7 +66,7 @@ export default () => {
       }
       if (message.side === "response") {
         return (
-          <div key={index}>
+          <div key={index} className="mr-auto">
             {message.content ? (
               <Image
                 layout="responsive"
@@ -97,12 +97,14 @@ export default () => {
         title={"Image generation"}
         description="Write prompts to generate images using OpenAI's DALL-E image generation model"
       >
-        {renderMessages()}
-        {loading && (
-          <div className="border border-zinc-600 rounded-lg p-4 w-fit max-w-[80%]">
-            <Spinner />
-          </div>
-        )}
+        <div className="flex flex-col gap-4 w-full h-full">
+          {renderMessages()}
+          {loading && (
+            <div className="border border-zinc-600 rounded-lg p-4 w-fit max-w-[80%] mr-auto">
+              <Spinner />
+            </div>
+          )}
+        </div>
       </Heading>
       <ChatInput
         onChange={(e) => setPrompt(e.target.value)}

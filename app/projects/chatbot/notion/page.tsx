@@ -153,58 +153,65 @@ export default () => {
       handleInputChange={(e) => setQuery(e.target.value)}
       handleSubmit={handleChat}
       configurations={
-        <Accordion open={openConfig}>
-          <AccordionHeader
-            onClick={() => setOpenConfig((prev) => !prev)}
-            className="text-white hover:text-white justify-between [&>span]:hidden"
-          >
-            <h1>{openConfig ? "Close" : "Open"} configurations</h1>
-            <IconArrowDown />
-          </AccordionHeader>
-          <AccordionBody>
-            <div className="flex flex-col gap-8 w-full mt-2">
-              <Input
-                placeholder="Insert system prompt:"
-                value={systemPrompt}
-                onChange={(e) => setSystemPrompt(e.target.value)}
-              />
-              <ExternalLink
-                label="Edit content on Notion page"
-                href="https://solar-fox-a61.notion.site/Flash-dataset-chatbot-90ae074d502a41be99096e6585838941"
-              />
-              <Button onClick={handleGenerate} disabled={scraping}>
-                {scraping ? (
-                  <>
-                    <h1>Scraping...</h1>
-                    <Spinner />
-                  </>
-                ) : (
-                  <>
-                    <h1>
-                      Generate word embeddings from Notion page and update
-                      vector database
-                    </h1>
-                    <IconRotate />
-                  </>
-                )}
-              </Button>
-              <Select
-                label="Select mode"
-                color="gray"
-                value={mode}
-                onChange={(value) => setMode(value as "search" | "chat")}
-                size="lg"
-              >
-                <Option value="search" className="text-white hover:text-white">
-                  Search database for most similar chunks
-                </Option>
-                <Option value="chat" className="text-white hover:text-white">
-                  Chat with model fine-tuned by texts
-                </Option>
-              </Select>
-            </div>
-          </AccordionBody>
-        </Accordion>
+        <>
+          <div className="flex flex-col gap-4 w-full max-w-[333px] mb-4">
+            <ExternalLink
+              label="Edit content on Notion page"
+              href="https://solar-fox-a61.notion.site/Flash-dataset-chatbot-90ae074d502a41be99096e6585838941"
+            />
+          </div>
+          <Accordion open={openConfig}>
+            <AccordionHeader
+              onClick={() => setOpenConfig((prev) => !prev)}
+              className="text-white hover:text-white justify-between [&>span]:hidden"
+            >
+              <h1>{openConfig ? "Close" : "Open"} configurations</h1>
+              <IconArrowDown />
+            </AccordionHeader>
+            <AccordionBody>
+              <div className="flex flex-col gap-8 w-full mt-2">
+                <Input
+                  placeholder="Insert system prompt:"
+                  value={systemPrompt}
+                  onChange={(e) => setSystemPrompt(e.target.value)}
+                />
+                <Button onClick={handleGenerate} disabled={scraping}>
+                  {scraping ? (
+                    <>
+                      <h1>Scraping...</h1>
+                      <Spinner />
+                    </>
+                  ) : (
+                    <>
+                      <h1>
+                        Generate word embeddings from Notion page and update
+                        vector database
+                      </h1>
+                      <IconRotate />
+                    </>
+                  )}
+                </Button>
+                <Select
+                  label="Select mode"
+                  color="gray"
+                  value={mode}
+                  onChange={(value) => setMode(value as "search" | "chat")}
+                  size="lg"
+                >
+                  <Option
+                    value="search"
+                    className="text-white hover:text-white"
+                  >
+                    Search database for most similar chunks
+                  </Option>
+                  <Option value="chat" className="text-white hover:text-white">
+                    Chat with model fine-tuned by texts
+                  </Option>
+                </Select>
+              </div>
+            </AccordionBody>
+          </Accordion>
+        </>
       }
     >
       <div className="flex flex-col gap-4 w-full h-full">

@@ -154,11 +154,19 @@ export default () => {
       handleSubmit={handleChat}
       configurations={
         <>
-          <div className="flex flex-col gap-4 w-full max-w-[333px] mb-4">
-            <ExternalLink
-              label="Edit content on Notion page"
-              href="https://solar-fox-a61.notion.site/Flash-dataset-chatbot-90ae074d502a41be99096e6585838941"
-            />
+          <div className="flex flex-row gap-4 w-full">
+            <div className="flex flex-col gap-4 w-full max-w-[333px] mb-4">
+              <ExternalLink
+                label="Edit content on Notion page"
+                href="https://solar-fox-a61.notion.site/Flash-dataset-chatbot-90ae074d502a41be99096e6585838941"
+              />
+            </div>
+            <div className="flex flex-col gap-4 w-full max-w-[333px] mb-4">
+              <ExternalLink
+                label="Visualize 3D relational positions of embeddings"
+                href="/projects/embeddings"
+              />
+            </div>
           </div>
           <Accordion open={openConfig}>
             <AccordionHeader

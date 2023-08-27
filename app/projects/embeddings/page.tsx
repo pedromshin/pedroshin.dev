@@ -1,14 +1,17 @@
 "use client";
-import React, { useEffect, useRef } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import * as THREE from "three";
 //@ts-ignore
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
 
 //@ts-ignore
 import * as tsne from "./tsne";
+import { Spinner } from "@material-tailwind/react";
+import { set } from "lodash-es";
 
 export default () => {
   const containerRef = useRef<HTMLDivElement>(null);
+  const [fetching, setFetching] = useState<boolean>(false);
   const [data, setData] = React.useState<
     { embedding: number[]; label: string }[]
   >([]);
@@ -90,6 +93,7 @@ export default () => {
 
   useEffect(() => {
     (async () => {
+      setFetching(true);
       const response = await fetch("/api/projects/embeddings");
       const data = await response.json();
       setData(
@@ -100,8 +104,20 @@ export default () => {
           };
         })
       );
+      setFetching(false);
     })();
   }, []);
 
-  return <div ref={containerRef}></div>;
+  return (
+    <>
+      {fetching ? (
+        <div className="w-full h-full flex flex-col items-center justify-center">
+          <Spinner />
+          {fetching && <div className="mt-4">Fetching data...</div>}
+        </div>
+      ) : (
+        <div ref={containerRef} />
+      )}
+    </>
+  );
 };

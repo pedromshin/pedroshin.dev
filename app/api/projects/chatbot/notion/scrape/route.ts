@@ -27,29 +27,32 @@ export async function GET() {
       block_id: NOTION_PAGE_ID,
       page_size: 50,
     });
-
-    const texts = findTexts(results);
-    const encodedTexts: EncodedTextType[] = encodeText(texts);
-
     const currentUrl = envs.DEV ? envs.DEV_URL : envs.PROD_URL;
 
-    try {
-      await Promise.allSettled(
-        encodedTexts.map(async (section) => {
-          await Promise.allSettled(
-            section.chunks.map(async (chunk) => {
-              await fetch(`${currentUrl}/api/projects/chatbot/notion/embed`, {
+    const texts = findTexts(results);
+    const encodedTexts = await Promise.all(
+      encodeText(texts).map(async (section) => {
+        const embeddings = await Promise.all(
+          section.chunks.map(async (chunk) => {
+            const embed = await fetch(
+              `${currentUrl}/api/projects/chatbot/notion/embed`,
+              {
                 headers: {
                   "Content-Type": "application/json",
                 },
                 method: "POST",
                 body: JSON.stringify({ text: chunk }),
-              });
-            })
-          );
-        })
-      );
-    } catch {}
+              }
+            );
+
+            const { embedding } = await embed.json();
+            return embedding;
+          })
+        );
+
+        return { ...section, embedding: embeddings[0] };
+      })
+    );
 
     return NextResponse.json(encodedTexts);
   } catch {

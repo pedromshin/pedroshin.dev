@@ -34,6 +34,12 @@ export const links: LinkType[] = [
     description: "Generate images by a text prompt (R$0,20 per image)",
   },
   {
+    title: "Embeddings",
+    slug: "/embeddings",
+    description:
+      "Visualize multi-dimensional word embeddings in 3D with Three.js",
+  },
+  {
     title: "Chatbot",
     description: "Open chatbot",
     slug: "/chatbot",

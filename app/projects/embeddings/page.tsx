@@ -4,13 +4,14 @@ import * as THREE from "three";
 //@ts-ignore
 import * as tsne from "./tsne";
 
-import { data } from "./data.json";
-
 export default () => {
   const containerRef = useRef<HTMLDivElement>(null);
+  const [data, setData] = React.useState<
+    { embedding: number; label: string }[]
+  >([]);
 
   useEffect(() => {
-    if (!containerRef.current) return;
+    if (!containerRef.current || !data.length) return;
     const scene = new THREE.Scene();
     const camera = new THREE.PerspectiveCamera(
       75,
@@ -19,7 +20,7 @@ export default () => {
       1000
     );
     const renderer = new THREE.WebGLRenderer();
-    renderer.setSize(window.innerWidth, window.innerHeight);
+    renderer.setSize(window.innerWidth, window.innerHeight - 66);
     containerRef.current.appendChild(renderer.domElement);
 
     const tsneData = new tsne.tSNE({
@@ -27,7 +28,7 @@ export default () => {
       perplexity: 50,
     });
 
-    tsneData.initDataRaw(data);
+    tsneData.initDataRaw(data.map((item) => item.embedding));
 
     const points = new THREE.Group();
 
@@ -41,7 +42,7 @@ export default () => {
       const geometry = new THREE.BufferGeometry();
       const vertices = new Float32Array([x, y, z]);
       geometry.setAttribute("position", new THREE.BufferAttribute(vertices, 3));
-      const material = new THREE.PointsMaterial({ color: 0x00ff00, size: 0.1 });
+      const material = new THREE.PointsMaterial({ color: 0x000000, size: 0.1 });
       const point = new THREE.Points(geometry, material);
 
       // Create a text sprite for the index
@@ -50,7 +51,7 @@ export default () => {
       if (!context) return;
       context.font = "Bold 16px Arial";
       context.fillStyle = "rgba(255, 255, 255, 1)";
-      context.fillText(index.toString(), 0, 16);
+      context.fillText(data[index].label, 0, 16);
       const spriteTexture = new THREE.CanvasTexture(spriteCanvas);
       const spriteMaterial = new THREE.SpriteMaterial({ map: spriteTexture });
       const sprite = new THREE.Sprite(spriteMaterial);
@@ -75,6 +76,21 @@ export default () => {
       renderer.render(scene, camera);
     };
     animate();
+  }, [data]);
+
+  useEffect(() => {
+    (async () => {
+      const response = await fetch("/api/projects/embeddings");
+      const data = await response.json();
+      setData(
+        data.data.data.map((item: { embedding: number; content: string }) => {
+          return {
+            embedding: item.embedding,
+            label: item.content,
+          };
+        })
+      );
+    })();
   }, []);
 
   return (

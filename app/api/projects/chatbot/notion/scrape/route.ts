@@ -56,6 +56,6 @@ export async function GET() {
 
     return NextResponse.json(encodedTexts);
   } catch {
-    return null;
+    return new Response("Error", { status: 500 });
   }
 }

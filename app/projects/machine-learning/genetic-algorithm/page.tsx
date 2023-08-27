@@ -7,7 +7,7 @@ export default () => {
 
   useEffect(() => {
     !height && setHeight(window.innerHeight - 100 + "px");
-  }, []);
+  }, [height]);
 
   return (
     <>

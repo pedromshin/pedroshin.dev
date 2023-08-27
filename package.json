@@ -27,6 +27,7 @@
     "@tabler/icons-react": "2.30.0",
     "ai": "^2.1.31",
     "autoprefixer": "10.4.14",
+    "aws-crt": "^1.18.0",
     "endent": "^2.1.0",
     "gpt-tokenizer": "^2.1.1",
     "next": "13.4.19",

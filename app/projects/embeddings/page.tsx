@@ -29,30 +29,43 @@ export default () => {
 
     tsneData.initDataRaw(data);
 
-    const points = tsneData.Y.map((coords: any) => {
+    const points = new THREE.Group();
+
+    tsneData.Y.forEach((coords: any, index: number) => {
       const multiplier = 10000;
       const x = coords[0] * multiplier;
       const y = coords[1] * multiplier;
       const z = coords[2] * multiplier;
-      const position = [x, y, z];
-      const pointGeometry = new THREE.BufferGeometry();
-      const pointMaterial = new THREE.PointsMaterial({
-        color: 0xff0000,
-        size: 0.1,
-      });
 
-      const positions = new Float32Array(position);
+      // Create a point
+      const geometry = new THREE.BufferGeometry();
+      const vertices = new Float32Array([x, y, z]);
+      geometry.setAttribute("position", new THREE.BufferAttribute(vertices, 3));
+      const material = new THREE.PointsMaterial({ color: 0x00ff00, size: 0.1 });
+      const point = new THREE.Points(geometry, material);
 
-      console.log(positions);
-      pointGeometry.setAttribute(
-        "position",
-        new THREE.BufferAttribute(positions, 3)
-      );
+      // Create a text sprite for the index
+      const spriteCanvas = document.createElement("canvas");
+      const context = spriteCanvas.getContext("2d");
+      if (!context) return;
+      context.font = "Bold 16px Arial";
+      context.fillStyle = "rgba(255, 255, 255, 1)";
+      context.fillText(index.toString(), 0, 16);
+      const spriteTexture = new THREE.CanvasTexture(spriteCanvas);
+      const spriteMaterial = new THREE.SpriteMaterial({ map: spriteTexture });
+      const sprite = new THREE.Sprite(spriteMaterial);
+      sprite.scale.set(0.5, 0.25, 1);
 
-      return new THREE.Points(pointGeometry, pointMaterial);
+      // Position the point and text
+      point.position.set(x, y, z);
+      sprite.position.set(x, y, z);
+
+      // Add point and text to the group
+      points.add(point);
+      points.add(sprite);
     });
 
-    points.forEach((point: any) => scene.add(point));
+    scene.add(points);
 
     // Set camera position
     camera.position.z = 5;

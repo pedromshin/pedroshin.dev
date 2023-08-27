@@ -20,7 +20,7 @@
     "typescript": "5.1.6"
   },
   "dependencies": {
-    "@aws-sdk/client-textract": "3.360.0",
+    "@aws-sdk/client-textract": "^3.398.0",
     "@material-tailwind/react": "^2.1.0",
     "@notionhq/client": "^2.2.12",
     "@supabase/supabase-js": "^2.33.1",

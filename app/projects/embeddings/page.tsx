@@ -2,16 +2,21 @@
 import React, { useEffect, useRef } from "react";
 import * as THREE from "three";
 //@ts-ignore
+import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
+
+//@ts-ignore
 import * as tsne from "./tsne";
 
 export default () => {
   const containerRef = useRef<HTMLDivElement>(null);
   const [data, setData] = React.useState<
-    { embedding: number; label: string }[]
+    { embedding: number[]; label: string }[]
   >([]);
 
   useEffect(() => {
     if (!containerRef.current || !data.length) return;
+
+    // Set up the scene, camera, and renderer
     const scene = new THREE.Scene();
     const camera = new THREE.PerspectiveCamera(
       75,
@@ -19,33 +24,37 @@ export default () => {
       0.1,
       1000
     );
-    const renderer = new THREE.WebGLRenderer();
+    const renderer = new THREE.WebGLRenderer({ antialias: true });
     renderer.setSize(window.innerWidth, window.innerHeight - 66);
     containerRef.current.appendChild(renderer.domElement);
 
+    // Initialize t-SNE data
     const tsneData = new tsne.tSNE({
       dim: 3,
       perplexity: 50,
     });
-
     tsneData.initDataRaw(data.map((item) => item.embedding));
+
+    const axesHelper = new THREE.AxesHelper(4);
+    scene.add(axesHelper);
 
     const points = new THREE.Group();
 
-    tsneData.Y.forEach((coords: any, index: number) => {
-      const multiplier = 10000;
-      const x = coords[0] * multiplier;
-      const y = coords[1] * multiplier;
-      const z = coords[2] * multiplier;
+    const minX = Math.min(...tsneData.Y.map((coords: any) => coords[0]));
+    const minY = Math.min(...tsneData.Y.map((coords: any) => coords[1]));
+    const minZ = Math.min(...tsneData.Y.map((coords: any) => coords[2]));
 
+    tsneData.Y.forEach((coords: any, index: number) => {
+      const multiplier = 5000;
+      const x = (coords[0] - minX) * multiplier;
+      const y = (coords[1] - minY) * multiplier;
+      const z = (coords[2] - minZ) * multiplier;
       // Create a point
       const geometry = new THREE.BufferGeometry();
       const vertices = new Float32Array([x, y, z]);
       geometry.setAttribute("position", new THREE.BufferAttribute(vertices, 3));
-      const material = new THREE.PointsMaterial({ color: 0x000000, size: 0.1 });
-      const point = new THREE.Points(geometry, material);
 
-      // Create a text sprite for the index
+      // Create a text sprite for the label
       const spriteCanvas = document.createElement("canvas");
       const context = spriteCanvas.getContext("2d");
       if (!context) return;
@@ -57,23 +66,24 @@ export default () => {
       const sprite = new THREE.Sprite(spriteMaterial);
       sprite.scale.set(0.5, 0.25, 1);
 
-      // Position the point and text
-      point.position.set(x, y, z);
       sprite.position.set(x, y, z);
 
-      // Add point and text to the group
-      points.add(point);
       points.add(sprite);
     });
 
     scene.add(points);
 
     // Set camera position
-    camera.position.z = 5;
+    camera.position.set(2, 3, 5);
+    camera.lookAt(scene.position);
+
+    // Add event listener for mouse interaction
+    const controls = new OrbitControls(camera, renderer.domElement);
 
     const animate = () => {
       requestAnimationFrame(animate);
       renderer.render(scene, camera);
+      controls.update(); // Update camera controls
     };
     animate();
   }, [data]);
@@ -83,7 +93,7 @@ export default () => {
       const response = await fetch("/api/projects/embeddings");
       const data = await response.json();
       setData(
-        data.data.data.map((item: { embedding: number; content: string }) => {
+        data.data.data.map((item: { embedding: number[]; content: string }) => {
           return {
             embedding: item.embedding,
             label: item.content,
@@ -93,10 +103,5 @@ export default () => {
     })();
   }, []);
 
-  return (
-    <div>
-      <div ref={containerRef}></div>
-      <div id="embedding-space" data-sr="fade in over 5s"></div>
-    </div>
-  );
+  return <div ref={containerRef}></div>;
 };

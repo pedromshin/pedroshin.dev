@@ -12,26 +12,20 @@ export default () => {
 
   const renderMessages = () => {
     return messages?.map((message, index) => {
-      if (message.role === "user") {
-        return (
-          <div
-            key={index}
-            className="border border-zinc-600 rounded-lg p-4 ml-auto"
-          >
-            <div className="">{message.content}</div>
-          </div>
-        );
-      }
-      if (message.role === "assistant") {
-        return (
-          <div
-            key={index}
-            className="border border-zinc-600 rounded-lg p-4 w-fit max-w-[80%]"
-          >
+      const isUser = message.role === "user";
+      const messageStyle = isUser
+        ? "border border-zinc-600 rounded-lg p-4 ml-auto"
+        : "border border-zinc-600 rounded-lg p-4 w-fit max-w-[80%]";
+
+      return (
+        <div key={index} className={messageStyle}>
+          {isUser ? (
+            <div>{message.content}</div>
+          ) : (
             <StreamingWords text={message.content} />
-          </div>
-        );
-      }
+          )}
+        </div>
+      );
     });
   };
 

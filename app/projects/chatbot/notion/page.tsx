@@ -119,29 +119,23 @@ export default () => {
       }
     }
   };
-
   const renderMessages = () => {
     return messages?.map((message, index) => {
-      if (message.side === "query") {
-        return (
-          <div
-            key={index}
-            className="border border-zinc-600 rounded-lg p-4 ml-auto"
-          >
-            <div className="">{message.content}</div>
-          </div>
-        );
-      }
-      if (message.side === "response") {
-        return (
-          <div
-            key={index}
-            className="border border-zinc-600 rounded-lg p-4 w-fit max-w-[80%]"
-          >
+      const isQuery = message.side === "query";
+      const messageStyle =
+        message.side === "query"
+          ? "border border-zinc-600 rounded-lg p-4 ml-auto"
+          : "border border-zinc-600 rounded-lg p-4 w-fit max-w-[80%]";
+
+      return (
+        <div key={index} className={messageStyle}>
+          {isQuery ? (
+            <div>{message.content}</div>
+          ) : (
             <StreamingWords text={message.content} />
-          </div>
-        );
-      }
+          )}
+        </div>
+      );
     });
   };
 

@@ -148,81 +148,77 @@ export default () => {
   return (
     <PageChatbot
       input={query}
-      title="Customized Chatbot"
-      description="Train chatbot with data from custom Notion page and either SEARCH for most similar chunks OR CHAT with model fine-tuned by texts."
       handleInputChange={(e) => setQuery(e.target.value)}
       handleSubmit={handleChat}
-      configurations={
-        <>
-          <div className="flex flex-row gap-4 w-full">
-            <div className="flex flex-col gap-4 w-full max-w-[333px] mb-4">
-              <ExternalLink
-                label="Edit content on Notion page"
-                href="https://solar-fox-a61.notion.site/Flash-dataset-chatbot-90ae074d502a41be99096e6585838941"
-              />
-            </div>
-            <div className="flex flex-col gap-4 w-full max-w-[333px] mb-4">
-              <ExternalLink
-                label="Visualize 3D relational positions of embeddings"
-                href="/projects/embeddings"
-              />
-            </div>
-          </div>
-          <Accordion open={openConfig}>
-            <AccordionHeader
-              onClick={() => setOpenConfig((prev) => !prev)}
-              className="text-white hover:text-white justify-between [&>span]:hidden"
-            >
-              <h1>{openConfig ? "Close" : "Open"} configurations</h1>
-              <IconArrowDown />
-            </AccordionHeader>
-            <AccordionBody>
-              <div className="flex flex-col gap-8 w-full mt-2">
-                <Input
-                  placeholder="Insert system prompt:"
-                  value={systemPrompt}
-                  onChange={(e) => setSystemPrompt(e.target.value)}
-                />
-                <Button onClick={handleGenerate} disabled={scraping}>
-                  {scraping ? (
-                    <>
-                      <h1>Scraping...</h1>
-                      <Spinner />
-                    </>
-                  ) : (
-                    <>
-                      <h1>
-                        Generate word embeddings from Notion page and update
-                        vector database
-                      </h1>
-                      <IconRotate />
-                    </>
-                  )}
-                </Button>
-                <Select
-                  label="Select mode"
-                  color="gray"
-                  value={mode}
-                  onChange={(value) => setMode(value as "search" | "chat")}
-                  size="lg"
-                >
-                  <Option
-                    value="search"
-                    className="text-white hover:text-white"
-                  >
-                    Search database for most similar chunks
-                  </Option>
-                  <Option value="chat" className="text-white hover:text-white">
-                    Chat with model fine-tuned by texts
-                  </Option>
-                </Select>
-              </div>
-            </AccordionBody>
-          </Accordion>
-        </>
-      }
     >
-      <div className="flex flex-col gap-4 w-full h-full">
+      <Accordion open={openConfig} className="pt-12 px-12">
+        <AccordionHeader
+          onClick={() => setOpenConfig((prev) => !prev)}
+          className="text-2xl md:text-4xl font-bold mb-2 md:mb-4 text-white hover:text-white justify-between [&>span]:hidden"
+        >
+          {/* <h1>{openConfig ? "Close" : "Open"} configurations</h1> */}
+          <h1>Customized Chatbot</h1>
+          <IconArrowDown />
+        </AccordionHeader>
+        <AccordionBody>
+          <div className="flex flex-col gap-8 w-full mt-2">
+            <p className="text-base md:text-xl text-white hover:text-white ">
+              Train chatbot with data from custom Notion page and either SEARCH
+              for most similar chunks OR CHAT with model fine-tuned by texts.
+            </p>
+            <Input
+              placeholder="Insert system prompt:"
+              value={systemPrompt}
+              onChange={(e) => setSystemPrompt(e.target.value)}
+            />
+            <Button onClick={handleGenerate} disabled={scraping}>
+              {scraping ? (
+                <>
+                  <h1>Scraping...</h1>
+                  <Spinner />
+                </>
+              ) : (
+                <>
+                  <h1>
+                    Generate word embeddings from Notion page and update vector
+                    database
+                  </h1>
+                  <IconRotate />
+                </>
+              )}
+            </Button>
+            <Select
+              label="Select mode"
+              color="gray"
+              value={mode}
+              onChange={(value) => setMode(value as "search" | "chat")}
+              size="lg"
+            >
+              <Option value="search" className="text-white hover:text-white">
+                Search database for most similar chunks
+              </Option>
+              <Option value="chat" className="text-white hover:text-white">
+                Chat with model fine-tuned by texts
+              </Option>
+            </Select>
+          </div>
+        </AccordionBody>
+      </Accordion>
+      <div className="flex flex-row gap-4 w-full overflow-x-scroll pl-12 no-scrollbar mt-8">
+        <div className="flex flex-col gap-4 w-full min-w-fit md:min-w-none md:max-w-fit">
+          <ExternalLink
+            label="Edit content on Notion page"
+            href="https://solar-fox-a61.notion.site/Flash-dataset-chatbot-90ae074d502a41be99096e6585838941"
+          />
+        </div>
+        <div className="flex flex-col gap-4 w-full min-w-fit md:min-w-none md:max-w-fit">
+          <ExternalLink
+            label="Visualize 3D relational positions of embeddings"
+            href="/projects/embeddings"
+          />
+        </div>
+      </div>
+      <div className="flex flex-col gap-4 w-full mt-8 pb-[85px] px-[12px]">
         {renderMessages()}
         {loading && (
           <div className="border border-zinc-600 rounded-lg p-4 w-fit max-w-[80%]">

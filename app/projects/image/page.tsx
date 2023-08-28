@@ -97,7 +97,7 @@ export default () => {
         title={"Image generation"}
         description="Write prompts to generate images using OpenAI's DALL-E image generation model"
       >
-        <div className="flex flex-col gap-4 w-full h-full">
+        <div className="flex flex-col gap-4 w-full mt-8 pb-[85px] px-[12px]">
           {renderMessages()}
           {loading && (
             <div className="border border-zinc-600 rounded-lg p-4 w-fit max-w-[80%] mr-auto">

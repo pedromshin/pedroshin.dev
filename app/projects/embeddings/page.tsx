@@ -7,8 +7,7 @@ import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
 //@ts-ignore
 import * as tsne from "./tsne";
 import { Spinner } from "@material-tailwind/react";
-import { set } from "lodash-es";
-import Heading from "@App/components/organisms/Heading";
+import ExternalLink from "@App/components/atoms/ExternalLink";
 
 export default () => {
   const containerRef = useRef<HTMLDivElement>(null);
@@ -31,7 +30,7 @@ export default () => {
     const renderer = new THREE.WebGLRenderer({ antialias: true });
     renderer.setSize(
       window.innerWidth,
-      window.innerHeight - 66 - (window.innerWidth < 768 ? 320 : 248)
+      window.innerHeight - 66 - 48 - (window.innerWidth < 768 ? 252 : 200)
     );
     containerRef.current.appendChild(renderer.domElement);
 
@@ -114,10 +113,31 @@ export default () => {
 
   return (
     <>
-      <Heading
-        title={"Embeddings 3D Visualization"}
-        description="Using t-distributed stochastic neighbor embedding (t-SNE) to reduce word embeddings dimensionality and plotting in 3D space."
-      ></Heading>
+      <div className="flex flex-col items-center justify-start pt-12 pl-12 pr-12 lg:items-start">
+        <div className="mb-8 md:mb-10">
+          <h1 className="text-xl md:text-4xl font-bold mb-2 md:mb-4">
+            Notion page word-embeddings 3D Visualization
+          </h1>
+          <p className="text-sm md:text-xl opacity-60">
+            Using t-distributed stochastic neighbor embedding (t-SNE) to reduce
+            word embeddings dimensionality and plotting in 3D space.
+          </p>
+        </div>
+      </div>
+      <div className="flex flex-row gap-4 w-full overflow-x-scroll pl-12 no-scrollbar">
+        <div className="flex flex-col gap-4 w-full min-w-fit md:min-w-none md:max-w-fit">
+          <ExternalLink
+            label="Edit content on Notion page"
+            href="https://solar-fox-a61.notion.site/Flash-dataset-chatbot-90ae074d502a41be99096e6585838941"
+          />
+        </div>
+        <div className="flex flex-col gap-4 w-full min-w-fit md:min-w-none md:max-w-fit">
+          <ExternalLink
+            label="Chat with gpt-3.5-turbo fine-tuned with this embeddings"
+            href="/projects/chatbot/notion"
+          />
+        </div>
+      </div>
       {fetching ? (
         <div className="w-full h-full flex flex-col items-center justify-center">
           <Spinner />

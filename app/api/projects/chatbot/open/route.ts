@@ -9,20 +9,15 @@ const aiConfig = new Configuration({
 const openAI = new OpenAIApi(aiConfig);
 
 export async function POST(req: Request, res: Response) {
-  const { messages } = await req.json();
-
-  messages.push({
-    role: "system",
-    content: "",
-  });
+  const { query } = await req.json();
 
   const response = await openAI.createChatCompletion({
     model: "gpt-3.5-turbo",
     stream: true,
-    messages: messages,
+    messages: [{ content: query, role: "user" }],
   });
 
   const stream = OpenAIStream(response);
 
-  return new StreamingTextResponse(stream);
+  return new Response(stream);
 }

@@ -8,6 +8,7 @@ import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
 import * as tsne from "./tsne";
 import { Spinner } from "@material-tailwind/react";
 import { set } from "lodash-es";
+import Heading from "@App/components/organisms/Heading";
 
 export default () => {
   const containerRef = useRef<HTMLDivElement>(null);
@@ -28,7 +29,10 @@ export default () => {
       1000
     );
     const renderer = new THREE.WebGLRenderer({ antialias: true });
-    renderer.setSize(window.innerWidth, window.innerHeight - 66);
+    renderer.setSize(
+      window.innerWidth,
+      window.innerHeight - 66 - (window.innerWidth < 768 ? 320 : 248)
+    );
     containerRef.current.appendChild(renderer.domElement);
 
     // Initialize t-SNE data
@@ -110,6 +114,10 @@ export default () => {
 
   return (
     <>
+      <Heading
+        title={"Embeddings 3D Visualization"}
+        description="Using t-distributed stochastic neighbor embedding (t-SNE) to reduce word embeddings dimensionality and plotting in 3D space."
+      ></Heading>
       {fetching ? (
         <div className="w-full h-full flex flex-col items-center justify-center">
           <Spinner />

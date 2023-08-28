@@ -37,7 +37,7 @@ export const links: LinkType[] = [
     title: "Embeddings 3D",
     slug: "/embeddings",
     description:
-      "Visualize multi-dimensional word embeddings in 3D with Three.js",
+      "Visualize multi-dimensional word embeddings in 3D with t-SNE algorithm in Three.js",
   },
   {
     title: "Chatbot",

@@ -1,23 +1,16 @@
-import { Configuration, OpenAIApi } from "openai-edge";
 import { OpenAIStream, StreamingTextResponse } from "ai";
-import envs from "@Envs";
+import openaiClient from "@App/clients/openai-client";
 
-const aiConfig = new Configuration({
-  apiKey: envs.OPEN_AI_KEY,
-});
+export async function POST(req: Request) {
+  const { messages } = await req.json();
 
-const openAI = new OpenAIApi(aiConfig);
-
-export async function POST(req: Request, res: Response) {
-  const { query } = await req.json();
-
-  const response = await openAI.createChatCompletion({
+  const response = await openaiClient.createChatCompletion({
     model: "gpt-3.5-turbo",
     stream: true,
-    messages: [{ content: query, role: "user" }],
+    messages,
   });
 
   const stream = OpenAIStream(response);
 
-  return new Response(stream);
+  return new StreamingTextResponse(stream);
 }

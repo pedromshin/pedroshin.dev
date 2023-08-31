@@ -1,24 +1,24 @@
 "use client";
-import React, { useEffect, useRef, useState } from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 import * as THREE from "three";
 //@ts-ignore
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
 
 //@ts-ignore
 import * as tsne from "./tsne";
-import { Spinner } from "@material-tailwind/react";
+import { Spinner, Switch } from "@material-tailwind/react";
 import ExternalLink from "@App/components/atoms/ExternalLink";
 
 export default () => {
   const containerRef = useRef<HTMLDivElement>(null);
-  const [fetching, setFetching] = useState<boolean>(false);
+  const [loading, setLoading] = useState<boolean>(false);
   const [data, setData] = React.useState<
     { embedding: number[]; label: string }[]
   >([]);
+  const [is3D, setIs3D] = useState<boolean>(true);
 
-  useEffect(() => {
+  const generateScene = useCallback(() => {
     if (!containerRef.current || !data.length) return;
-
     // Set up the scene, camera, and renderer
     const scene = new THREE.Scene();
     const camera = new THREE.PerspectiveCamera(
@@ -32,16 +32,23 @@ export default () => {
       window.innerWidth,
       window.innerHeight - 66 - 48 - (window.innerWidth < 768 ? 252 : 200)
     );
+    containerRef.current.firstChild &&
+      containerRef.current.removeChild(containerRef.current.firstChild);
     containerRef.current.appendChild(renderer.domElement);
 
     // Initialize t-SNE data
     const tsneData = new tsne.tSNE({
-      dim: 3,
+      dim: is3D ? 3 : 2,
       perplexity: 50,
     });
     tsneData.initDataRaw(data.map((item) => item.embedding));
 
     const axesHelper = new THREE.AxesHelper(4);
+    const originX = is3D ? 0 : -2;
+    const originY = is3D ? 0 : -1;
+
+    const axisOrigin = new THREE.Vector3(originX, originY, 0);
+    axesHelper.position.copy(axisOrigin);
     scene.add(axesHelper);
 
     const points = new THREE.Group();
@@ -52,13 +59,17 @@ export default () => {
 
     tsneData.Y.forEach((coords: any, index: number) => {
       const multiplier = 5000;
-      const x = (coords[0] - minX) * multiplier;
-      const y = (coords[1] - minY) * multiplier;
+      const x = originX + (coords[0] - minX) * multiplier;
+      const y = originY + (coords[1] - minY) * multiplier;
       const z = (coords[2] - minZ) * multiplier;
       // Create a point
       const geometry = new THREE.BufferGeometry();
-      const vertices = new Float32Array([x, y, z]);
-      geometry.setAttribute("position", new THREE.BufferAttribute(vertices, 3));
+      const verticesArr = is3D ? [x, y, z] : [x, y];
+      const vertices = new Float32Array(verticesArr);
+      geometry.setAttribute(
+        "position",
+        new THREE.BufferAttribute(vertices, is3D ? 3 : 2)
+      );
 
       // Create a text sprite for the label
       const spriteCanvas = document.createElement("canvas");
@@ -72,7 +83,7 @@ export default () => {
       const sprite = new THREE.Sprite(spriteMaterial);
       sprite.scale.set(0.5, 0.25, 1);
 
-      sprite.position.set(x, y, z);
+      sprite.position.set(x, y, is3D ? z : 0);
 
       points.add(sprite);
     });
@@ -80,7 +91,7 @@ export default () => {
     scene.add(points);
 
     // Set camera position
-    camera.position.set(2, 3, 5);
+    is3D ? camera.position.set(2, 3, 5) : camera.position.set(0, 0, 5);
     camera.lookAt(scene.position);
 
     // Add event listener for mouse interaction
@@ -92,11 +103,15 @@ export default () => {
       controls.update(); // Update camera controls
     };
     animate();
-  }, [data]);
+  }, [data, is3D]);
+
+  useEffect(() => {
+    generateScene();
+  }, [generateScene]);
 
   useEffect(() => {
     (async () => {
-      setFetching(true);
+      setLoading(true);
       const response = await fetch("/api/projects/embeddings");
       const data = await response.json();
       setData(
@@ -107,7 +122,7 @@ export default () => {
           };
         })
       );
-      setFetching(false);
+      setLoading(false);
     })();
   }, []);
 
@@ -137,11 +152,18 @@ export default () => {
             href="/projects/chatbot/notion"
           />
         </div>
+        <Switch
+          label="3D"
+          onChange={(e) => {
+            setIs3D(e.target.checked);
+          }}
+          checked={is3D}
+        />
       </div>
-      {fetching ? (
+      {loading ? (
         <div className="w-full h-full flex flex-col items-center justify-center">
           <Spinner />
-          {fetching && <div className="mt-4">Fetching data...</div>}
+          {loading && <div className="mt-4">Fetching data...</div>}
         </div>
       ) : (
         <div ref={containerRef} />

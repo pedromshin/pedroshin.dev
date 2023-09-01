@@ -81,6 +81,11 @@ export const links: LinkType[] = [
         slug: "https://vue.pedroshin.dev",
         external: true,
       },
+      {
+        title: "Astro",
+        slug: "https://astro.pedroshin.dev",
+        external: true,
+      },
     ],
   },
   {

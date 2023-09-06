@@ -70,9 +70,8 @@ export default ({
                     width={400}
                     height={400}
                     src={base64}
-                    className="w-auto max-w-md h-auto max-h-[400px]"
+                    className="max-w-md max-h-[400px]"
                     alt="droppzone"
-                    layout="responsive"
                   />
                   {documents.length === 1 && (
                     <div className="flex flex-col gap-4">

@@ -57,7 +57,7 @@ export default ({
           </p>
         )}
         {!!documents && (
-          <div className="flex flex-col gap-4 lg:flex-row">
+          <div className="flex flex-col gap-4">
             {documents.map(({ base64, file }) => {
               return (
                 <>

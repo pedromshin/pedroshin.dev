@@ -20,11 +20,11 @@ export default () => {
       fetchURL="/api/projects/ocr/analyse"
       queries={[
         {
-          Text: "registro geral",
+          Text: "If there is a REGISTRO GERAL, what is the content?",
           Alias: RG_ALIAS_ENUM.RG_DOCUMENT_NUMBER,
         },
         {
-          Text: "data de expedicao",
+          Text: "If the is an DATA DE EMISSAO, what is the content?",
           Alias: RG_ALIAS_ENUM.RG_DOCUMENT_EXPEDITION_DATE,
         },
         {

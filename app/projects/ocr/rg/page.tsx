@@ -40,11 +40,11 @@ export default () => {
           Alias: RG_ALIAS_ENUM.RG_OWNER_NAME,
         },
         {
-          Text: "what is the content of the first line of filiacao?",
+          Text: "Underneath the document owner's name, there are two names, which are values of field FILIACAO. What is the first name?",
           Alias: RG_ALIAS_ENUM.RG_OWNER_FATHER_NAME,
         },
         {
-          Text: "what is the content of the second line of filiacao?",
+          Text: "Underneath the document owner's name, there are two names, which are values of field FILIACAO. What is the second name?",
           Alias: RG_ALIAS_ENUM.RG_OWNER_MOTHER_NAME,
         },
         {

@@ -32,7 +32,7 @@ export default () => {
   return (
     <PageChatbot
       title="Open Chatbot"
-      description="ChatGPT gpt-3.5-turbo model with no fine-tuning."
+      description="ChatGPT gpt-4 model with no fine-tuning."
       input={input}
       handleInputChange={handleInputChange}
       handleSubmit={handleSubmit}

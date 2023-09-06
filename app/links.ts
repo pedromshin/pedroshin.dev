@@ -47,7 +47,7 @@ export const links: LinkType[] = [
       {
         title: "Open",
         slug: "/open",
-        description: "Default chatbot with gpt-3.5-turbo",
+        description: "Default chatbot with gpt-4",
       },
       {
         title: "Trained chatbot (word embeddings)",

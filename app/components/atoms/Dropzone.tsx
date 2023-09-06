@@ -67,10 +67,10 @@ export default ({
               return (
                 <>
                   <Image
-                    width={400}
-                    height={400}
+                    width={0}
+                    height={0}
                     src={base64}
-                    className="max-w-md max-h-[400px]"
+                    className="max-w-md max-h-[400px] h-auto w-auto"
                     alt="droppzone"
                   />
                   {documents.length === 1 && (

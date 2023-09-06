@@ -13,5 +13,5 @@ export async function POST(req: Request, res: Response) {
 
   const result = new TextractableDocumentEntity(output).process();
 
-  return NextResponse.json(result);
+  return NextResponse.json({ result, output });
 }

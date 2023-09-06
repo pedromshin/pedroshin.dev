@@ -75,7 +75,7 @@ export default ({
             onSubmit={async (_, base64s) => {
               if (base64s.length === 0) setOCRResult([]);
               setLoading(true);
-              const results = Promise.all(
+              const results = await Promise.all(
                 base64s.map(async (base64) => {
                   const result = await fetch(fetchURL, {
                     method: "POST",
@@ -91,8 +91,9 @@ export default ({
                   return await result.json();
                 })
               );
-
-              setOCRResult(await results.finally(() => setLoading(false)));
+              console.log(results.map(({ output }) => output));
+              setLoading(false);
+              setOCRResult(results.map(({ result }) => result));
             }}
             submitText="Extrair"
             loading={loading}

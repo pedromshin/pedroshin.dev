@@ -32,7 +32,7 @@ export default () => {
           Alias: RG_ALIAS_ENUM.RG_OWNER_PLACE_OF_BIRTH,
         },
         {
-          Text: "data de nascimento",
+          Text: "What is DATA DE NASCIMENTO value, given that it is garanteed to be over 16 years ago?",
           Alias: RG_ALIAS_ENUM.RG_OWNER_BIRTHDATE,
         },
         { Text: "nome", Alias: RG_ALIAS_ENUM.RG_OWNER_NAME },

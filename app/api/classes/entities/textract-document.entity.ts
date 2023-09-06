@@ -24,7 +24,7 @@ export default class TextractableDocumentEntity {
   }
 
   private detectErrors(resultValue: string) {
-    const commonErrors = ["NATURALIDACE", "NATURALIDADE"];
+    const commonErrors = ["NATURALIDACE", "NATURALIDADE", "Funnam", "funnam"];
 
     return commonErrors.includes(resultValue) ? "" : resultValue;
   }

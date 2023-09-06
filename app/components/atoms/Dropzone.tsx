@@ -40,8 +40,9 @@ export default ({
   const handleClear = (
     e: MouseEvent<HTMLButtonElement, globalThis.MouseEvent>
   ) => {
-    setDocuments([]);
+    setDocuments(undefined);
     e.preventDefault();
+    onSubmit([], []);
   };
 
   return (
@@ -57,7 +58,11 @@ export default ({
           </p>
         )}
         {!!documents && (
-          <div className="flex flex-col gap-4">
+          <div
+            className={`flex flex-col gap-4 ${
+              documents.length === 1 ? "md:flex-row" : ""
+            }`}
+          >
             {documents.map(({ base64, file }) => {
               return (
                 <>
@@ -65,13 +70,19 @@ export default ({
                     width={400}
                     height={400}
                     src={base64}
-                    className="w-auto max-w-md h-auto"
+                    className="w-auto max-w-md h-auto max-h-[400px]"
                     alt="droppzone"
                     layout="responsive"
                   />
                   {documents.length === 1 && (
                     <div className="flex flex-col gap-4">
-                      <Button onClick={(e) => handleClear(e)}>Limpar</Button>
+                      <Button
+                        onClick={(e) => {
+                          handleClear(e);
+                        }}
+                      >
+                        Limpar
+                      </Button>
                       <p className="flex flex-col gap-2 text-2xl text-gray-500 dark:text-gray-400">
                         {file?.name ? (
                           <>

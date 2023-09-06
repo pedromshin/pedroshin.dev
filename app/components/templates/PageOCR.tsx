@@ -73,6 +73,7 @@ export default ({
             multiple
             accept="image/png, image/jpeg, application/pdf"
             onSubmit={async (_, base64s) => {
+              if (base64s.length === 0) setOCRResult([]);
               setLoading(true);
               const results = Promise.all(
                 base64s.map(async (base64) => {

@@ -20,22 +20,25 @@ export default () => {
       fetchURL="/api/projects/ocr/analyse"
       queries={[
         {
-          Text: "If there is a REGISTRO GERAL, what is the content?",
+          Text: "If there is a REGISTRO GERAL, what is the content? It is the main document number.",
           Alias: RG_ALIAS_ENUM.RG_DOCUMENT_NUMBER,
         },
         {
-          Text: "If the is an DATA DE EMISSAO, what is the content?",
+          Text: "If there is a DATA DE EMISSAO, which is the documents emission date, what is its value?",
           Alias: RG_ALIAS_ENUM.RG_DOCUMENT_EXPEDITION_DATE,
         },
         {
-          Text: "naturalidade",
+          Text: "What is the document owner's naturalness, or NATURALIDADE?",
           Alias: RG_ALIAS_ENUM.RG_OWNER_PLACE_OF_BIRTH,
         },
         {
-          Text: "What is DATA DE NASCIMENTO value, given that it is garanteed to be over 16 years ago?",
+          Text: "What is the document owner's birthdate, that would be the documents DATA DE NASCIMENTO field value, given that it must be over 16 years ago?",
           Alias: RG_ALIAS_ENUM.RG_OWNER_BIRTHDATE,
         },
-        { Text: "nome", Alias: RG_ALIAS_ENUM.RG_OWNER_NAME },
+        {
+          Text: "What is the document owner's name, or NOME?",
+          Alias: RG_ALIAS_ENUM.RG_OWNER_NAME,
+        },
         {
           Text: "what is the content of the first line of filiacao?",
           Alias: RG_ALIAS_ENUM.RG_OWNER_FATHER_NAME,

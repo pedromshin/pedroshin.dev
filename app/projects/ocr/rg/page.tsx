@@ -44,11 +44,11 @@ export default () => {
           Alias: RG_ALIAS_ENUM.RG_OWNER_FATHER_NAME,
         },
         {
-          Text: "Underneath the document owner's name, there are two names, which are values of field FILIACAO. What is the second name?",
+          Text: "What is the value of the third name in the image, if there is one?",
           Alias: RG_ALIAS_ENUM.RG_OWNER_MOTHER_NAME,
         },
         {
-          Text: "city and state in 'doc origem'",
+          Text: "What is the value in DOC ORIGEM, if there is one?",
           Alias: RG_ALIAS_ENUM.RG_DOCUMENT_ORIGIN,
         },
       ]}

@@ -17,8 +17,6 @@ export default class TextractableDocumentEntity {
     this.resultBlocks = this.filterBlocks(this.blocks, "QUERY_RESULT") || [];
   }
 
-  private specialCharsRegex = /[\u0300-\u036f\u00c0-\u00ff]/;
-
   private filterBlocks(blocks: Block[] | undefined, type: BlockType) {
     return blocks?.filter((block) => block.BlockType === type);
   }
@@ -28,50 +26,6 @@ export default class TextractableDocumentEntity {
 
     return commonErrors.includes(resultValue) ? "" : resultValue;
   }
-
-  // private findLine(resultBlock: Block) {
-  //   const line = this.blocks.find((block) => {
-  //     const blockTop = block.Geometry?.BoundingBox?.Top?.toFixed(3);
-  //     const resultBlockTop =
-  //       resultBlock?.Geometry?.BoundingBox?.Top?.toFixed(3);
-
-  //     return (
-  //       block.BlockType === "LINE" &&
-  //       Math.abs(+blockTop! - +resultBlockTop!) < 0.05
-  //     );
-  //   })?.Text;
-
-  //   return line ?? "";
-  // }
-
-  // private normalizeSpecialCharacters(resultValue: string) {
-  //   let normalizedResultValue = resultValue;
-  //   for (const resultBlock of this.resultBlocks) {
-  //     const resultLineText = this.findLine(resultBlock);
-
-  //     const normalizedResultLineText = resultLineText?.replace(
-  //       this.specialCharsRegex,
-  //       ""
-  //     );
-
-  //     if (
-  //       normalizedResultLineText?.includes(resultValue) ||
-  //       resultValue?.includes(normalizedResultLineText!)
-  //     ) {
-  //       const normalizedWords = resultLineText.split(" ");
-  //       const queryResultWords: string[] = resultValue?.split(" ");
-  //       const indexes: number[] = [];
-  //       normalizedWords.forEach((word, index) => {
-  //         if (word === queryResultWords[index]) indexes.push(index);
-  //       });
-  //       indexes.forEach(
-  //         (index) => (queryResultWords[index] = normalizedWords[index])
-  //       );
-  //       normalizedResultValue = queryResultWords.join(" ");
-  //     }
-  //   }
-  //   return resultValue;
-  // }
 
   private validateConfidence(
     resultConfidence: number,
@@ -104,8 +58,6 @@ export default class TextractableDocumentEntity {
       }
 
       const resultValue = this.detectErrors(resultBlock?.Text ?? "");
-      // const normalizedResultValue =
-      //   this.normalizeSpecialCharacters(resultValue);
 
       this.validateConfidence(
         resultBlock?.Confidence ?? 0,

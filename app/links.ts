@@ -10,6 +10,11 @@ export const rootSlug = "/projects";
 
 export const links: LinkType[] = [
   {
+    title: "Websocket",
+    slug: "/websocket",
+    description: "",
+  },
+  {
     title: "Python Jupyter Notebooks",
     slug: "https://python.pedroshin.dev",
     external: true,

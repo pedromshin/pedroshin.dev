@@ -36,7 +36,7 @@ export const links: LinkType[] = [
   {
     title: "Image Generation",
     slug: "/image",
-    description: "Generate images by a text prompt (R$0,20 per image)",
+    description: "Generate images with text prompts",
   },
   {
     title: "Embeddings 3D",

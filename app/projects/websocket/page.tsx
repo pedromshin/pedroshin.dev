@@ -16,9 +16,7 @@ export default () => {
   const [data, setData] = useState<{ price: string; timestamp: string }[]>([]);
 
   useEffect(() => {
-    const socket = io(
-      "https://flask-env.eba-rbgeum2r.sa-east-1.elasticbeanstalk.com/"
-    );
+    const socket = io("https://finance.pedroshin.dev");
 
     // Listen for messages from the server
     socket.on("response_to_frontend", (data) => {
@@ -42,19 +40,17 @@ export default () => {
     };
   }, []);
 
-  // console.log(data);
-
   return (
     <Heading title={"Websocket"} description="">
-      <div className="flex flex-col gap-4 w-full mt-8 pb-[85px] px-[12px]">
+      <div className="w-full mt-8 px-2 md:px-[12px]">
         <LineChart
-          width={800}
-          height={400}
+          width={window.innerWidth > 768 ? 800 : window.innerWidth - 80}
+          height={300}
           data={data.map((dataPoint) => ({
             x: dataPoint.timestamp,
             y: dataPoint.price,
           }))}
-          margin={{ top: 20, right: 30, left: 20, bottom: 10 }}
+          margin={{ top: 20, right: 10, left: 10, bottom: 20 }}
         >
           <CartesianGrid strokeDasharray="3 3" />
           <XAxis dataKey="x" />

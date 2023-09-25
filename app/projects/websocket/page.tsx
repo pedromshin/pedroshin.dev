@@ -15,9 +15,6 @@ import {
 export default () => {
   const [data, setData] = useState<{ price: string; timestamp: string }[]>([]);
 
-  const minValue = Math.min(...data.map((entry) => Number(entry.price)));
-  const maxValue = Math.max(...data.map((entry) => Number(entry.price)));
-
   useEffect(() => {
     const socket = io(
       "http://flask-env.eba-rbgeum2r.sa-east-1.elasticbeanstalk.com/"
@@ -37,7 +34,7 @@ export default () => {
             minute: "2-digit",
             second: "2-digit",
           }),
-          price: Number(data.price)?.toFixed(2),
+          price: `${Number(data.price)?.toFixed(2)}`,
         },
       ]);
     });
@@ -47,6 +44,8 @@ export default () => {
       socket.disconnect();
     };
   }, []);
+
+  // console.log(data);
 
   return (
     <Heading title={"Websocket"} description="">

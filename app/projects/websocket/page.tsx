@@ -44,7 +44,7 @@ export default () => {
     <Heading title={"Websocket"} description="">
       <div className="w-full mt-8 px-2 md:px-[12px]">
         <LineChart
-          width={!!window ? window.innerWidth - 80 : 0}
+          width={400}
           height={300}
           data={data.map((dataPoint) => ({
             x: dataPoint.timestamp,

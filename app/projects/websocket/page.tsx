@@ -46,7 +46,7 @@ export default () => {
       title={"Bitcoin real-time websocket"}
       description="Websocket calling API on https://finance.pedroshin.dev with real-time Bitcoin price in USD"
     >
-      <div className="w-full mt-8 px-2 md:px-[12px]">
+      <div className="w-full mt-8 px-2 md:px-[12px] [&>div]:overflow-visible [&>div>svg]:overflow-visible">
         <LineChart
           width={width}
           height={300}
@@ -54,11 +54,10 @@ export default () => {
             x: dataPoint.timestamp,
             y: dataPoint.price,
           }))}
-          margin={{ top: 20, right: 10, left: 10, bottom: 20 }}
         >
           <CartesianGrid strokeDasharray="3 3" />
           <XAxis dataKey="x" />
-          <YAxis domain={["dataMin - 5", "dataMax + 5"]} />
+          <YAxis type="number" domain={["dataMin - 5", "dataMax + 5"]} />
           <Line
             dataKey="y"
             name="Real-time Bitcoin price (USD)"

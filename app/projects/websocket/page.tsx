@@ -20,9 +20,6 @@ export default () => {
       "http://flask-env.eba-rbgeum2r.sa-east-1.elasticbeanstalk.com/"
     );
 
-    // Send a message to the server
-    socket.emit("message_from_frontend", "Hello from React!");
-
     // Listen for messages from the server
     socket.on("response_to_frontend", (data) => {
       console.log("Received from server:", data);

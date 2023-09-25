@@ -61,17 +61,13 @@ export default () => {
           margin={{ top: 20, right: 30, left: 20, bottom: 10 }}
         >
           <CartesianGrid strokeDasharray="3 3" />
-          <XAxis
-            dataKey="x"
-            // type="number"
-            // domain={["auto", "auto"]}
-            // tickFormatter={(timestamp) =>
-          />
-          <YAxis domain={[minValue - 1000, maxValue + 1000]} />
+          <XAxis dataKey="x" />
+          <YAxis domain={["dataMin - 5", "dataMax + 5"]} />
           <Tooltip />
           <Legend />
           <Line
             dataKey="y"
+            name="Real-time Bitcoin price (USD)"
             type="monotone"
             stroke="#8884d8"
             isAnimationActive={false}

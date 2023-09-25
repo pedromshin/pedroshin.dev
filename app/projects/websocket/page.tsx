@@ -2,15 +2,7 @@
 import { useEffect, useState } from "react";
 import Heading from "@App/components/organisms/Heading";
 import io from "socket.io-client";
-import {
-  LineChart,
-  Line,
-  XAxis,
-  YAxis,
-  CartesianGrid,
-  Tooltip,
-  Legend,
-} from "recharts";
+import { LineChart, Line, XAxis, YAxis, CartesianGrid } from "recharts";
 
 export default () => {
   const [data, setData] = useState<{ price: string; timestamp: string }[]>([]);
@@ -50,7 +42,10 @@ export default () => {
   }, []);
 
   return (
-    <Heading title={"Websocket"} description="">
+    <Heading
+      title={"Bitcoin real-time websocket"}
+      description="Websocket calling API on https://finance.pedroshin.dev with real-time Bitcoin price in USD"
+    >
       <div className="w-full mt-8 px-2 md:px-[12px]">
         <LineChart
           width={width}
@@ -64,8 +59,6 @@ export default () => {
           <CartesianGrid strokeDasharray="3 3" />
           <XAxis dataKey="x" />
           <YAxis domain={["dataMin - 5", "dataMax + 5"]} />
-          {/* <Tooltip /> */}
-          <Legend />
           <Line
             dataKey="y"
             name="Real-time Bitcoin price (USD)"

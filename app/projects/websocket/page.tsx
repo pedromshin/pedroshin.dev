@@ -17,7 +17,7 @@ export default () => {
 
   useEffect(() => {
     const socket = io(
-      "http://flask-env.eba-rbgeum2r.sa-east-1.elasticbeanstalk.com/"
+      "https://flask-env.eba-rbgeum2r.sa-east-1.elasticbeanstalk.com/"
     );
 
     // Listen for messages from the server
@@ -59,7 +59,7 @@ export default () => {
           <CartesianGrid strokeDasharray="3 3" />
           <XAxis dataKey="x" />
           <YAxis domain={["dataMin - 5", "dataMax + 5"]} />
-          <Tooltip />
+          {/* <Tooltip /> */}
           <Legend />
           <Line
             dataKey="y"
@@ -67,6 +67,7 @@ export default () => {
             type="monotone"
             stroke="#8884d8"
             isAnimationActive={false}
+            dot={false}
           />
         </LineChart>
       </div>

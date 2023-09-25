@@ -13,10 +13,10 @@ import {
 } from "recharts";
 
 export default () => {
-  const [data, setData] = useState<{ price: number; timestamp: Date }[]>([]);
+  const [data, setData] = useState<{ price: string; timestamp: string }[]>([]);
 
-  const minValue = Math.min(...data.map((entry) => entry.price));
-  const maxValue = Math.max(...data.map((entry) => entry.price));
+  const minValue = Math.min(...data.map((entry) => Number(entry.price)));
+  const maxValue = Math.max(...data.map((entry) => Number(entry.price)));
 
   useEffect(() => {
     const socket = io(
@@ -31,7 +31,14 @@ export default () => {
       console.log("Received from server:", data);
       setData((prev) => [
         ...prev,
-        { timestamp: new Date(), price: data.price },
+        {
+          timestamp: new Date().toLocaleTimeString(["pt-br"], {
+            hour: "2-digit",
+            minute: "2-digit",
+            second: "2-digit",
+          }),
+          price: Number(data.price)?.toFixed(2),
+        },
       ]);
     });
 
@@ -47,12 +54,8 @@ export default () => {
         <LineChart
           width={800}
           height={400}
-          data={data.map((dataPoint, index) => ({
-            x: dataPoint.timestamp.toLocaleTimeString([], {
-              hour: "2-digit",
-              minute: "2-digit",
-              second: "2-digit",
-            }),
+          data={data.map((dataPoint) => ({
+            x: dataPoint.timestamp,
             y: dataPoint.price,
           }))}
           margin={{ top: 20, right: 30, left: 20, bottom: 10 }}

@@ -14,6 +14,7 @@ import {
 
 export default () => {
   const [data, setData] = useState<{ price: string; timestamp: string }[]>([]);
+  const [width, setWidth] = useState(0);
 
   useEffect(() => {
     const socket = io("https://finance.pedroshin.dev");
@@ -40,11 +41,19 @@ export default () => {
     };
   }, []);
 
+  useEffect(() => {
+    const handleResize = () => setWidth(window.innerWidth - 80);
+    handleResize();
+    window.addEventListener("resize", handleResize);
+
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
+
   return (
     <Heading title={"Websocket"} description="">
       <div className="w-full mt-8 px-2 md:px-[12px]">
         <LineChart
-          width={400}
+          width={width}
           height={300}
           data={data.map((dataPoint) => ({
             x: dataPoint.timestamp,

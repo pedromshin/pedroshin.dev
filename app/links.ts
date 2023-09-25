@@ -10,6 +10,11 @@ export const rootSlug = "/projects";
 
 export const links: LinkType[] = [
   {
+    title: "Bitcoin Websocket real-time price",
+    slug: "/websocket",
+    description: "Flask API with websocket to stream Bitcoin price",
+  },
+  {
     title: "Python Jupyter Notebooks",
     slug: "https://python.pedroshin.dev",
     external: true,

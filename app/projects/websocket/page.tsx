@@ -3,13 +3,20 @@ import { useEffect, useState } from "react";
 import Heading from "@App/components/organisms/Heading";
 import io from "socket.io-client";
 import { LineChart, Line, XAxis, YAxis, CartesianGrid } from "recharts";
+import Button from "@App/components/atoms/Button";
 
 export default () => {
   const [data, setData] = useState<{ price: string; timestamp: string }[]>([]);
+  const [streaming, setStreaming] = useState(true);
   const [width, setWidth] = useState(0);
 
   useEffect(() => {
-    const socket = io("https://finance.pedroshin.dev");
+    if (!streaming) return;
+
+    const socket = io(
+      "http://finance-pedroshin-dev.sa-east-1.elasticbeanstalk.com/"
+      // "http://localhost:5000"
+    );
 
     // Listen for messages from the server
     socket.on("response_to_frontend", (data) => {
@@ -31,7 +38,7 @@ export default () => {
     return () => {
       socket.disconnect();
     };
-  }, []);
+  }, [streaming]);
 
   useEffect(() => {
     const handleResize = () => setWidth(window.innerWidth - 80);
@@ -46,6 +53,9 @@ export default () => {
       title={"Bitcoin real-time websocket"}
       description="Websocket calling API on https://finance.pedroshin.dev with real-time Bitcoin price in USD"
     >
+      <Button onClick={() => setStreaming((prev) => !prev)}>
+        {streaming ? "Pause" : "Stream"}
+      </Button>
       <div className="w-full mt-8 px-2 md:px-[12px] [&>div]:overflow-visible [&>div>svg]:overflow-visible">
         <LineChart
           width={width}

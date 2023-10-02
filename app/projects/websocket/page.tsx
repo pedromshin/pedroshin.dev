@@ -1,6 +1,7 @@
 "use client";
 import { useEffect, useState } from "react";
 import Heading from "@App/components/organisms/Heading";
+import Dot from "@App/components/atoms/Dot";
 import io from "socket.io-client";
 import { LineChart, Line, XAxis, YAxis, CartesianGrid } from "recharts";
 import Button from "@App/components/atoms/Button";
@@ -11,12 +12,17 @@ export default () => {
   const [width, setWidth] = useState(0);
 
   useEffect(() => {
-    if (!streaming) return;
-
     const socket = io(
-      "http://finance-pedroshin-dev.sa-east-1.elasticbeanstalk.com/"
+      "https://finance.pedroshin.dev"
       // "http://localhost:5000"
     );
+
+    if (!streaming) {
+      socket.emit("control_streaming", "pause");
+      return;
+    }
+
+    socket.emit("control_streaming", "stream");
 
     // Listen for messages from the server
     socket.on("response_to_frontend", (data) => {
@@ -53,9 +59,16 @@ export default () => {
       title={"Bitcoin real-time websocket"}
       description="Websocket calling API on https://finance.pedroshin.dev with real-time Bitcoin price in USD"
     >
-      <Button onClick={() => setStreaming((prev) => !prev)}>
-        {streaming ? "Pause" : "Stream"}
-      </Button>
+      <div className="flex items-center gap-4">
+        <Button
+          onClick={() => {
+            setStreaming((prev) => !prev);
+          }}
+        >
+          {streaming ? "Pause" : "Stream"}
+        </Button>
+        <Dot variant={streaming ? "green" : "error"} />
+      </div>
       <div className="w-full mt-8 px-2 md:px-[12px] [&>div]:overflow-visible [&>div>svg]:overflow-visible">
         <LineChart
           width={width}

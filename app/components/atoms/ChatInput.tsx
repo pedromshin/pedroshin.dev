@@ -1,3 +1,4 @@
+import { IconArrowRight } from "@tabler/icons-react";
 import { InputHTMLAttributes, DOMAttributes } from "react";
 
 type ChatInputType = {
@@ -14,15 +15,21 @@ export default ({ value, placeholder, onSubmit, onChange }: ChatInputType) => {
         onSubmit && onSubmit(e);
         e.preventDefault();
       }}
-      className="fixed bottom-0 w-full bg-black"
+      className="flex fixed bottom-0 w-full bg-black p-5 border-t-2 border-gray-300 focus:outline-none focus:border-white"
     >
       <input
         value={value}
         placeholder={placeholder ?? "Say something..."}
         onChange={onChange}
         autoFocus
-        className="w-full p-5 border-t-2 border-gray-300 bg-transparent focus:outline-none focus:border-white"
+        className="w-full bg-black"
       />
+      <button
+        className="flex items-center justify-center w-12 h-12 bg-white rounded-full min-w-[48px] min-h-[48px]"
+        type="submit"
+      >
+        <IconArrowRight size={20} color="black" />
+      </button>
     </form>
   );
 };

@@ -1,5 +1,5 @@
 "use client";
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import Heading from "@App/components/organisms/Heading";
 import io from "socket.io-client";
 import ChatInput from "@App/components/atoms/ChatInput";
@@ -7,6 +7,7 @@ import ChatInput from "@App/components/atoms/ChatInput";
 export default () => {
   const [typing, setTyping] = useState<string>();
   const [messages, setMessages] = useState<string[]>([]);
+  const messagesEndRef = useRef<HTMLDivElement>(null);
 
   const handleChat = async () => {
     if (!typing) return;
@@ -18,8 +19,8 @@ export default () => {
   const socket = useMemo(
     () =>
       io(
-        "https://talk.pedroshin.dev"
-        // "http://0.0.0.0:5000"
+        // "https://talk.pedroshin.dev"
+        "http://0.0.0.0:5000"
         // "http://0.0.0.0:8000"
         // "http://talk-pedroshin-dev.sa-east-1.elasticbeanstalk.com/"
       ),
@@ -39,6 +40,13 @@ export default () => {
     };
   }, []);
 
+  useEffect(() => {
+    // Scroll to the bottom of the messages container when new messages are added
+    if (messagesEndRef.current) {
+      messagesEndRef.current.scrollIntoView({ behavior: "smooth" });
+    }
+  }, [messages]);
+
   const renderMessages = () => {
     return messages?.map((message, index) => {
       return (
@@ -53,8 +61,13 @@ export default () => {
     <Heading
       title={"Talk room in websocket"}
       description="Websocket calling API on https://talk.pedroshin.dev for real-time messaging"
+      // TODO fix min height calc
+      className="min-h-[calc(100% + 75px)]"
     >
-      <div className="flex flex-col gap-4 w-full mt-8 pb-[85px] px-[12px]">
+      <div
+        ref={messagesEndRef}
+        className="flex flex-col gap-4 w-full mt-8 pb-[85px] px-[12px]"
+      >
         {renderMessages()}
       </div>
       <ChatInput

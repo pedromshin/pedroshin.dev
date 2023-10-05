@@ -23,6 +23,12 @@ export default () => {
     // Listen for messages from the server
     socket.on("response_to_frontend", (data) => {
       console.log("Received from server:", data);
+      if (data.streaming === "true") {
+        if (!streaming) setStreaming(true);
+      } else if (data.streaming === "false") {
+        if (streaming) setStreaming(false);
+      }
+
       setData((prev) => [
         ...prev,
         {

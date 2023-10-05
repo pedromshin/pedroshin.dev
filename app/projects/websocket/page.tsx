@@ -7,23 +7,18 @@ import { LineChart, Line, XAxis, YAxis, CartesianGrid } from "recharts";
 import Button from "@App/components/atoms/Button";
 
 export default () => {
-  const [data, setData] = useState<{ price: string; timestamp: string }[]>([]);
+  const [data, setData] = useState<
+    { price: string | undefined; timestamp: string }[]
+  >([]);
   const [streaming, setStreaming] = useState(true);
   const [width, setWidth] = useState(0);
 
+  const socket = io(
+    "https://finance.pedroshin.dev"
+    // "http://localhost:5000"
+  );
+
   useEffect(() => {
-    const socket = io(
-      "https://finance.pedroshin.dev"
-      // "http://localhost:5000"
-    );
-
-    if (!streaming) {
-      socket.emit("control_streaming", "pause");
-      return;
-    }
-
-    socket.emit("control_streaming", "stream");
-
     // Listen for messages from the server
     socket.on("response_to_frontend", (data) => {
       console.log("Received from server:", data);
@@ -35,7 +30,7 @@ export default () => {
             minute: "2-digit",
             second: "2-digit",
           }),
-          price: `${Number(data.price)?.toFixed(2)}`,
+          price: data.price ? `${Number(data.price)?.toFixed(2)}` : undefined,
         },
       ]);
     });
@@ -44,7 +39,7 @@ export default () => {
     return () => {
       socket.disconnect();
     };
-  }, [streaming]);
+  }, [socket]);
 
   useEffect(() => {
     const handleResize = () => setWidth(window.innerWidth - 80);
@@ -63,6 +58,9 @@ export default () => {
         <Button
           onClick={() => {
             setStreaming((prev) => !prev);
+            streaming
+              ? socket.emit("control_streaming", "pause")
+              : socket.emit("control_streaming", "stream");
           }}
         >
           {streaming ? "Pause" : "Stream"}

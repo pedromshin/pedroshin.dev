@@ -1,6 +1,6 @@
 import { IconArrowRight } from "@tabler/icons-react";
 import { InputHTMLAttributes, DOMAttributes } from "react";
-
+import { useRef } from "react";
 type ChatInputType = {
   value: Pick<InputHTMLAttributes<HTMLInputElement>, "value">["value"];
   placeholder?: string;
@@ -9,11 +9,17 @@ type ChatInputType = {
 };
 
 export default ({ value, placeholder, onSubmit, onChange }: ChatInputType) => {
+  const inputRef = useRef<HTMLInputElement>(null);
+
   return (
     <form
       onSubmit={(e) => {
         onSubmit && onSubmit(e);
         e.preventDefault();
+
+        if (inputRef.current) {
+          inputRef.current.blur();
+        }
       }}
       className="flex fixed bottom-0 w-full bg-black p-5 border-t-2 border-gray-300 focus:outline-none focus:border-white"
     >
@@ -23,6 +29,7 @@ export default ({ value, placeholder, onSubmit, onChange }: ChatInputType) => {
         onChange={onChange}
         autoFocus
         className="w-full bg-black"
+        ref={inputRef}
       />
       <button
         className="flex items-center justify-center w-12 h-12 bg-white rounded-full min-w-[48px] min-h-[48px]"

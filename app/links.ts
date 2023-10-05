@@ -45,6 +45,11 @@ export const links: LinkType[] = [
       "Visualize multi-dimensional word embeddings in 3D with t-SNE algorithm in Three.js",
   },
   {
+    title: "Websocket talk room",
+    slug: "/talk",
+    description: "",
+  },
+  {
     title: "Chatbot",
     description: "Open chatbot",
     slug: "/chatbot",
@@ -58,6 +63,23 @@ export const links: LinkType[] = [
         title: "Trained chatbot (word embeddings)",
         slug: "/notion",
         description: "Chatbot trained with content from a Notion page",
+      },
+    ],
+  },
+  {
+    title: "OCR",
+    description: "",
+    slug: "/ocr",
+    subitems: [
+      {
+        title: "RG",
+        slug: "/rg",
+        description: "Extract standardized data from identity card",
+      },
+      {
+        title: "CNH",
+        slug: "/cnh",
+        description: "Extract standardized data from driver's license",
       },
     ],
   },
@@ -90,23 +112,6 @@ export const links: LinkType[] = [
         title: "Astro",
         slug: "https://astro.pedroshin.dev",
         external: true,
-      },
-    ],
-  },
-  {
-    title: "OCR",
-    description: "",
-    slug: "/ocr",
-    subitems: [
-      {
-        title: "RG",
-        slug: "/rg",
-        description: "Extract standardized data from identity card",
-      },
-      {
-        title: "CNH",
-        slug: "/cnh",
-        description: "Extract standardized data from driver's license",
       },
     ],
   },

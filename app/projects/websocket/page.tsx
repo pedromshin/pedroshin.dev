@@ -14,8 +14,9 @@ export default () => {
   const [width, setWidth] = useState(0);
 
   const socket = io(
-    "https://finance.pedroshin.dev"
-    // "http://localhost:5000"
+    // "https://finance.pedroshin.dev"
+    // "http://0.0.0.0:8000"
+    "http://finance-pedroshin-dev.sa-east-1.elasticbeanstalk.com/"
   );
 
   useEffect(() => {

@@ -97,7 +97,8 @@ export default () => {
         {username ? (
           <>
             <h1 className="p-12">
-              Welcome, {username}! There are {connections} other users online.
+              Welcome, {username}! There are {connections - 1} other users
+              online.
             </h1>
             <div
               ref={messagesEndRef}

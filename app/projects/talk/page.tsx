@@ -24,8 +24,8 @@ export default () => {
   const socket = useMemo(
     () =>
       io(
-        // "https://talk.pedroshin.dev"
-        "http://0.0.0.0:5000"
+        "https://talk.pedroshin.dev"
+        // "http://0.0.0.0:5000"
         // "http://0.0.0.0:8000"
         // "http://talk-pedroshin-dev.sa-east-1.elasticbeanstalk.com/"
       ),

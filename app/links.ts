@@ -10,9 +10,10 @@ export const rootSlug = "/projects";
 
 export const links: LinkType[] = [
   {
-    title: "Bitcoin Websocket real-time price",
-    slug: "/websocket",
-    description: "Flask API with websocket to stream Bitcoin price",
+    title: "Live object detection and classification",
+    slug: "https://detect.pedroshin.dev",
+    external: true,
+    description: "Real time object detection through users camera feed.",
   },
   {
     title: "Python Jupyter Notebooks",
@@ -34,6 +35,12 @@ export const links: LinkType[] = [
     ],
   },
   {
+    title: "3D physics studies in three.js",
+    slug: "https://3d.pedroshin.dev",
+    external: true,
+    description: "",
+  },
+  {
     title: "Image Generation",
     slug: "/image",
     description: "Generate images with text prompts",
@@ -48,6 +55,11 @@ export const links: LinkType[] = [
     title: "Websocket talk room",
     slug: "/talk",
     description: "",
+  },
+  {
+    title: "Bitcoin Websocket real-time price",
+    slug: "/websocket",
+    description: "Flask API with websocket to stream Bitcoin price",
   },
   {
     title: "Chatbot",

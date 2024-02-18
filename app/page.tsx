@@ -20,7 +20,7 @@ export default () => {
     const hasSubitems = !!item.subitems;
 
     const cardContainerStyle =
-      "border rounded-3xl py-6 px-8 hover:bg-gray-normal h-fit m-auto max-w-full overflow-scroll";
+      "border rounded-3xl py-6 px-8 hover:bg-gray-normal h-fit m-auto max-w-full overflow-scroll no-scrollbar";
     const cardTitleStyle =
       "flex flex-row items-center gap-2 md:gap-4 font-bold text-xl md:text-4xl mb-2 break-words";
     const subItemTitleStyle =

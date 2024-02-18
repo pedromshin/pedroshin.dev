@@ -13,7 +13,7 @@ export const links: LinkType[] = [
     title: "Live object detection and classification",
     slug: "https://detect.pedroshin.dev",
     external: true,
-    description: "Real time object detection through users camera feed.",
+    description: "Real time object detection through camera feed.",
   },
   {
     title: "Python Jupyter Notebooks",

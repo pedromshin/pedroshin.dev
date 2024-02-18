@@ -128,7 +128,7 @@ export const links: LinkType[] = [
     ],
   },
   {
-    title: "Em desenvolvimento / criação",
+    title: "In development",
     slug: "/development",
     subitems: [
       {

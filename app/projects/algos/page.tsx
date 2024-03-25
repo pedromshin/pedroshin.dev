@@ -1,11 +1,12 @@
 "use client"
-// import JSON from "./bn-fly-drosophila_medulla_1.json"
-import JSON from "./roadNet-CA.json"
+import { useEffect, useRef } from "react";
+import JSON from "./bn-fly-drosophila_medulla_1.json";
+import * as d3 from 'd3';
 
 class Graph {
-    public adjacencyList;
-    public nodes;
-    public edges;
+    public adjacencyList: Map<number, number[]>;
+    public nodes: number[];
+    public edges: number[][];
 
     constructor(params: { nodes: number[], edges: number[][] }) {
         this.adjacencyList = new Map();
@@ -20,15 +21,17 @@ class Graph {
     };
 
     addEdge(edge: number[]) {
-        const [origin, destination] = edge
-        this.adjacencyList.get(origin).push(destination);
-        this.adjacencyList.get(destination).push(origin);
+        const [source, target] = edge
+        this.adjacencyList.get(source)?.push(target);
+        this.adjacencyList.get(target)?.push(source);
 
-        return [origin, destination];
+        return [source, target];
     };
 }
 
-const relations = JSON.data.split(' ').map(Number);
+const data = JSON.data.split(' ');
+
+const relations = data.map(Number);
 
 const edges: number[][] = [];
 
@@ -38,8 +41,60 @@ for (let i = 0; i < relations.length; i += 2) {
 
 const nodes = Array.from(new Set(relations))
 
-export default () => {
-    const graph = new Graph({ nodes, edges });
+const graph = new Graph({ nodes, edges });
 
-    return <></>
+export default () => {
+    const graphRef = useRef(null);
+
+    useEffect(() => {
+        const svg = d3.select(graphRef.current)
+            .append("svg")
+            .attr("width", "100%")
+            .attr("height", "100%");
+
+        const links = graph.edges.map(([source, target]) => ({ source, target }));
+
+        const simulation = d3.forceSimulation(nodes.map(node => ({ index: node })))
+            .force('link', d3.forceLink(links).id(d => d.index ?? 0))
+            .force('charge', d3.forceManyBody())
+            .force('center', d3.forceCenter(500, 300));
+
+        const link = svg.append('g')
+            .selectAll('line')
+            .data(links)
+            .enter().append('line')
+            .attr('stroke', '#999')
+            .attr('stroke-opacity', 0.6)
+            .attr('stroke-width', d => Math.sqrt(2));
+
+        const node = svg.append('g')
+            .selectAll('circle')
+            .data(nodes)
+            .enter().append('circle')
+            .attr('r', 5)
+            .attr('fill', '#69b3a2');
+
+        simulation.on('tick', () => {
+            link
+                .attr('x1', (d: any) => d.source.x)
+                .attr('y1', (d: any) => d.source.y)
+                .attr('x2', (d: any) => d.target.x)
+                .attr('y2', (d: any) => d.target.y);
+
+            node
+                .attr('cx', (d: any) => d.x)
+                .attr('cy', (d: any) => d.y);
+        });
+
+        return () => {
+            simulation.stop();
+          };
+    }, []);
+
+    return (
+        <div className="h-full w-full">
+            <span>Open debugger (ctrl + shift + i) to see graph data.</span>
+            <div ref={graphRef} className="h-full w-full" />
+        </div>
+    );
 }

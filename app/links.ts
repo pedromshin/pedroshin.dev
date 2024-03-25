@@ -10,6 +10,10 @@ export const rootSlug = "/projects";
 
 export const links: LinkType[] = [
   {
+    title: "Graphs, trees, and algorithms",
+    slug: "/algos"
+  },
+  {
     title: "Live object detection and classification",
     slug: "https://detect.pedroshin.dev",
     external: true,

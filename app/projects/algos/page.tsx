@@ -1,6 +1,7 @@
 "use client"
 import { useEffect, useRef } from "react";
-import JSON from "./bn-fly-drosophila_medulla_1.json";
+// import JSON from "./bn-fly-drosophila_medulla_1.json";
+import JSON from "./soc-wiki-Vote.json"
 import * as d3 from 'd3';
 
 class Graph {
@@ -30,72 +31,75 @@ class Graph {
 }
 
 const data = JSON.data.split(' ');
-
-const relations = data.map(Number);
-
+const relations = data.map(item => (Number(item) - 1));
 const edges: number[][] = [];
 
 for (let i = 0; i < relations.length; i += 2) {
     edges.push([relations[i], relations[i + 1]]);
 }
 
-const nodes = Array.from(new Set(relations))
+const nodes = Array.from(new Set([...relations].sort((a, b) => a - b)))
 
 const graph = new Graph({ nodes, edges });
-console.log(graph);
+
+console.log(graph)
 
 export default () => {
     const graphRef = useRef(null);
 
-    // useEffect(() => {
-    //     const svg = d3.select(graphRef.current)
-    //         .append("svg")
-    //         .attr("width", "100%")
-    //         .attr("height", "100%");
+    useEffect(() => {
+        const svg = d3.select(graphRef.current)
+            .append("svg")
+            .attr("width", "100%")
+            .attr("height", "100%");
 
-    //     const links = graph.edges.map(([source, target]) => ({ source, target }));
+        const links = graph.edges.map(([source, target]) => ({ source, target }));
 
-    //     const simulation = d3.forceSimulation(nodes.map(node => ({ index: node })))
-    //         .force('link', d3.forceLink(links).id(d => d.index ?? 0))
-    //         .force('charge', d3.forceManyBody())
-    //         .force('center', d3.forceCenter(500, 300));
+        console.log(links);
+        console.log(nodes.map(node => ({ index: node - 1 })))
+        console.log(d3.forceLink(links).id(() => 3))
 
-    //     const link = svg.append('g')
-    //         .selectAll('line')
-    //         .data(links)
-    //         .enter().append('line')
-    //         .attr('stroke', '#999')
-    //         .attr('stroke-opacity', 0.6)
-    //         .attr('stroke-width', d => Math.sqrt(2));
+        const simulation = d3.forceSimulation(nodes.map(node => ({ index: node })))
+            .force('link', d3.forceLink(links).id(d => d.index! ))
+            .force('charge', d3.forceManyBody())
+            .force('center', d3.forceCenter(500, 300));
 
-    //     const node = svg.append('g')
-    //         .selectAll('circle')
-    //         .data(nodes)
-    //         .enter().append('circle')
-    //         .attr('r', 5)
-    //         .attr('fill', '#69b3a2');
+        const link = svg.append('g')
+            .selectAll('line')
+            .data(links)
+            .enter().append('line')
+            .attr('stroke', '#999')
+            .attr('stroke-opacity', 0.6)
+            .attr('stroke-width', d => Math.sqrt(2));
 
-    //     simulation.on('tick', () => {
-    //         link
-    //             .attr('x1', (d: any) => d.source.x)
-    //             .attr('y1', (d: any) => d.source.y)
-    //             .attr('x2', (d: any) => d.target.x)
-    //             .attr('y2', (d: any) => d.target.y);
+        const node = svg.append('g')
+            .selectAll('circle')
+            .data(nodes)
+            .enter().append('circle')
+            .attr('r', 5)
+            .attr('fill', '#69b3a2');
 
-    //         node
-    //             .attr('cx', (d: any) => d.x)
-    //             .attr('cy', (d: any) => d.y);
-    //     });
+        simulation.on('tick', () => {
+            link
+                .attr('x1', (d: any) => d.source.x)
+                .attr('y1', (d: any) => d.source.y)
+                .attr('x2', (d: any) => d.target.x)
+                .attr('y2', (d: any) => d.target.y);
 
-    //     return () => {
-    //         simulation.stop();
-    //       };
-    // }, []);
+            node
+                .attr('cx', (d: any) => d.x)
+                .attr('cy', (d: any) => d.y);
+        });
+
+        return () => {
+            simulation.stop();
+          };
+    }, []);
 
     return (
         <div className="h-full w-full">
             <span>Open debugger (ctrl + shift + i) to see graph data.</span>
-            {/* <div ref={graphRef} className="h-full w-full" /> */}
+            <div ref={graphRef} className="h-full w-full" />
         </div>
     );
 }

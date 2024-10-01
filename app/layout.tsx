@@ -4,7 +4,7 @@ import { SessionProvider } from "next-auth/react";
 import { Inter } from "next/font/google";
 import RouteGuard from "@Components/hocs/RouteGuard";
 import GlobalContainer from "@Components/hocs/GlobalContainer";
-
+import { Analytics } from "@vercel/analytics/react"
 const inter = Inter({ subsets: ["latin"] });
 
 export default function RootLayout({
@@ -22,6 +22,7 @@ export default function RootLayout({
             <GlobalContainer>{children}</GlobalContainer>
           </RouteGuard>
         </SessionProvider>
+        <Analytics />
       </body>
     </html>
   );
